@@ -2,6 +2,7 @@ import { Menu } from "@cloud-materials/common";
 import { IconHouseDashboard } from "@cloud-materials/common/ve-o-iconbox";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LogoCAM } from "@/assets/icons";
 import styles from "./index.module.less";
 
 const Sidebar = () => {
@@ -21,7 +22,7 @@ const Sidebar = () => {
                 {t("nav.home")}
             </Menu.Item>
             <Menu.Item key="/cam">
-                <span className={styles.productIcon}>C</span>
+                <img className={styles.productIcon} src={LogoCAM} alt="" />
                 API 管理 CAM
             </Menu.Item>
         </Menu>
@@ -29,4 +30,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
