@@ -3,17 +3,28 @@
   "common": { "cancel": "取消", "modifyPassword": "修改密码", "logout": "退出登录" },
   "login": {
     "title": "登录", "username": "用户名/邮箱", "usernamePlaceholder": "请输入用户名或邮箱",
+    "usernameRequired": "请输入用户名或邮箱",
     "password": "密码", "passwordPlaceholder": "请输入密码", "login": "登录",
+    "passwordRequired": "请输入密码",
     "success": "登录成功", "failure": "登录失败"
   },
   "register": {
     "title": "注册", "username": "用户名", "nickname": "昵称", "email": "邮箱", "role": "角色",
+    "usernamePlaceholder": "请输入用户名", "usernameRequired": "请输入用户名",
+    "nicknamePlaceholder": "请输入昵称", "nicknameRequired": "请输入昵称",
+    "emailPlaceholder": "请输入邮箱", "emailRequired": "请输入邮箱",
+    "rolePlaceholder": "请选择角色", "roleRequired": "请选择角色",
     "password": "密码", "confirmPassword": "确认密码", "submit": "注册",
+    "passwordPlaceholder": "请输入密码", "passwordRequired": "请输入密码",
+    "confirmPasswordPlaceholder": "请再次输入密码", "confirmPasswordRequired": "请再次输入密码",
     "success": "注册成功", "failure": "注册失败"
   },
   "modifyPassword": {
     "title": "修改密码", "oldPassword": "旧密码", "newPassword": "新密码",
-    "confirmPassword": "确认密码", "submit": "提交", "success": "修改成功", "failure": "修改失败"
+    "oldPasswordPlaceholder": "请输入旧密码", "oldPasswordRequired": "请输入旧密码",
+    "newPasswordPlaceholder": "请输入新密码", "newPasswordRequired": "请输入新密码",
+    "confirmPassword": "确认密码", "submit": "提交", "success": "修改成功", "failure": "修改失败",
+    "confirmPasswordPlaceholder": "请再次输入新密码", "confirmPasswordRequired": "请再次输入新密码"
   },
   "user": {
     "frontend": "前端开发", "backend": "后端开发", "fullstack": "全栈开发", "qa": "测试工程师",
@@ -21,4 +32,3 @@
     "architect": "系统架构师", "proj_lead": "项目负责人", "guest": "访客"
   }
 }
-
