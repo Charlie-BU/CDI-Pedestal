@@ -1,0 +1,64 @@
+:global(.arco-page-header).header {
+    padding: 10px 0;
+}
+
+.header {
+    position: relative;
+    z-index: 10;
+    background: var(--color-bg-white);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+}
+
+.brand,
+.action {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+    color: #1d2129;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: #fff;
+    background: #165dff;
+}
+
+.action {
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #1d2129;
+    font-size: 14px;
+}
+
+.action:hover {
+    background: #f5f5f5;
+}
+
+.avatar,
+.guest {
+    cursor: pointer;
+}
+
+.avatar {
+    background: #ecf2ff;
+}
+
+.guest {
+    color: #fff;
+    background: #c9cdd4;
+}
+

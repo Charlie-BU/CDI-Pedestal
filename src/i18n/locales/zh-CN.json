@@ -1,0 +1,24 @@
+{
+  "nav": { "home": "首页" },
+  "common": { "cancel": "取消", "modifyPassword": "修改密码", "logout": "退出登录" },
+  "login": {
+    "title": "登录", "username": "用户名/邮箱", "usernamePlaceholder": "请输入用户名或邮箱",
+    "password": "密码", "passwordPlaceholder": "请输入密码", "login": "登录",
+    "success": "登录成功", "failure": "登录失败"
+  },
+  "register": {
+    "title": "注册", "username": "用户名", "nickname": "昵称", "email": "邮箱", "role": "角色",
+    "password": "密码", "confirmPassword": "确认密码", "submit": "注册",
+    "success": "注册成功", "failure": "注册失败"
+  },
+  "modifyPassword": {
+    "title": "修改密码", "oldPassword": "旧密码", "newPassword": "新密码",
+    "confirmPassword": "确认密码", "submit": "提交", "success": "修改成功", "failure": "修改失败"
+  },
+  "user": {
+    "frontend": "前端开发", "backend": "后端开发", "fullstack": "全栈开发", "qa": "测试工程师",
+    "devops": "运维工程师", "product_manager": "产品经理", "designer": "设计师",
+    "architect": "系统架构师", "proj_lead": "项目负责人", "guest": "访客"
+  }
+}
+

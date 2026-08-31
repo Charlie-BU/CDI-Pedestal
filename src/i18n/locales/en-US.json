@@ -1,0 +1,25 @@
+{
+  "nav": { "home": "Home" },
+  "common": { "cancel": "Cancel", "modifyPassword": "Change Password", "logout": "Logout" },
+  "login": {
+    "title": "Login", "username": "Username / Email", "usernamePlaceholder": "Enter username or email",
+    "password": "Password", "passwordPlaceholder": "Enter password", "login": "Login",
+    "success": "Login successfully", "failure": "Login failed"
+  },
+  "register": {
+    "title": "Register", "username": "Username", "nickname": "Nickname", "email": "Email", "role": "Role",
+    "password": "Password", "confirmPassword": "Confirm Password", "submit": "Register",
+    "success": "Registered successfully", "failure": "Registration failed"
+  },
+  "modifyPassword": {
+    "title": "Change Password", "oldPassword": "Current Password", "newPassword": "New Password",
+    "confirmPassword": "Confirm Password", "submit": "Submit", "success": "Password updated",
+    "failure": "Password update failed"
+  },
+  "user": {
+    "frontend": "Frontend Developer", "backend": "Backend Developer", "fullstack": "Fullstack Developer",
+    "qa": "QA Engineer", "devops": "DevOps Engineer", "product_manager": "Product Manager",
+    "designer": "Designer", "architect": "Architect", "proj_lead": "Project Lead", "guest": "Guest"
+  }
+}
+
