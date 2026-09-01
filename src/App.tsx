@@ -10,10 +10,44 @@ import RemoteBoundary from "@/components/RemoteBoundary";
 
 const CamApp = lazy(() => import("cam/App"));
 
+const LoadingFallback = () => (
+    <div className="shell-loading">
+        <Spin dot loading />
+    </div>
+);
+
 const Home = () => (
     <div style={{ padding: 32 }}>
         <h1 style={{ marginTop: 0 }}>CDI</h1>
         <p>请从左侧导航选择要使用的平台。</p>
+    </div>
+);
+
+const Railway = () => (
+    <div style={{ padding: 32 }}>
+        <h1 style={{ marginTop: 0 }}>Railway</h1>
+        <p>Railway 不允许被嵌入其他网站，请在新标签页中打开。</p>
+        <a
+            href="https://railway.com/"
+            target="_blank"
+            rel="noreferrer"
+        >
+            打开 Railway
+        </a>
+    </div>
+);
+
+const CozeLoop = () => (
+    <div style={{ padding: 32 }}>
+        <h1 style={{ marginTop: 0 }}>扣子罗盘</h1>
+        <p>扣子罗盘不允许被嵌入其他网站，请在新标签页中打开。</p>
+        <a
+            href="https://loop.coze.cn/console"
+            target="_blank"
+            rel="noreferrer"
+        >
+            打开扣子罗盘
+        </a>
     </div>
 );
 
@@ -57,13 +91,25 @@ const App = () => {
                         element={
                             accessToken ? (
                                 <RemoteBoundary>
-                                    <Suspense fallback={<Spin dot loading />}>
+                                    <Suspense fallback={<LoadingFallback />}>
                                         <CamApp platform={platform} />
                                     </Suspense>
                                 </RemoteBoundary>
                             ) : (
                                 <Navigate to="/home" replace />
                             )
+                        }
+                    />
+                    <Route
+                        path="railway"
+                        element={
+                            accessToken ? <Railway /> : <Navigate to="/home" replace />
+                        }
+                    />
+                    <Route
+                        path="coze-loop"
+                        element={
+                            accessToken ? <CozeLoop /> : <Navigate to="/home" replace />
                         }
                     />
                     <Route path="*" element={<Navigate to="/home" replace />} />

@@ -2,7 +2,7 @@ import { Menu, Message } from "@cloud-materials/common";
 import { IconHouseDashboard } from "@cloud-materials/common/ve-o-iconbox";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { LogoCAM } from "@/assets/icons";
+import { LogoCAM, LogoCozeLoop, LogoRailway } from "@/assets/icons";
 import { useUser } from "@/hooks/useUser";
 import styles from "./index.module.less";
 
@@ -11,7 +11,13 @@ const Sidebar = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { accessToken, openLoginModal } = useUser();
-    const selected = location.pathname.startsWith("/cam") ? "/cam" : "/home";
+    const selected = location.pathname.startsWith("/cam")
+        ? "/cam"
+        : location.pathname.startsWith("/railway")
+          ? "/railway"
+          : location.pathname.startsWith("/coze-loop")
+            ? "/coze-loop"
+          : "/home";
 
     const handleMenuItemClick = (key: string) => {
         if (key !== "/home" && !accessToken) {
@@ -41,6 +47,20 @@ const Sidebar = () => {
             >
                 <img className={styles.productIcon} src={LogoCAM} alt="" />
                 API 管理 CAM
+            </Menu.Item>
+            <Menu.Item
+                key="/railway"
+                style={{ display: "flex", alignItems: "center" }}
+            >
+                <img className={styles.productIcon} src={LogoRailway} alt="" />
+                Railway
+            </Menu.Item>
+            <Menu.Item
+                key="/coze-loop"
+                style={{ display: "flex", alignItems: "center" }}
+            >
+                <img className={styles.productIcon} src={LogoCozeLoop} alt="" />
+                扣子罗盘
             </Menu.Item>
         </Menu>
     );

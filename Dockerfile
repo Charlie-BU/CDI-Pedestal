@@ -25,5 +25,8 @@ WORKDIR /srv
 ARG CAM_UPSTREAM_BASE_URL
 ENV CAM_UPSTREAM_BASE_URL=${CAM_UPSTREAM_BASE_URL}
 COPY Caddyfile /etc/caddy/Caddyfile
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 COPY --from=builder /app/dist /srv
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
