@@ -43,7 +43,7 @@ const Header = () => {
         <PageHeader
             className={styles.header}
             title={
-                <button className={styles.brand} onClick={() => navigate("/home")}>
+                <button className={styles.brand} onClick={() => navigate("/")}>
                     <img className={styles.logo} src={LogoCDI} alt="" />
                     <span>CDI</span>
                 </button>

@@ -17,10 +17,10 @@ const Sidebar = () => {
           ? "/railway"
           : location.pathname.startsWith("/coze-loop")
             ? "/coze-loop"
-          : "/home";
+          : "/";
 
     const handleMenuItemClick = (key: string) => {
-        if (key !== "/home" && !accessToken) {
+        if (key !== "/" && !accessToken) {
             Message.warning(t("login.required"));
             openLoginModal();
             return;
@@ -35,7 +35,7 @@ const Sidebar = () => {
             className={styles.menu}
         >
             <Menu.Item
-                key="/home"
+                key="/"
                 style={{ display: "flex", alignItems: "center" }}
             >
                 <IconHouseDashboard className={styles.icon} />

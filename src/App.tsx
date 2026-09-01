@@ -84,8 +84,7 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route element={<Layout />}>
-                    <Route index element={<Navigate to="/home" replace />} />
-                    <Route path="home" element={<Home />} />
+                    <Route index element={<Home />} />
                     <Route
                         path="cam/*"
                         element={
@@ -96,23 +95,23 @@ const App = () => {
                                     </Suspense>
                                 </RemoteBoundary>
                             ) : (
-                                <Navigate to="/home" replace />
+                                <Navigate to="/" replace />
                             )
                         }
                     />
                     <Route
                         path="railway"
                         element={
-                            accessToken ? <Railway /> : <Navigate to="/home" replace />
+                            accessToken ? <Railway /> : <Navigate to="/" replace />
                         }
                     />
                     <Route
                         path="coze-loop"
                         element={
-                            accessToken ? <CozeLoop /> : <Navigate to="/home" replace />
+                            accessToken ? <CozeLoop /> : <Navigate to="/" replace />
                         }
                     />
-                    <Route path="*" element={<Navigate to="/home" replace />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
             </Routes>
         </BrowserRouter>

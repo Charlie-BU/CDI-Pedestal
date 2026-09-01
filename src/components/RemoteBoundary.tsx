@@ -24,16 +24,21 @@ class RemoteBoundary extends Component<Props, State> {
     render() {
         if (this.state.failed) {
             return (
-                <Result
-                    status="error"
-                    title="平台加载失败"
-                    subTitle="请确认子应用已经发布并且远程入口地址可访问。"
-                    extra={
-                        <Button type="primary" onClick={() => window.location.reload()}>
-                            重新加载
-                        </Button>
-                    }
-                />
+                <div className="shell-error">
+                    <Result
+                        status="error"
+                        title="平台加载失败"
+                        subTitle="请确认子应用已经发布并且远程入口地址可访问"
+                        extra={
+                            <Button
+                                type="primary"
+                                onClick={() => window.location.reload()}
+                            >
+                                重新加载
+                            </Button>
+                        }
+                    />
+                </div>
             );
         }
         return this.props.children;
@@ -41,4 +46,3 @@ class RemoteBoundary extends Component<Props, State> {
 }
 
 export default RemoteBoundary;
-

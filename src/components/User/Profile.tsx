@@ -26,7 +26,7 @@ const Profile = ({ userInfo, logout, openModifyPasswordModal }: Props) => {
             <button className={styles.item} onClick={openModifyPasswordModal}>
                 <IconLock /> {t("common.modifyPassword")}
             </button>
-            <button className={styles.item} onClick={() => { logout(); navigate("/home"); }}>
+            <button className={styles.item} onClick={() => { logout(); navigate("/"); }}>
                 <IconPoweroff /> {t("common.logout")}
             </button>
         </div>
