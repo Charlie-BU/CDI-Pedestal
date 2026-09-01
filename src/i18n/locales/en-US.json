@@ -14,6 +14,7 @@
         "passwordPlaceholder": "Enter password",
         "login": "Login",
         "passwordRequired": "Please enter password",
+        "required": "Please log in first",
         "success": "Login successfully",
         "failure": "Login failed"
     },

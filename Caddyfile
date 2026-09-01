@@ -11,8 +11,9 @@
     @health path /health
     respond @health "OK" 200
 
-    handle_path /api/* {
-        reverse_proxy {$API_UPSTREAM_BASE_URL}
+    # 基座和 CAM 子应用统一使用 /api/cam/v1/* -> /v1/*。
+    handle_path /api/cam/* {
+        reverse_proxy {$CAM_UPSTREAM_BASE_URL}
     }
 
     handle {
@@ -20,4 +21,3 @@
         file_server
     }
 }
-

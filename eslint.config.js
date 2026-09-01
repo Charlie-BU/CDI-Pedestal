@@ -6,7 +6,7 @@ import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-    globalIgnores(["dist", "cloud-materials-common"]),
+    globalIgnores(["dist", "cloud-materials-common", "src/cam-auto-generate/**"]),
     {
         files: ["**/*.{ts,tsx}"],
         extends: [
@@ -21,4 +21,3 @@ export default defineConfig([
         },
     },
 ]);
-

@@ -21,4 +21,3 @@ export const modifyPassword = async (data: ModifyPasswordRequest) =>
 
 export const getMyInfo = async () =>
     (await http.get<UserResponse>(`${prefix}/getMyInfo`)).data;
-

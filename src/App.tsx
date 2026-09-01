@@ -23,8 +23,6 @@ const App = () => {
         user,
         accessToken,
         fetchUser,
-        openLoginModal,
-        openRegisterModal,
         logout,
     } = useUser();
 
@@ -36,17 +34,14 @@ const App = () => {
         () => ({
             user,
             accessToken,
+            apiBase: "/api/cam",
             locale: i18n.resolvedLanguage || "zh-CN",
-            openLoginModal,
-            openRegisterModal,
-            logout,
+            onUnauthorized: logout,
         }),
         [
             accessToken,
             i18n.resolvedLanguage,
             logout,
-            openLoginModal,
-            openRegisterModal,
             user,
         ],
     );
@@ -60,11 +55,15 @@ const App = () => {
                     <Route
                         path="cam/*"
                         element={
-                            <RemoteBoundary>
-                                <Suspense fallback={<Spin dot loading />}>
-                                    <CamApp platform={platform} />
-                                </Suspense>
-                            </RemoteBoundary>
+                            accessToken ? (
+                                <RemoteBoundary>
+                                    <Suspense fallback={<Spin dot loading />}>
+                                        <CamApp platform={platform} />
+                                    </Suspense>
+                                </RemoteBoundary>
+                            ) : (
+                                <Navigate to="/home" replace />
+                            )
                         }
                     />
                     <Route path="*" element={<Navigate to="/home" replace />} />

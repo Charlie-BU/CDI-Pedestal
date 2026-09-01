@@ -4,7 +4,7 @@ import type { AxiosError } from "axios";
 export const TOKEN_KEY = "cdi_access_token";
 
 export const http = axios.create({
-    baseURL: import.meta.env.VITE_API_PUBLIC_BASE_URL || "/api",
+    baseURL: "/api/cam",
     timeout: 60000,
     headers: { "Content-Type": "application/json" },
 });
@@ -23,4 +23,3 @@ http.interceptors.response.use(
     (response) => response,
     (error: AxiosError) => Promise.reject(error),
 );
-

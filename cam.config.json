@@ -1,0 +1,7 @@
+{
+  "services": {
+    "CDIService": "infra/CDI/pedestal@latest"
+  },
+  "outDir": "src/cam-auto-generate",
+  "generateConfig": {}
+}

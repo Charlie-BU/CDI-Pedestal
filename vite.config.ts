@@ -4,11 +4,20 @@ import { defineConfig, loadEnv } from "vite";
 import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd(), "VITE_");
-    const apiEnv = loadEnv(mode, process.cwd(), "API_UPSTREAM_");
-    const port = Number(env.VITE_FE_PORT) || 9100;
+    const env = loadEnv(mode, process.cwd(), "");
+    const port = Number(env.VITE_FE_PORT) || 9000;
+    const camUpstream = env.CAM_UPSTREAM_BASE_URL;
+    const camRemoteEntry = env.VITE_CAM_REMOTE_ENTRY;
+    if (!camRemoteEntry) {
+        throw new Error(
+            "VITE_CAM_REMOTE_ENTRY is required to load the CAM remote module.",
+        );
+    }
     const cloudMaterialsPath = fileURLToPath(
-        new URL("./cloud-materials-common/@cloud-materials/common", import.meta.url),
+        new URL(
+            "./cloud-materials-common/@cloud-materials/common",
+            import.meta.url,
+        ),
     );
     const nativeMapShimPath = fileURLToPath(
         new URL("./src/shims/babel-runtime-map.ts", import.meta.url),
@@ -24,9 +33,7 @@ export default defineConfig(({ mode }) => {
                     cam: {
                         type: "module",
                         name: "cam",
-                        entry:
-                            env.VITE_CAM_REMOTE_ENTRY ||
-                            "http://localhost:9000/mf-manifest.json",
+                        entry: camRemoteEntry,
                     },
                 },
                 shared: {
@@ -47,10 +54,11 @@ export default defineConfig(({ mode }) => {
             port,
             origin: `http://localhost:${port}`,
             proxy: {
-                "/api": {
-                    target: apiEnv.API_UPSTREAM_BASE_URL,
+                // 基座和 CAM 子应用统一使用 /api/cam/v1/*。
+                "/api/cam": {
+                    target: camUpstream,
                     changeOrigin: true,
-                    rewrite: (path) => path.replace(/^\/api(?=\/|$)/, ""),
+                    rewrite: (path) => path.replace(/^\/api\/cam(?=\/|$)/, ""),
                 },
             },
         },

@@ -10,9 +10,10 @@ pnpm install
 pnpm dev
 ```
 
-默认端口为 `9100`。CAM 默认从 `http://localhost:9000/mf-manifest.json` 加载，因此需要同时启动 CAM；也可以通过 `VITE_CAM_REMOTE_ENTRY` 指定其他地址。
+默认端口为 `9000`。`VITE_CAM_REMOTE_ENTRY` 为必填构建变量；示例值为 `http://localhost:9100/mf-manifest.json`，因此本地运行时需要同时启动 CAM。也可以将其设置为其他已部署的 CAM 远程入口。
+
+基座统一代理 CAM：所有 CAM 请求均使用 `/api/cam/v1/*`，并被改写为 CAM 后端的 `/v1/*`，包括登录、注册、用户资料和业务接口。
 
 ## 主站与子应用契约
 
-主站通过 Module Federation 加载 `cam/App`，并传入 `PlatformContextValue`：当前用户、访问令牌、语言和登录/注册/退出操作。子应用不渲染全局导航，也不拥有主站登录 UI。
-
+主站通过 Module Federation 加载 `cam/App`，并传入 `PlatformContextValue`：当前用户、访问令牌、CAM API 基地址、语言和未授权回调。子应用不渲染全局导航，也不拥有主站登录 UI。

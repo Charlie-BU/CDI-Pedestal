@@ -1,20 +1,30 @@
-import { Menu } from "@cloud-materials/common";
+import { Menu, Message } from "@cloud-materials/common";
 import { IconHouseDashboard } from "@cloud-materials/common/ve-o-iconbox";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LogoCAM } from "@/assets/icons";
+import { useUser } from "@/hooks/useUser";
 import styles from "./index.module.less";
 
 const Sidebar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { accessToken } = useUser();
     const selected = location.pathname.startsWith("/cam") ? "/cam" : "/home";
+
+    const handleMenuItemClick = (key: string) => {
+        if (key !== "/home" && !accessToken) {
+            Message.warning(t("login.required"));
+            return;
+        }
+        navigate(key);
+    };
 
     return (
         <Menu
             selectedKeys={[selected]}
-            onClickMenuItem={(key) => navigate(key)}
+            onClickMenuItem={handleMenuItemClick}
             className={styles.menu}
         >
             <Menu.Item

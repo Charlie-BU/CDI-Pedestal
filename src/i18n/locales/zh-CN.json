@@ -14,6 +14,7 @@
         "passwordPlaceholder": "请输入密码",
         "login": "登录",
         "passwordRequired": "请输入密码",
+        "required": "请先登录",
         "success": "登录成功",
         "failure": "登录失败"
     },
