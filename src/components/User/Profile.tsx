@@ -1,11 +1,11 @@
 import { Avatar, Divider, IconLock, IconPoweroff, Space, Typography } from "@cloud-materials/common";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { UserProfile } from "@/services/user/types";
+import type { GetMyInfo200ResponseUser } from "@/cam-auto-generate/CDIService/namespaces";
 import styles from "./index.module.less";
 
 interface Props {
-    userInfo: UserProfile;
+    userInfo: GetMyInfo200ResponseUser;
     logout: () => void;
     openModifyPasswordModal: () => void;
 }
@@ -34,4 +34,3 @@ const Profile = ({ userInfo, logout, openModifyPasswordModal }: Props) => {
 };
 
 export default Profile;
-

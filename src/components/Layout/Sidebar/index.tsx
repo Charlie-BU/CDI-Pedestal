@@ -10,12 +10,13 @@ const Sidebar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { accessToken } = useUser();
+    const { accessToken, openLoginModal } = useUser();
     const selected = location.pathname.startsWith("/cam") ? "/cam" : "/home";
 
     const handleMenuItemClick = (key: string) => {
         if (key !== "/home" && !accessToken) {
             Message.warning(t("login.required"));
+            openLoginModal();
             return;
         }
         navigate(key);

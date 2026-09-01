@@ -1,15 +1,19 @@
 import { create } from "zustand";
 import { CModal, Message } from "@cloud-materials/common";
 import { t } from "i18next";
-import { TOKEN_KEY } from "@/request";
-import { getMyInfo, login, modifyPassword, register } from "@/services/user";
-import type { LoginRequest, ModifyPasswordRequest, RegisterRequest, UserProfile } from "@/services/user/types";
+import { CDIService, TOKEN_KEY } from "@/services/CDIService";
+import type {
+    GetMyInfo200ResponseUser,
+    ModifyPasswordBodyRequest,
+    UserLoginBodyRequest,
+    UserRegisterBodyRequest,
+} from "@/cam-auto-generate/CDIService/namespaces";
 import LoginForm from "@/components/User/LoginForm";
 import RegisterForm from "@/components/User/RegisterForm";
 import ModifyPasswordForm from "@/components/User/ModifyPasswordForm";
 
 interface UserStore {
-    user: UserProfile | null;
+    user: GetMyInfo200ResponseUser | null;
     accessToken: string;
     loading: boolean;
     fetchUser: () => Promise<void>;
@@ -20,7 +24,10 @@ interface UserStore {
 }
 
 const ensureSuccess = (status: number, message: string) => {
-    if (status !== 200) throw new Error(message);
+    if (status !== 200) {
+        Message.warning(message);
+        throw new Error(message);
+    }
 };
 
 export const useUser = create<UserStore>((set, get) => ({
@@ -32,7 +39,7 @@ export const useUser = create<UserStore>((set, get) => ({
         if (!get().accessToken || get().loading) return;
         set({ loading: true });
         try {
-            const response = await getMyInfo();
+            const response = await CDIService.GetMyInfoGET({ Authorization: "" });
             ensureSuccess(response.status, response.message || "获取用户信息失败");
             set({ user: response.user, loading: false });
         } catch {
@@ -54,12 +61,17 @@ export const useUser = create<UserStore>((set, get) => ({
             okText: t("login.login"),
             onOk: async (values, form) => {
                 await form.validate();
-                const payload: LoginRequest = {
+                const payload: UserLoginBodyRequest = {
                     username: values.username,
                     password: values.password,
                 };
-                const response = await login(payload);
+                const response = await CDIService.UserLoginPOST(payload);
                 ensureSuccess(response.status, response.message || t("login.failure"));
+                if (!response.access_token) {
+                    const message = t("login.failure");
+                    Message.warning(message);
+                    throw new Error(message);
+                }
                 localStorage.setItem(TOKEN_KEY, response.access_token);
                 set({ accessToken: response.access_token, user: null });
                 await get().fetchUser();
@@ -80,14 +92,14 @@ export const useUser = create<UserStore>((set, get) => ({
                 if (values.password !== values.confirmPassword) {
                     throw new Error("两次密码输入不一致");
                 }
-                const payload: RegisterRequest = {
+                const payload: UserRegisterBodyRequest = {
                     username: values.username,
                     nickname: values.nickname,
                     email: values.email,
                     role: values.role,
                     password: values.password,
                 };
-                const response = await register(payload);
+                const response = await CDIService.UserRegisterPOST(payload);
                 ensureSuccess(response.status, response.message || t("register.failure"));
                 Message.success(response.message || t("register.success"));
                 modal.close();
@@ -106,11 +118,14 @@ export const useUser = create<UserStore>((set, get) => ({
                 if (values.new_password !== values.confirm_new_password) {
                     throw new Error("两次新密码输入不一致");
                 }
-                const payload: ModifyPasswordRequest = {
+                const payload: ModifyPasswordBodyRequest = {
                     old_password: values.old_password,
                     new_password: values.new_password,
                 };
-                const response = await modifyPassword(payload);
+                const response = await CDIService.ModifyPasswordPOST({
+                    ...payload,
+                    Authorization: "",
+                });
                 ensureSuccess(response.status, response.message || t("modifyPassword.failure"));
                 Message.success(response.message || t("modifyPassword.success"));
                 modal.close();
@@ -118,4 +133,3 @@ export const useUser = create<UserStore>((set, get) => ({
         });
     },
 }));
-

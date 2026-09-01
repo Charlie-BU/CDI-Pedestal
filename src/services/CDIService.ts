@@ -1,9 +1,9 @@
-import axios, { AxiosHeaders } from "axios";
-import type { AxiosError } from "axios";
+import axios, { AxiosHeaders, type AxiosRequestConfig } from "axios";
+import CDIServiceService from "@/cam-auto-generate/CDIService";
 
 export const TOKEN_KEY = "cdi_access_token";
 
-export const http = axios.create({
+const http = axios.create({
     baseURL: "/api/cam",
     timeout: 60000,
     headers: { "Content-Type": "application/json" },
@@ -19,7 +19,7 @@ http.interceptors.request.use((config) => {
     return config;
 });
 
-http.interceptors.response.use(
-    (response) => response,
-    (error: AxiosError) => Promise.reject(error),
-);
+export const CDIService = new CDIServiceService<AxiosRequestConfig>({
+    request: (config, options) =>
+        http.request({ ...options, ...config }).then((response) => response.data),
+});
