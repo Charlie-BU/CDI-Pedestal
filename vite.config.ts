@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
         plugins: [
             react(),
             federation({
-                name: "cdk_pedestal",
+                name: "cdi_pedestal",
                 dts: false,
                 remotes: {
                     cam: {

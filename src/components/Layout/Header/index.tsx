@@ -14,6 +14,7 @@ import {
 import { useTranslation } from "react-i18next";
 import Profile from "@/components/User/Profile";
 import { useUser } from "@/hooks/useUser";
+import { LogoCDI } from "@/assets/icons";
 import styles from "./index.module.less";
 
 const Header = () => {
@@ -43,11 +44,11 @@ const Header = () => {
             className={styles.header}
             title={
                 <button className={styles.brand} onClick={() => navigate("/home")}>
-                    <span className={styles.logo}>C</span>
-                    <span>CDK</span>
+                    <img className={styles.logo} src={LogoCDI} alt="" />
+                    <span>CDI</span>
                 </button>
             }
-            subTitle="Development Infrastructure"
+            subTitle="Composable Development Infrastructure"
             extra={
                 <Space size="large">
                     <Dropdown droplist={languageMenu} position="bottom">
@@ -89,4 +90,3 @@ const Header = () => {
 };
 
 export default Header;
-

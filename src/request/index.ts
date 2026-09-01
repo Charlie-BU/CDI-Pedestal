@@ -1,7 +1,7 @@
 import axios, { AxiosHeaders } from "axios";
 import type { AxiosError } from "axios";
 
-export const TOKEN_KEY = "cdk_access_token";
+export const TOKEN_KEY = "cdi_access_token";
 
 export const http = axios.create({
     baseURL: import.meta.env.VITE_API_PUBLIC_BASE_URL || "/api",

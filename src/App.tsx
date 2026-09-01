@@ -12,7 +12,7 @@ const CamApp = lazy(() => import("cam/App"));
 
 const Home = () => (
     <div style={{ padding: 32 }}>
-        <h1 style={{ marginTop: 0 }}>CDK</h1>
+        <h1 style={{ marginTop: 0 }}>CDI</h1>
         <p>请从左侧导航选择要使用的平台。</p>
     </div>
 );

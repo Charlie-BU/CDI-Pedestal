@@ -1,6 +1,6 @@
-# CDK-Pedestal
+# CDI-Pedestal
 
-CDK 主站 Shell。负责统一顶导、侧导、底导、登录态和产品路由；各产品继续在独立 repo 中构建和发布。
+CDI 主站 Shell。负责统一顶导、侧导、底导、登录态和产品路由；各产品继续在独立 repo 中构建和发布。
 
 ## 本地运行
 

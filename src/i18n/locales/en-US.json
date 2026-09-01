@@ -1,35 +1,71 @@
 {
-  "nav": { "home": "Home" },
-  "common": { "cancel": "Cancel", "modifyPassword": "Change Password", "logout": "Logout" },
-  "login": {
-    "title": "Login", "username": "Username / Email", "usernamePlaceholder": "Enter username or email",
-    "usernameRequired": "Please enter username or email",
-    "password": "Password", "passwordPlaceholder": "Enter password", "login": "Login",
-    "passwordRequired": "Please enter password",
-    "success": "Login successfully", "failure": "Login failed"
-  },
-  "register": {
-    "title": "Register", "username": "Username", "nickname": "Nickname", "email": "Email", "role": "Role",
-    "usernamePlaceholder": "Enter username", "usernameRequired": "Please enter username",
-    "nicknamePlaceholder": "Enter nickname", "nicknameRequired": "Please enter nickname",
-    "emailPlaceholder": "Enter email", "emailRequired": "Please enter email",
-    "rolePlaceholder": "Select role", "roleRequired": "Please select role",
-    "password": "Password", "confirmPassword": "Confirm Password", "submit": "Register",
-    "passwordPlaceholder": "Enter password", "passwordRequired": "Please enter password",
-    "confirmPasswordPlaceholder": "Re-enter password", "confirmPasswordRequired": "Please confirm password",
-    "success": "Registered successfully", "failure": "Registration failed"
-  },
-  "modifyPassword": {
-    "title": "Change Password", "oldPassword": "Current Password", "newPassword": "New Password",
-    "oldPasswordPlaceholder": "Enter current password", "oldPasswordRequired": "Please enter current password",
-    "newPasswordPlaceholder": "Enter new password", "newPasswordRequired": "Please enter new password",
-    "confirmPassword": "Confirm Password", "submit": "Submit", "success": "Password updated",
-    "failure": "Password update failed", "confirmPasswordPlaceholder": "Re-enter new password",
-    "confirmPasswordRequired": "Please confirm new password"
-  },
-  "user": {
-    "frontend": "Frontend Developer", "backend": "Backend Developer", "fullstack": "Fullstack Developer",
-    "qa": "QA Engineer", "devops": "DevOps Engineer", "product_manager": "Product Manager",
-    "designer": "Designer", "architect": "Architect", "proj_lead": "Project Lead", "guest": "Guest"
-  }
+    "nav": { "home": "Home" },
+    "common": {
+        "cancel": "Cancel",
+        "modifyPassword": "Change Password",
+        "logout": "Logout"
+    },
+    "login": {
+        "title": "Login",
+        "username": "Username / Email",
+        "usernamePlaceholder": "Enter username or email",
+        "usernameRequired": "Please enter username or email",
+        "password": "Password",
+        "passwordPlaceholder": "Enter password",
+        "login": "Login",
+        "passwordRequired": "Please enter password",
+        "success": "Login successfully",
+        "failure": "Login failed"
+    },
+    "register": {
+        "title": "Register",
+        "username": "Username",
+        "nickname": "Nickname",
+        "email": "Email",
+        "role": "Role",
+        "usernamePlaceholder": "Enter username",
+        "usernameRequired": "Please enter username",
+        "nicknamePlaceholder": "Enter nickname",
+        "nicknameRequired": "Please enter nickname",
+        "emailPlaceholder": "Enter email",
+        "emailRequired": "Please enter email",
+        "rolePlaceholder": "Select role",
+        "roleRequired": "Please select role",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "submit": "Register",
+        "passwordPlaceholder": "Enter password",
+        "passwordRequired": "Please enter password",
+        "confirmPasswordPlaceholder": "Re-enter password",
+        "confirmPasswordRequired": "Please confirm password",
+        "success": "Registered successfully",
+        "failure": "Registration failed"
+    },
+    "modifyPassword": {
+        "title": "Change Password",
+        "oldPassword": "Current Password",
+        "newPassword": "New Password",
+        "oldPasswordPlaceholder": "Enter current password",
+        "oldPasswordRequired": "Please enter current password",
+        "newPasswordPlaceholder": "Enter new password",
+        "newPasswordRequired": "Please enter new password",
+        "confirmPassword": "Confirm Password",
+        "submit": "Submit",
+        "success": "Password updated",
+        "failure": "Password update failed",
+        "confirmPasswordPlaceholder": "Re-enter new password",
+        "confirmPasswordRequired": "Please confirm new password"
+    },
+    "user": {
+        "frontend": "Frontend Developer",
+        "backend": "Backend Developer",
+        "fullstack": "Fullstack Developer",
+        "qa": "QA Engineer",
+        "devops": "DevOps Engineer",
+        "product_manager": "Product Manager",
+        "designer": "Designer",
+        "architect": "Architect",
+        "proj_lead": "Project Lead",
+        "guest": "Guest"
+    }
 }
