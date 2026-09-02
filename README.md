@@ -13,6 +13,12 @@ pnpm dev
 
 基座统一代理 CAM：所有 CAM 请求均使用 `/api/cam/v1/*`，并被改写为 CAM 后端的 `/v1/*`，包括登录、注册、用户资料和业务接口。
 
+## 组件库 Release 更新与开发缓存
+
+`@cloud-materials/common` 从 GitHub Release 的 `.tgz` 安装。发布、升级、缓存恢复和
+白屏排查见 [组件库消费包文档](docs/cloud-materials-common.md)；该文档与 CAM-FE 的同名文档
+保持一致。
+
 ## 主站与子应用契约
 
 主站通过 Module Federation 加载 `cam/App`，并传入 `PlatformContextValue`：当前用户、访问令牌、CAM API 基地址、语言和未授权回调。子应用不渲染全局导航，也不拥有主站登录 UI。
