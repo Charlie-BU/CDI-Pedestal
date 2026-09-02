@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@cloud-materials/common':
+        specifier: https://github.com/Charlie-BU/cloud-materials-common/releases/download/release/cloud-materials-common-1.20.1-cdi.0.tgz?asset=20260902-125705
+        version: https://github.com/Charlie-BU/cloud-materials-common/releases/download/release/cloud-materials-common-1.20.1-cdi.0.tgz?asset=20260902-125705(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       axios:
         specifier: ^1.13.2
         version: 1.20.0(debug@4.4.3(supports-color@7.1.0))(supports-color@7.1.0)
@@ -200,6 +203,13 @@ packages:
   '@bramus/specificity@2.4.2':
     resolution: {integrity: sha512-ctxtJ/eA+t+6q2++vj5j7FYX3nRu311q1wfYH3xjlLOsczhlhxAg2FWNUXhpGvAw3BWo1xBcvOV6/YLc2r5FJw==}
     hasBin: true
+
+  '@cloud-materials/common@https://github.com/Charlie-BU/cloud-materials-common/releases/download/release/cloud-materials-common-1.20.1-cdi.0.tgz?asset=20260902-125705':
+    resolution: {integrity: sha512-sB3rxZ/nl1eyvbqmQPasbGGTFPvwCvoUWyg/5qgdZB/k1lxIoTShsBM767dyCHf/362Vqu0pVnA/ibZhXaKKvw==, tarball: https://github.com/Charlie-BU/cloud-materials-common/releases/download/release/cloud-materials-common-1.20.1-cdi.0.tgz?asset=20260902-125705}
+    version: 1.20.1-cdi.0
+    peerDependencies:
+      react: '>=16 <20'
+      react-dom: '>=16 <20'
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -2306,6 +2316,11 @@ snapshots:
   '@bramus/specificity@2.4.2':
     dependencies:
       css-tree: 3.2.1
+
+  '@cloud-materials/common@https://github.com/Charlie-BU/cloud-materials-common/releases/download/release/cloud-materials-common-1.20.1-cdi.0.tgz?asset=20260902-125705(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   '@colors/colors@1.5.0':
     optional: true

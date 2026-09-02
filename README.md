@@ -5,7 +5,6 @@ CDI 主站 Shell。负责统一顶导、侧导、底导、登录态和产品路�
 ## 本地运行
 
 ```bash
-./setup-consumer.sh .
 pnpm install
 pnpm dev
 ```
