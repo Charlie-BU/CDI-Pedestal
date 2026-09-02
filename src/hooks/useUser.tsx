@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { CModal, Message } from "@cloud-materials/common";
 import { t } from "i18next";
 import { CDIService, TOKEN_KEY } from "@/services/CDIService";
+import { clearCachedResponsesForToken } from "@/services/cache";
 import type {
     GetMyInfo200ResponseUser,
     ModifyPasswordBodyRequest,
@@ -36,10 +37,27 @@ export const useUser = create<UserStore>((set, get) => ({
     loading: false,
 
     fetchUser: async () => {
-        if (!get().accessToken || get().loading) return;
+        const token = get().accessToken;
+        if (!token || get().loading) return;
         set({ loading: true });
         try {
-            const response = await CDIService.GetMyInfoGET({ Authorization: "" });
+            const response = await CDIService.GetMyInfoGET(
+                { Authorization: "" },
+                {
+                    needCache: true,
+                    onCacheUpdated: (updatedResponse) => {
+                        const latest = updatedResponse as {
+                            status?: number;
+                            user?: GetMyInfo200ResponseUser;
+                        };
+                        // 忽略在退出登录或切换账号后才返回的旧响应。
+                        if (get().accessToken === token && latest.status === 200) {
+                            // 命中了缓存后，又拉到更新数据时，再补一次最新用户信息
+                            set({ user: latest.user || null });
+                        }
+                    },
+                },
+            );
             ensureSuccess(response.status, response.message || "获取用户信息失败");
             set({ user: response.user, loading: false });
         } catch {
@@ -49,7 +67,9 @@ export const useUser = create<UserStore>((set, get) => ({
     },
 
     logout: () => {
+        const token = get().accessToken;
         localStorage.removeItem(TOKEN_KEY);
+        void clearCachedResponsesForToken(token).catch(() => undefined);
         set({ user: null, accessToken: "" });
     },
 
