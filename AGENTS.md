@@ -3,6 +3,9 @@
 ## Project scope
 
 CDI-Pedestal is the CDI shell application. It owns product-level navigation, authentication state, `/cam/*` routing, and the Module Federation host integration for CAM. CAM business screens remain in the separate CAM-FE repository.
+## Agent resources
+
+- Repository-local agent skills and related guidance live under `.agents/skills/`. Check that directory for CAM-FE specific review, commitlog, documentation, and React best-practice workflows.
 
 ## Toolchain and commands
 
@@ -24,6 +27,7 @@ CDI-Pedestal is the CDI shell application. It owns product-level navigation, aut
 ## Implementation conventions
 
 - Use `@/` aliases for source imports and retain React/React Router singleton sharing in the federation configuration.
+- TypeScript / React 注释：函数、类、接口、类型别名、枚举、常量、导出组件与其他必要声明前建议添加 `/** 声明名称：用途。 */` 形式的中文单行 JSDoc 注释；注释仅说明声明的功能或用途，不描述实现细节、背景或设计理由；对象属性、局部变量与简单 JSX 无需逐项注释。
 - Keep user-visible text in both locale files under `src/i18n/locales/`.
 - Prefer service, hook, and component layers over API calls or authentication logic embedded in presentation components.
 - Preserve existing user changes outside the requested scope. Inspect `git status` before editing and stage explicit files only when committing.
