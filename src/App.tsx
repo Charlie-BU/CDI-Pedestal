@@ -44,12 +44,12 @@ const EmbeddedPage = ({ title, src }: { title: string; src: string }) => (
 
 /** Railway：Railway 平台嵌入页。 */
 const Railway = () => (
-    <EmbeddedPage title="Railway" src="https://railway.com/" />
+    <EmbeddedPage title="Railway" src="/embed/railway/" />
 );
 
 /** CozeLoop：扣子罗盘 平台嵌入页。 */
 const CozeLoop = () => (
-    <EmbeddedPage title="扣子罗盘" src="https://loop.coze.cn/console" />
+    <EmbeddedPage title="扣子罗盘" src="/embed/coze-loop/console" />
 );
 
 
@@ -78,7 +78,7 @@ const ArcoDesign = () => (
 const FeishuOpenPlatform = () => (
     <EmbeddedPage
         title="飞书开放平台"
-        src="https://open.feishu.cn/app"
+        src="/embed/feishu-open-platform/app"
     />
 );
 

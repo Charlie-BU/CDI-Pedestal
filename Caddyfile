@@ -11,9 +11,42 @@
     @health path /health
     respond @health "OK" 200
 
-    # 基座和 CAM 子应用统一使用 /api/cam/v1/* -> /v1/*。
+    # CAM API
     handle_path /api/cam/* {
         reverse_proxy {$CAM_UPSTREAM_BASE_URL}
+    }
+
+    # 仅适用于你自己控制、或已经得到授权的站点
+    handle_path /embed/railway/* {
+        reverse_proxy https://railway.com {
+            header_down -X-Frame-Options
+            header_down -Content-Security-Policy
+            header_down Content-Security-Policy "frame-ancestors 'self';"
+        }
+    }
+
+    handle_path /embed/coze-loop/* {
+        reverse_proxy https://loop.coze.cn {
+            header_down -X-Frame-Options
+            header_down -Content-Security-Policy
+            header_down Content-Security-Policy "frame-ancestors 'self';"
+        }
+    }
+
+    handle_path /embed/feishu-open-platform/* {
+        reverse_proxy https://open.feishu.cn {
+            header_down -X-Frame-Options
+            header_down -Content-Security-Policy
+            header_down Content-Security-Policy "frame-ancestors 'self';"
+        }
+    }
+
+    handle_path /embed/volcengine-signin/* {
+        reverse_proxy https://signin.volcengine.com {
+            header_down -X-Frame-Options
+            header_down -Content-Security-Policy
+            header_down Content-Security-Policy "frame-ancestors 'self';"
+        }
     }
 
     handle {

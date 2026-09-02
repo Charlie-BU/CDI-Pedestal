@@ -61,20 +61,6 @@ const Sidebar = () => {
                 API 管理 CAM
             </Menu.Item>
             <Menu.Item
-                key="/railway"
-                style={{ display: "flex", alignItems: "center" }}
-            >
-                <img className={styles.productIcon} src={LogoRailway} alt="" />
-                Railway
-            </Menu.Item>
-            <Menu.Item
-                key="/coze-loop"
-                style={{ display: "flex", alignItems: "center" }}
-            >
-                <img className={styles.productIcon} src={LogoCozeLoop} alt="" />
-                扣子罗盘
-            </Menu.Item>
-            <Menu.Item
                 key="/prompt-minder"
                 style={{ display: "flex", alignItems: "center" }}
             >
@@ -94,6 +80,20 @@ const Sidebar = () => {
             >
                 <img className={styles.productIcon} src={LogoArcoDesign} alt="" />
                 {t("nav.arcoDesign")}
+            </Menu.Item>
+            <Menu.Item
+                key="/railway"
+                style={{ display: "flex", alignItems: "center" }}
+            >
+                <img className={styles.productIcon} src={LogoRailway} alt="" />
+                Railway
+            </Menu.Item>
+            <Menu.Item
+                key="/coze-loop"
+                style={{ display: "flex", alignItems: "center" }}
+            >
+                <img className={styles.productIcon} src={LogoCozeLoop} alt="" />
+                扣子罗盘
             </Menu.Item>
             <Menu.Item
                 key="/feishu-open-platform"
