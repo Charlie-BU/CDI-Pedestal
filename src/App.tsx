@@ -7,8 +7,17 @@ import { useUser } from "@/hooks/useUser";
 import { useTranslation } from "react-i18next";
 import type { PlatformContextValue } from "@/platform";
 import RemoteBoundary from "@/components/RemoteBoundary";
+import { preloadCAMRemote } from "@/preloadCAMRemote";
 
-const CamApp = lazy(() => import("cam/App"));
+const CAMApp = lazy(() => import("cam/App"));
+
+type IdleCallbackWindow = {
+    requestIdleCallback?: (
+        callback: () => void,
+        options?: { timeout: number },
+    ) => number;
+    cancelIdleCallback?: (handle: number) => void;
+};
 
 const LoadingFallback = () => (
     <div className="shell-loading">
@@ -64,6 +73,25 @@ const App = () => {
         if (accessToken && !user) void fetchUser();
     }, [accessToken, fetchUser, user]);
 
+    useEffect(() => {
+        if (!accessToken) return;
+
+        // 用户完成登录后，提前在空闲时预加载 CAM 远程模块，减少首次进入页面的等待。
+        const preload = () => void preloadCAMRemote();
+        const idleWindow = window as unknown as IdleCallbackWindow;
+        if (idleWindow.requestIdleCallback) {
+            // 优先利用浏览器空闲时间执行，避免和当前首屏渲染抢占资源。
+            const idleCallback = idleWindow.requestIdleCallback(preload, {
+                timeout: 3000,
+            });
+            return () => idleWindow.cancelIdleCallback?.(idleCallback);
+        }
+
+        // 不支持 requestIdleCallback 时，退化为延迟触发，仍然尽量避开关键渲染阶段。
+        const timer = window.setTimeout(preload, 1000);
+        return () => window.clearTimeout(timer);
+    }, [accessToken]);
+
     const platform = useMemo<PlatformContextValue>(
         () => ({
             user,
@@ -91,7 +119,7 @@ const App = () => {
                             accessToken ? (
                                 <RemoteBoundary>
                                     <Suspense fallback={<LoadingFallback />}>
-                                        <CamApp platform={platform} />
+                                        <CAMApp platform={platform} />
                                     </Suspense>
                                 </RemoteBoundary>
                             ) : (
