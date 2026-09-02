@@ -1,5 +1,11 @@
 {
-    "nav": { "home": "Home" },
+    "nav": {
+        "home": "Home",
+        "promptMinder": "Prompt Minder",
+        "iconGallery": "Icon Gallery",
+        "arcoDesign": "Arco Design",
+        "feishuOpenPlatform": "Feishu Open Platform"
+    },
     "common": {
         "cancel": "Cancel",
         "modifyPassword": "Change Password",

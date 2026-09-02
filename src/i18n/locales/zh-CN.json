@@ -1,5 +1,11 @@
 {
-    "nav": { "home": "首页" },
+    "nav": {
+        "home": "首页",
+        "promptMinder": "Prompt Minder",
+        "iconGallery": "Icon Gallery",
+        "arcoDesign": "Arco Design",
+        "feishuOpenPlatform": "飞书开放平台"
+    },
     "common": {
         "cancel": "取消",
         "modifyPassword": "修改密码",

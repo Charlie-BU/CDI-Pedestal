@@ -32,32 +32,54 @@ const Home = () => (
     </div>
 );
 
-const Railway = () => (
-    <div style={{ padding: 32 }}>
-        <h1 style={{ marginTop: 0 }}>Railway</h1>
-        <p>Railway 不允许被嵌入其他网站，请在新标签页中打开。</p>
-        <a
-            href="https://railway.com/"
-            target="_blank"
-            rel="noreferrer"
-        >
-            打开 Railway
-        </a>
-    </div>
+/** 外部嵌入页面：在 CDI 内容区承载允许被嵌入的第三方平台。 */
+const EmbeddedPage = ({ title, src }: { title: string; src: string }) => (
+    <iframe
+        title={title}
+        src={src}
+        style={{ display: "block", width: "100%", height: "100%", border: 0 }}
+    />
 );
 
+
+/** Railway：Railway 平台嵌入页。 */
+const Railway = () => (
+    <EmbeddedPage title="Railway" src="https://railway.com/" />
+);
+
+/** CozeLoop：扣子罗盘 平台嵌入页。 */
 const CozeLoop = () => (
-    <div style={{ padding: 32 }}>
-        <h1 style={{ marginTop: 0 }}>扣子罗盘</h1>
-        <p>扣子罗盘不允许被嵌入其他网站，请在新标签页中打开。</p>
-        <a
-            href="https://loop.coze.cn/console"
-            target="_blank"
-            rel="noreferrer"
-        >
-            打开扣子罗盘
-        </a>
-    </div>
+    <EmbeddedPage title="扣子罗盘" src="https://loop.coze.cn/console" />
+);
+
+
+/** Prompt Minder：提示词管理平台嵌入页。 */
+const PromptMinder = () => (
+    <EmbeddedPage title="Prompt Minder" src="https://www.prompt-minder.com/" />
+);
+
+/** Icon Gallery：cloud-materials-common 图标库嵌入页。 */
+const IconGallery = () => (
+    <EmbeddedPage
+        title="Icon Gallery"
+        src="https://charlie-bu.github.io/cloud-materials-common/"
+    />
+);
+
+/** Arco Design：Arco Design React 文档嵌入页。 */
+const ArcoDesign = () => (
+    <EmbeddedPage
+        title="Arco Design"
+        src="https://arco.design/react/docs/start"
+    />
+);
+
+/** 飞书开放平台：飞书开发者后台嵌入页。 */
+const FeishuOpenPlatform = () => (
+    <EmbeddedPage
+        title="飞书开放平台"
+        src="https://open.feishu.cn/app"
+    />
 );
 
 const App = () => {
@@ -137,6 +159,30 @@ const App = () => {
                         path="coze-loop"
                         element={
                             accessToken ? <CozeLoop /> : <Navigate to="/" replace />
+                        }
+                    />
+                    <Route
+                        path="prompt-minder"
+                        element={
+                            accessToken ? <PromptMinder /> : <Navigate to="/" replace />
+                        }
+                    />
+                    <Route
+                        path="icon-gallery"
+                        element={
+                            accessToken ? <IconGallery /> : <Navigate to="/" replace />
+                        }
+                    />
+                    <Route
+                        path="arco-design"
+                        element={
+                            accessToken ? <ArcoDesign /> : <Navigate to="/" replace />
+                        }
+                    />
+                    <Route
+                        path="feishu-open-platform"
+                        element={
+                            accessToken ? <FeishuOpenPlatform /> : <Navigate to="/" replace />
                         }
                     />
                     <Route path="*" element={<Navigate to="/" replace />} />
