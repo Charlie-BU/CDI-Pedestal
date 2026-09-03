@@ -58,7 +58,7 @@ const Sidebar = () => {
                 style={{ display: "flex", alignItems: "center" }}
             >
                 <img className={styles.productIcon} src={LogoCAM} alt="" />
-                API 管理 CAM
+                {t("nav.cam")}
             </Menu.Item>
             <Menu.Item
                 key="/prompt-minder"
@@ -86,14 +86,14 @@ const Sidebar = () => {
                 style={{ display: "flex", alignItems: "center" }}
             >
                 <img className={styles.productIcon} src={LogoRailway} alt="" />
-                Railway
+                {t("nav.railway")}
             </Menu.Item>
             <Menu.Item
                 key="/coze-loop"
                 style={{ display: "flex", alignItems: "center" }}
             >
                 <img className={styles.productIcon} src={LogoCozeLoop} alt="" />
-                扣子罗盘
+                {t("nav.cozeLoop")}
             </Menu.Item>
             <Menu.Item
                 key="/feishu-open-platform"

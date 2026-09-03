@@ -1,9 +1,12 @@
 {
     "nav": {
         "home": "Home",
+        "cam": "CAM API Management",
         "promptMinder": "Prompt Minder",
         "iconGallery": "Icon Gallery",
         "arcoDesign": "Arco Design",
+        "railway": "Railway",
+        "cozeLoop": "CozeLoop",
         "feishuOpenPlatform": "Feishu Open Platform"
     },
     "common": {

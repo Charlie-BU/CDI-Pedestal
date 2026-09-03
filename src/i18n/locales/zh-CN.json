@@ -1,9 +1,12 @@
 {
     "nav": {
         "home": "首页",
+        "cam": "API 管理 CAM",
         "promptMinder": "Prompt Minder",
         "iconGallery": "Icon Gallery",
         "arcoDesign": "Arco Design",
+        "railway": "Railway",
+        "cozeLoop": "扣子罗盘",
         "feishuOpenPlatform": "飞书开放平台"
     },
     "common": {
