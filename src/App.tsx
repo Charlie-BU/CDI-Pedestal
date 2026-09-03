@@ -8,8 +8,14 @@ import { useTranslation } from "react-i18next";
 import type { PlatformContextValue } from "@/platform";
 import RemoteBoundary from "@/components/RemoteBoundary";
 import { preloadCAMRemote } from "@/preloadCAMRemote";
+import { isMenuVisible, MENU_PATHS, parseHiddenMenus } from "@/navigation";
 
 const CAMApp = lazy(() => import("cam/App"));
+
+/** HIDDEN_MENUS：由构建环境决定的隐藏菜单及路由。 */
+const HIDDEN_MENUS = parseHiddenMenus(import.meta.env.VITE_HIDE_MENUS);
+/** FALLBACK_PATH：隐藏路由访问时跳转的首个可用菜单路径。 */
+const FALLBACK_PATH = MENU_PATHS.find((path) => isMenuVisible(path, HIDDEN_MENUS));
 
 type IdleCallbackWindow = {
     requestIdleCallback?: (
@@ -139,8 +145,8 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route element={<Layout />}>
-                    <Route index element={<Home />} />
-                    <Route
+                    {isMenuVisible("/", HIDDEN_MENUS) && <Route index element={<Home />} />}
+                    {isMenuVisible("/cam", HIDDEN_MENUS) && <Route
                         path="cam/*"
                         element={
                             accessToken ? (
@@ -153,44 +159,44 @@ const App = () => {
                                 <Navigate to="/" replace />
                             )
                         }
-                    />
-                    <Route
+                    />}
+                    {isMenuVisible("/railway", HIDDEN_MENUS) && <Route
                         path="railway"
                         element={
                             accessToken ? <Railway /> : <Navigate to="/" replace />
                         }
-                    />
-                    <Route
+                    />}
+                    {isMenuVisible("/coze-loop", HIDDEN_MENUS) && <Route
                         path="coze-loop"
                         element={
                             accessToken ? <CozeLoop /> : <Navigate to="/" replace />
                         }
-                    />
-                    <Route
+                    />}
+                    {isMenuVisible("/prompt-minder", HIDDEN_MENUS) && <Route
                         path="prompt-minder"
                         element={
                             accessToken ? <PromptMinder /> : <Navigate to="/" replace />
                         }
-                    />
-                    <Route
+                    />}
+                    {isMenuVisible("/icon-gallery", HIDDEN_MENUS) && <Route
                         path="icon-gallery"
                         element={
                             accessToken ? <IconGallery /> : <Navigate to="/" replace />
                         }
-                    />
-                    <Route
+                    />}
+                    {isMenuVisible("/arco-design", HIDDEN_MENUS) && <Route
                         path="arco-design"
                         element={
                             accessToken ? <ArcoDesign /> : <Navigate to="/" replace />
                         }
-                    />
-                    <Route
+                    />}
+                    {isMenuVisible("/feishu-open-platform", HIDDEN_MENUS) && <Route
                         path="feishu-open-platform"
                         element={
                             accessToken ? <FeishuOpenPlatform /> : <Navigate to="/" replace />
                         }
-                    />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    />}
+                    {FALLBACK_PATH && <Route path="*" element={<Navigate to={FALLBACK_PATH} replace />} />}
                 </Route>
             </Routes>
         </BrowserRouter>
