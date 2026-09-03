@@ -14,6 +14,26 @@
         "modifyPassword": "修改密码",
         "logout": "退出登录"
     },
+    "home": {
+        "description": "请从左侧导航选择要使用的平台。"
+    },
+    "remote": {
+        "loadFailedTitle": "平台加载失败",
+        "loadFailedDescription": "请确认子应用已经发布并且远程入口地址可访问",
+        "reload": "重新加载"
+    },
+    "language": {
+        "zhCN": "中文",
+        "enUS": "English"
+    },
+    "brand": {
+        "subtitle": "可组合开发基础设施"
+    },
+    "footer": {
+        "copyright": "版权所有 © 2025 - {{year}} ",
+        "author": "Charlie BU",
+        "rights": "。保留所有权利。"
+    },
     "login": {
         "title": "登录",
         "username": "用户名/邮箱",
@@ -49,7 +69,8 @@
         "confirmPasswordPlaceholder": "请再次输入密码",
         "confirmPasswordRequired": "请再次输入密码",
         "success": "注册成功",
-        "failure": "注册失败"
+        "failure": "注册失败",
+        "passwordMismatch": "两次密码输入不一致"
     },
     "modifyPassword": {
         "title": "修改密码",
@@ -64,9 +85,11 @@
         "success": "修改成功",
         "failure": "修改失败",
         "confirmPasswordPlaceholder": "请再次输入新密码",
-        "confirmPasswordRequired": "请再次输入新密码"
+        "confirmPasswordRequired": "请再次输入新密码",
+        "passwordMismatch": "两次新密码输入不一致"
     },
     "user": {
+        "fetchFailure": "获取用户信息失败",
         "frontend": "前端开发",
         "backend": "后端开发",
         "fullstack": "全栈开发",

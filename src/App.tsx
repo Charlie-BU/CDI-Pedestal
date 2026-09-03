@@ -25,12 +25,15 @@ const LoadingFallback = () => (
     </div>
 );
 
-const Home = () => (
-    <div style={{ padding: 32 }}>
-        <h1 style={{ marginTop: 0 }}>CDI</h1>
-        <p>请从左侧导航选择要使用的平台。</p>
-    </div>
-);
+const Home = () => {
+    const { t } = useTranslation();
+    return (
+        <div style={{ padding: 32 }}>
+            <h1 style={{ marginTop: 0 }}>CDI</h1>
+            <p>{t("home.description")}</p>
+        </div>
+    );
+};
 
 /** 外部嵌入页面：在 CDI 内容区承载允许被嵌入的第三方平台。 */
 const EmbeddedPage = ({ title, src }: { title: string; src: string }) => (
@@ -43,44 +46,46 @@ const EmbeddedPage = ({ title, src }: { title: string; src: string }) => (
 
 
 /** Railway：Railway 平台嵌入页。 */
-const Railway = () => (
-    <EmbeddedPage title="Railway" src="https://railway.com/" />
-);
+const Railway = () => {
+    const { t } = useTranslation();
+    return <EmbeddedPage title={t("nav.railway")} src="https://railway.com/" />;
+};
 
 /** CozeLoop：扣子罗盘 平台嵌入页。 */
-const CozeLoop = () => (
-    <EmbeddedPage title="扣子罗盘" src="https://loop.coze.cn/console" />
-);
+const CozeLoop = () => {
+    const { t } = useTranslation();
+    return <EmbeddedPage title={t("nav.cozeLoop")} src="https://loop.coze.cn/console" />;
+};
 
 
 /** Prompt Minder：提示词管理平台嵌入页。 */
-const PromptMinder = () => (
-    <EmbeddedPage title="Prompt Minder" src="https://www.prompt-minder.com/" />
-);
+const PromptMinder = () => {
+    const { t } = useTranslation();
+    return <EmbeddedPage title={t("nav.promptMinder")} src="https://www.prompt-minder.com/" />;
+};
 
 /** Icon Gallery：cloud-materials-common 图标库嵌入页。 */
-const IconGallery = () => (
-    <EmbeddedPage
-        title="Icon Gallery"
-        src="https://charlie-bu.github.io/cloud-materials-common/"
-    />
-);
+const IconGallery = () => {
+    const { t } = useTranslation();
+    return (
+        <EmbeddedPage
+            title={t("nav.iconGallery")}
+            src="https://charlie-bu.github.io/cloud-materials-common/"
+        />
+    );
+};
 
 /** Arco Design：Arco Design React 文档嵌入页。 */
-const ArcoDesign = () => (
-    <EmbeddedPage
-        title="Arco Design"
-        src="https://arco.design/react/docs/start"
-    />
-);
+const ArcoDesign = () => {
+    const { t } = useTranslation();
+    return <EmbeddedPage title={t("nav.arcoDesign")} src="https://arco.design/react/docs/start" />;
+};
 
 /** 飞书开放平台：飞书开发者后台嵌入页。 */
-const FeishuOpenPlatform = () => (
-    <EmbeddedPage
-        title="飞书开放平台"
-        src="https://open.feishu.cn/app"
-    />
-);
+const FeishuOpenPlatform = () => {
+    const { t } = useTranslation();
+    return <EmbeddedPage title={t("nav.feishuOpenPlatform")} src="https://open.feishu.cn/app" />;
+};
 
 const App = () => {
     const { i18n } = useTranslation();

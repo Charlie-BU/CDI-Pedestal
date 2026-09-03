@@ -14,6 +14,26 @@
         "modifyPassword": "Change Password",
         "logout": "Logout"
     },
+    "home": {
+        "description": "Choose a platform from the navigation on the left."
+    },
+    "remote": {
+        "loadFailedTitle": "Failed to load platform",
+        "loadFailedDescription": "Confirm that the sub-application is deployed and its remote entry is accessible.",
+        "reload": "Reload"
+    },
+    "language": {
+        "zhCN": "中文",
+        "enUS": "English"
+    },
+    "brand": {
+        "subtitle": "Composable Development Infrastructure"
+    },
+    "footer": {
+        "copyright": "Copyright © 2025 - {{year}} ",
+        "author": "Charlie BU",
+        "rights": ". All Rights Reserved."
+    },
     "login": {
         "title": "Login",
         "username": "Username / Email",
@@ -49,7 +69,8 @@
         "confirmPasswordPlaceholder": "Re-enter password",
         "confirmPasswordRequired": "Please confirm password",
         "success": "Registered successfully",
-        "failure": "Registration failed"
+        "failure": "Registration failed",
+        "passwordMismatch": "Passwords do not match"
     },
     "modifyPassword": {
         "title": "Change Password",
@@ -64,9 +85,11 @@
         "success": "Password updated",
         "failure": "Password update failed",
         "confirmPasswordPlaceholder": "Re-enter new password",
-        "confirmPasswordRequired": "Please confirm new password"
+        "confirmPasswordRequired": "Please confirm new password",
+        "passwordMismatch": "New passwords do not match"
     },
     "user": {
+        "fetchFailure": "Failed to fetch user information",
         "frontend": "Frontend Developer",
         "backend": "Backend Developer",
         "fullstack": "Fullstack Developer",

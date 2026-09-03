@@ -19,7 +19,7 @@ import styles from "./index.module.less";
 
 const Header = () => {
     const navigate = useNavigate();
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const [showProfile, setShowProfile] = useState(false);
     const {
         user,
@@ -31,10 +31,10 @@ const Header = () => {
     const languageMenu = (
         <Menu>
             <Menu.Item key="zh-CN" onClick={() => void i18n.changeLanguage("zh-CN")}>
-                中文
+                {t("language.zhCN")}
             </Menu.Item>
             <Menu.Item key="en-US" onClick={() => void i18n.changeLanguage("en-US")}>
-                English
+                {t("language.enUS")}
             </Menu.Item>
         </Menu>
     );
@@ -48,14 +48,16 @@ const Header = () => {
                     <span>CDI</span>
                 </button>
             }
-            subTitle="Composable Development Infrastructure"
+            subTitle={t("brand.subtitle")}
             extra={
                 <Space size="large">
                     <Dropdown droplist={languageMenu} position="bottom">
                         <button className={styles.action}>
                             <Space>
                                 <IconLanguage />
-                                {i18n.resolvedLanguage === "zh-CN" ? "中文" : "English"}
+                                {i18n.resolvedLanguage === "zh-CN"
+                                    ? t("language.zhCN")
+                                    : t("language.enUS")}
                                 <IconDown />
                             </Space>
                         </button>

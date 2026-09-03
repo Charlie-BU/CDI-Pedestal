@@ -58,7 +58,7 @@ export const useUser = create<UserStore>((set, get) => ({
                     },
                 },
             );
-            ensureSuccess(response.status, response.message || "获取用户信息失败");
+            ensureSuccess(response.status, response.message || t("user.fetchFailure"));
             set({ user: response.user, loading: false });
         } catch {
             localStorage.removeItem(TOKEN_KEY);
@@ -110,7 +110,7 @@ export const useUser = create<UserStore>((set, get) => ({
             onOk: async (values, form) => {
                 await form.validate();
                 if (values.password !== values.confirmPassword) {
-                    throw new Error("两次密码输入不一致");
+                    throw new Error(t("register.passwordMismatch"));
                 }
                 const payload: UserRegisterBodyRequest = {
                     username: values.username,
@@ -136,7 +136,7 @@ export const useUser = create<UserStore>((set, get) => ({
             onOk: async (values, form) => {
                 await form.validate();
                 if (values.new_password !== values.confirm_new_password) {
-                    throw new Error("两次新密码输入不一致");
+                    throw new Error(t("modifyPassword.passwordMismatch"));
                 }
                 const payload: ModifyPasswordBodyRequest = {
                     old_password: values.old_password,

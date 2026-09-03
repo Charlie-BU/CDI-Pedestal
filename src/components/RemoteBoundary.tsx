@@ -1,6 +1,7 @@
 import { Component } from "react";
 import type { ErrorInfo, ReactNode } from "react";
 import { Button, Result } from "@cloud-materials/common";
+import i18n from "@/i18n";
 
 interface Props {
     children: ReactNode;
@@ -27,14 +28,14 @@ class RemoteBoundary extends Component<Props, State> {
                 <div className="shell-error">
                     <Result
                         status="error"
-                        title="平台加载失败"
-                        subTitle="请确认子应用已经发布并且远程入口地址可访问"
+                        title={i18n.t("remote.loadFailedTitle")}
+                        subTitle={i18n.t("remote.loadFailedDescription")}
                         extra={
                             <Button
                                 type="primary"
                                 onClick={() => window.location.reload()}
                             >
-                                重新加载
+                                {i18n.t("remote.reload")}
                             </Button>
                         }
                     />
