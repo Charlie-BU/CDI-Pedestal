@@ -11,6 +11,7 @@ const EMBEDDED_PATHS = [
     "/prompt-minder",
     "/icon-gallery",
     "/arco-design",
+    "/coze-loop",
     "/feishu-open-platform",
 ];
 
