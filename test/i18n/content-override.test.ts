@@ -31,4 +31,13 @@ describe("CONTENT_OVERRIDE", () => {
             defaults,
         );
     });
+
+    it("accepts JSON whose quotes are escaped by a deployment environment", () => {
+        const raw = '{\\"zh-CN\\":{\\"nav\\":{\\"cam\\":\\"JAM API 管理\\"}}}';
+
+        expect(applyContentOverride(defaults, parseContentOverride(raw), "zh-CN")).toEqual({
+            nav: { home: "首页", cam: "JAM API 管理" },
+            common: { cancel: "取消" },
+        });
+    });
 });

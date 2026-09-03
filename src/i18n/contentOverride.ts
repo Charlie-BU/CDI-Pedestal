@@ -21,12 +21,18 @@ function isContentOverride(value: unknown): value is ContentOverride {
 export function parseContentOverride(raw: string | undefined): ContentOverride {
     if (!raw) return {};
 
-    try {
-        const parsed: unknown = JSON.parse(raw);
-        return isContentOverride(parsed) ? parsed : {};
-    } catch {
-        return {};
+    // 部分部署平台会把 JSON 中的双引号保留为 \"。优先按标准 JSON
+    // 解析，仅在失败时去除一层转义后重试，避免影响本身合法的配置。
+    for (const candidate of [raw, raw.replace(/\\"/g, '"')]) {
+        try {
+            const parsed: unknown = JSON.parse(candidate);
+            if (isContentOverride(parsed)) return parsed;
+        } catch {
+            // 尝试下一种兼容格式。
+        }
     }
+
+    return {};
 }
 
 /** mergeContentOverride：仅覆盖默认资源中已存在的字符串文案。 */
