@@ -27,12 +27,12 @@
         "enUS": "English"
     },
     "brand": {
-        "subtitle": "可组合开发基础设施"
+        "subtitle": "Composable Development Infrastructure"
     },
     "footer": {
-        "copyright": "版权所有 © 2025 - {{year}} ",
+        "copyright": "Copyright © 2025 - {{year}} ",
         "author": "Charlie BU",
-        "rights": "。保留所有权利。"
+        "rights": ". All rights reserved."
     },
     "login": {
         "title": "登录",
