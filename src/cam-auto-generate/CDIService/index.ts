@@ -4,9 +4,6 @@
 // @ts-nocheck
 
 import type {
-  GetUserByIdQueryRequest,
-  GetUserByIdHeaderRequest,
-  GetUserById200Response,
   GetMyInfoHeaderRequest,
   GetMyInfo200Response,
   GetUserByUsernameOrNicknameOrEmailQueryRequest,
@@ -19,6 +16,19 @@ import type {
   UserRegister200Response,
   UserLoginBodyRequest,
   UserLogin200Response,
+  GetUserByIdQueryRequest,
+  GetUserByIdHeaderRequest,
+  GetUserById200Response,
+  UserGoogleLoginBodyRequest,
+  UserGoogleLogin200Response,
+  UserGoogleLogin400Response,
+  UserGoogleLogin401Response,
+  UserGoogleLogin403Response,
+  UserGoogleLogin409Response,
+  UserGoogleLogin503Response,
+  LinkGoogleBodyRequest,
+  LinkGoogleHeaderRequest,
+  LinkGoogle200Response,
 } from './namespaces';
 
 export default class CDIServiceService<T> {
@@ -54,20 +64,6 @@ export default class CDIServiceService<T> {
   }
 
   /* API Services */
-
-  /** 按用户 ID 查询用户资料 */
-  GetUserByIdGET(
-    req: GetUserByIdQueryRequest & GetUserByIdHeaderRequest,
-    options?: T,
-  ): Promise<GetUserById200Response> {
-    const _req = req || {};
-    let url = this.genBaseURL('/v1/user/getUserById');
-    const method = 'GET';
-    const data = undefined;
-    const params = { id: _req['id'] };
-    const headers = { Authorization: _req['Authorization'] };
-    return this.request({ url, method, data, params, headers }, options);
-  }
 
   /** 从 Bearer 令牌查询当前用户资料 */
   GetMyInfoGET(
@@ -148,6 +144,55 @@ export default class CDIServiceService<T> {
     const data = { username: _req['username'], password: _req['password'] };
     const params = undefined;
     const headers = undefined;
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 根据用户 ID 查询用户详细资料；仅用户等级 L0 可以调用。 */
+  GetUserByIdGET(
+    req: GetUserByIdQueryRequest & GetUserByIdHeaderRequest,
+    options?: T,
+  ): Promise<GetUserById200Response> {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/user/getUserById');
+    const method = 'GET';
+    const data = undefined;
+    const params = { id: _req['id'] };
+    const headers = { Authorization: _req['Authorization'] };
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 校验 Google Identity Services ID Token，关联或创建 CAM 用户并返回平台 JWT。 */
+  UserGoogleLoginPOST(
+    req: UserGoogleLoginBodyRequest,
+    options?: T,
+  ): Promise<
+    UserGoogleLogin200Response &
+      UserGoogleLogin400Response &
+      UserGoogleLogin401Response &
+      UserGoogleLogin403Response &
+      UserGoogleLogin409Response &
+      UserGoogleLogin503Response
+  > {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/user/login/google');
+    const method = 'POST';
+    const data = { credential: _req['credential'] };
+    const params = undefined;
+    const headers = undefined;
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 为当前 Bearer Token 对应的 CAM 用户绑定同邮箱 Google 身份 */
+  LinkGooglePOST(
+    req: LinkGoogleBodyRequest & LinkGoogleHeaderRequest,
+    options?: T,
+  ): Promise<LinkGoogle200Response> {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/user/link/google');
+    const method = 'POST';
+    const data = { credential: _req['credential'] };
+    const params = undefined;
+    const headers = { Authorization: _req['Authorization'] };
     return this.request({ url, method, data, params, headers }, options);
   }
 }

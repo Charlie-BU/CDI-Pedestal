@@ -7,6 +7,7 @@
 :{$PORT:8080} {
     root * /srv
     encode gzip
+    header Cross-Origin-Opener-Policy "same-origin-allow-popups"
 
     @health path /health
     respond @health "OK" 200

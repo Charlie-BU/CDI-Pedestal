@@ -3,42 +3,6 @@
 /* tslint:disable */
 // @ts-nocheck
 
-export interface GetUserByIdQueryRequest {
-  /** 用户 ID */
-  id: number;
-}
-
-export interface GetUserByIdHeaderRequest {
-  /** 授权令牌 */
-  Authorization: string;
-}
-
-export interface GetUserById200Response {
-  /** 响应状态码 */
-  status: number;
-  /** 响应消息 */
-  message: string;
-  /** 用户信息，用户不存在时不返回 */
-  user?: GetUserById200ResponseUser;
-}
-
-export interface GetUserById200ResponseUser {
-  /** 用户 ID */
-  id: number;
-  /** 用户名 */
-  username: string;
-  /** 昵称 */
-  nickname: string | null;
-  /** 邮箱 */
-  email: string | null;
-  /** 角色 */
-  role: string;
-  /** 用户等级 */
-  level: number;
-  /** 创建时间（ISO8601） */
-  created_at: string;
-}
-
 export interface GetMyInfoHeaderRequest {
   /** Bearer 访问令牌 */
   Authorization: string;
@@ -90,8 +54,6 @@ export interface GetUserByUsernameOrNicknameOrEmail200Response {
 }
 
 export interface GetUserByUsernameOrNicknameOrEmail200ResponseUsersItem {
-  /** 用户 ID */
-  id: number;
   /** 创建时间（ISO8601） */
   created_at: string;
   /** 用户名 */
@@ -104,6 +66,12 @@ export interface GetUserByUsernameOrNicknameOrEmail200ResponseUsersItem {
   role: string;
   /** 等级 */
   level: number;
+  /** 用户 ID */
+  id: number;
+  /** 是否配置本地密码 */
+  has_password: boolean;
+  /** 已绑定的第三方身份提供方 */
+  auth_providers: string[];
 }
 
 export interface ModifyPasswordHeaderRequest {
@@ -112,8 +80,8 @@ export interface ModifyPasswordHeaderRequest {
 }
 
 export interface ModifyPasswordBodyRequest {
-  /** 旧密码 */
-  old_password: string;
+  /** 旧密码，无密码用户设置密码场景可为空 */
+  old_password?: string | null;
   /** 新密码 */
   new_password: string;
 }
@@ -159,4 +127,110 @@ export interface UserLogin200Response {
   message: string;
   /** JWT访问令牌，登录失败时不返回 */
   access_token?: string;
+}
+
+export interface GetUserByIdQueryRequest {
+  /** 目标用户 ID */
+  id: number;
+}
+
+export interface GetUserByIdHeaderRequest {
+  /** Bearer 访问令牌 */
+  Authorization: string;
+}
+
+export interface GetUserById200Response {
+  /** 业务状态码 */
+  status: number;
+  /** 响应信息 */
+  message: string;
+  /** 用户详细资料 */
+  user: GetUserById200ResponseUser;
+}
+
+export interface GetUserById200ResponseUser {
+  /** 用户 ID */
+  id: number;
+  /** 用户名 */
+  username: string;
+  /** 用户昵称 */
+  nickname: string | null;
+  /** 用户邮箱 */
+  email: string | null;
+  /** 用户角色，枚举 frontend、backend、fullstack、qa、devops、product_manager、designer、architect、proj_lead、guest */
+  role: string;
+  /** 用户等级，L0 至 L4 分别映射为 0 至 4 */
+  level: number;
+  /** 用户创建时间（ISO 8601） */
+  created_at: string;
+  /** 是否配置本地密码 */
+  has_password: boolean;
+  /** 已绑定的第三方身份提供方 */
+  auth_providers: string[];
+}
+
+export interface UserGoogleLoginBodyRequest {
+  /** Google Identity Services 返回的 ID Token */
+  credential: string;
+}
+
+export interface UserGoogleLogin200Response {
+  /** HTTP 状态码 */
+  status: number;
+  /** 提示信息 */
+  message: string;
+  /** 平台 JWT */
+  access_token: string;
+}
+
+export interface UserGoogleLogin400Response {
+  /** HTTP 状态码 */
+  status: number;
+  /** 错误信息：缺少 credential */
+  message: string;
+}
+
+export interface UserGoogleLogin401Response {
+  /** HTTP 状态码 */
+  status: number;
+  /** 错误信息：INVALID_GOOGLE_CREDENTIAL 或 UNVERIFIED_GOOGLE_ACCOUNT */
+  message: string;
+}
+
+export interface UserGoogleLogin403Response {
+  /** HTTP 状态码 */
+  status: number;
+  /** 错误信息：Google 域名不允许 */
+  message: string;
+}
+
+export interface UserGoogleLogin409Response {
+  /** HTTP 状态码 */
+  status: number;
+  /** 错误信息：邮箱已有本地账号，需要先密码登录后绑定 */
+  message: string;
+}
+
+export interface UserGoogleLogin503Response {
+  /** HTTP 状态码 */
+  status: number;
+  /** 错误信息：GOOGLE_AUTH_NOT_CONFIGURED 或 GOOGLE_AUTH_UNAVAILABLE */
+  message: string;
+}
+
+export interface LinkGoogleHeaderRequest {
+  /** Bearer 访问令牌 */
+  Authorization: string;
+}
+
+export interface LinkGoogleBodyRequest {
+  /** Google Identity Services 返回的 ID Token */
+  credential: string;
+}
+
+export interface LinkGoogle200Response {
+  /** 响应状态码 */
+  status: number;
+  /** 响应消息 */
+  message: string;
 }

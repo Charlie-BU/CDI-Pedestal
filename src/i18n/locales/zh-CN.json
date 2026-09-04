@@ -11,8 +11,18 @@
     },
     "common": {
         "cancel": "取消",
+        "setPassword": "设置密码",
         "modifyPassword": "修改密码",
         "logout": "退出登录"
+    },
+    "profile": {
+        "googleBound": "已绑定 Google 账号",
+        "googleUnbound": "尚未绑定 Google 账号，点击开始绑定",
+        "googleBindAction": "绑定 Google 账号",
+        "googleLinkTitle": "绑定 Google 账号",
+        "googleLinkDescription": "请选择要与当前账号绑定的 Google 账号。绑定后可直接使用 Google 登录。",
+        "googleLinkSuccess": "Google 账号绑定成功",
+        "googleLinkFailure": "Google 账号绑定失败，请重试"
     },
     "home": {
         "description": "请从左侧导航选择要使用的平台。"
@@ -45,7 +55,13 @@
         "passwordRequired": "请输入密码",
         "required": "请先登录",
         "success": "登录成功",
-        "failure": "登录失败"
+        "failure": "登录失败",
+        "or": "或",
+        "googleFailure": "Google 登录失败，请重试",
+        "googleUnavailable": "Google 登录暂不可用",
+        "googleLinkFailure": "登录成功，但 Google 账号绑定失败，请稍后重试",
+        "googleAccountLinkRequired": "该邮箱已有账号，请先使用密码登录后绑定 Google",
+        "googleDomainNotAllowed": "该 Google 账号不属于允许的组织"
     },
     "register": {
         "title": "注册",
@@ -86,6 +102,19 @@
         "failure": "修改失败",
         "confirmPasswordPlaceholder": "请再次输入新密码",
         "confirmPasswordRequired": "请再次输入新密码",
+        "passwordMismatch": "两次新密码输入不一致"
+    },
+    "setPassword": {
+        "title": "设置密码",
+        "newPassword": "新密码",
+        "newPasswordPlaceholder": "请输入新密码",
+        "newPasswordRequired": "请输入新密码",
+        "confirmPassword": "确认密码",
+        "confirmPasswordPlaceholder": "请再次输入新密码",
+        "confirmPasswordRequired": "请再次输入新密码",
+        "submit": "设置密码",
+        "success": "密码设置成功",
+        "failure": "密码设置失败",
         "passwordMismatch": "两次新密码输入不一致"
     },
     "user": {

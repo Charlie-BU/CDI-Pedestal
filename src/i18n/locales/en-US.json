@@ -11,8 +11,18 @@
     },
     "common": {
         "cancel": "Cancel",
+        "setPassword": "Set Password",
         "modifyPassword": "Change Password",
         "logout": "Logout"
+    },
+    "profile": {
+        "googleBound": "Google account linked",
+        "googleUnbound": "Google account not linked. Click to link it.",
+        "googleBindAction": "Link Google account",
+        "googleLinkTitle": "Link Google account",
+        "googleLinkDescription": "Choose the Google account to link. Once linked, you can use it to sign in.",
+        "googleLinkSuccess": "Google account linked successfully",
+        "googleLinkFailure": "Failed to link Google account. Please try again."
     },
     "home": {
         "description": "Choose a platform from the navigation on the left."
@@ -45,7 +55,13 @@
         "passwordRequired": "Please enter password",
         "required": "Please log in first",
         "success": "Login successfully",
-        "failure": "Login failed"
+        "failure": "Login failed",
+        "or": "or",
+        "googleFailure": "Google login failed. Please try again.",
+        "googleUnavailable": "Google login is currently unavailable.",
+        "googleLinkFailure": "Signed in, but the Google account could not be linked. Please try again later.",
+        "googleAccountLinkRequired": "An account with this email already exists. Sign in with your password before linking Google.",
+        "googleDomainNotAllowed": "This Google account is not in an allowed organization."
     },
     "register": {
         "title": "Register",
@@ -87,6 +103,19 @@
         "confirmPasswordPlaceholder": "Re-enter new password",
         "confirmPasswordRequired": "Please confirm new password",
         "passwordMismatch": "New passwords do not match"
+    },
+    "setPassword": {
+        "title": "Set Password",
+        "newPassword": "New Password",
+        "newPasswordPlaceholder": "Enter a new password",
+        "newPasswordRequired": "Please enter a new password",
+        "confirmPassword": "Confirm Password",
+        "confirmPasswordPlaceholder": "Re-enter the new password",
+        "confirmPasswordRequired": "Please confirm the new password",
+        "submit": "Set Password",
+        "success": "Password set successfully",
+        "failure": "Failed to set password",
+        "passwordMismatch": "Passwords do not match"
     },
     "user": {
         "fetchFailure": "Failed to fetch user information",

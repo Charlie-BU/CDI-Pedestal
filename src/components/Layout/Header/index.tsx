@@ -26,6 +26,8 @@ const Header = () => {
         logout,
         openLoginModal,
         openModifyPasswordModal,
+        openSetPasswordModal,
+        openGoogleLinkModal,
     } = useUser();
 
     const languageMenu = (
@@ -73,6 +75,8 @@ const Header = () => {
                                     userInfo={user}
                                     logout={logout}
                                     openModifyPasswordModal={openModifyPasswordModal}
+                                    openSetPasswordModal={openSetPasswordModal}
+                                    openGoogleLinkModal={openGoogleLinkModal}
                                 />
                             }
                         >
