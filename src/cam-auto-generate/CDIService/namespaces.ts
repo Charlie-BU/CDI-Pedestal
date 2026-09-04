@@ -32,6 +32,10 @@ export interface GetMyInfo200ResponseUser {
   created_at: string;
   /** 用户 ID */
   id: number;
+  /** 是否配置本地密码 */
+  has_password: boolean;
+  /** 已绑定的第三方身份提供方 */
+  auth_providers: string[];
 }
 
 export interface GetUserByUsernameOrNicknameOrEmailQueryRequest {
