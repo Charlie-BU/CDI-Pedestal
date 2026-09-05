@@ -234,6 +234,7 @@ export const useUser = create<UserStore>((set, get) => ({
                 <GoogleLinkPanel
                     clientId={clientId}
                     locale={i18next.resolvedLanguage || "zh-CN"}
+                    loadingMessage={t("login.googleLoading")}
                     unavailableMessage={t("login.googleUnavailable")}
                     description={t("profile.googleLinkDescription")}
                     onCredential={async (credential) => {

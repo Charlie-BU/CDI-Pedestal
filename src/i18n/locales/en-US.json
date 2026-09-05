@@ -57,6 +57,7 @@
         "success": "Login successfully",
         "failure": "Login failed",
         "or": "or",
+        "googleLoading": "Loading Google sign-in",
         "googleFailure": "Google login failed. Please try again.",
         "googleUnavailable": "Google login is currently unavailable.",
         "googleLinkFailure": "Signed in, but the Google account could not be linked. Please try again later.",

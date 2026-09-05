@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Form, Input, Typography } from "@cloud-materials/common";
+import { Form, Input, Spin, Typography } from "@cloud-materials/common";
 import { useTranslation } from "react-i18next";
 import styles from "./index.module.less";
 
@@ -27,6 +27,7 @@ declare global {
 interface GoogleLoginButtonProps {
     clientId: string;
     locale: string;
+    loadingMessage: string;
     unavailableMessage: string;
     onCredential: (credential: string) => Promise<void>;
 }
@@ -39,11 +40,13 @@ interface GoogleLinkPanelProps extends GoogleLoginButtonProps {
 export const GoogleLoginButton = ({
     clientId,
     locale,
+    loadingMessage,
     unavailableMessage,
     onCredential,
 }: GoogleLoginButtonProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         let disposed = false;
@@ -70,6 +73,7 @@ export const GoogleLoginButton = ({
                 width: 320,
                 locale,
             });
+            setLoading(false);
         };
         if (window.google) {
             render();
@@ -83,7 +87,10 @@ export const GoogleLoginButton = ({
         );
         const script = existingScript || document.createElement("script");
         const handleError = () => {
-            if (!disposed) setErrorMessage(unavailableMessage);
+            if (!disposed) {
+                setLoading(false);
+                setErrorMessage(unavailableMessage);
+            }
         };
         script.addEventListener("load", render);
         script.addEventListener("error", handleError);
@@ -101,7 +108,18 @@ export const GoogleLoginButton = ({
 
     return (
         <div className={styles.googleLogin}>
-            <div ref={containerRef} />
+            <div className={styles.googleButtonSlot}>
+                {loading && (
+                    <div
+                        className={styles.googleButtonLoading}
+                        role="status"
+                        aria-label={loadingMessage}
+                    >
+                        <Spin dot loading />
+                    </div>
+                )}
+                <div ref={containerRef} />
+            </div>
             {errorMessage && (
                 <Typography.Text type="error">{errorMessage}</Typography.Text>
             )}
@@ -165,6 +183,7 @@ const LoginForm = ({ onGoogleCredential }: LoginFormProps) => {
                     <GoogleLoginButton
                         clientId={googleClientId}
                         locale={currentLanguage || "zh-CN"}
+                        loadingMessage={t("login.googleLoading")}
                         unavailableMessage={t("login.googleUnavailable")}
                         onCredential={onGoogleCredential}
                     />
