@@ -12,7 +12,7 @@
     line-height: 1;
 }
 .userName { font-size: 16px; line-height: 24px; }
-.email { margin-top: 3px; color: #808080; font-size: 13px; }
+.email { margin-top: 3px; color: var(--color-text-3); font-size: 13px; }
 .divider { margin: 0; }
 .item {
     display: flex;
@@ -24,24 +24,24 @@
     padding: 0 20px;
     border: 0;
     border-radius: 4px;
-    color: #1d2129;
+    color: var(--color-text-1);
     background: transparent;
     cursor: pointer;
 }
-.item:hover { background: #f5f5f5; }
+.item:hover { background: var(--color-bg-4); }
 
 .loginDivider {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-bottom: 16px;
-    color: #86909c;
+    color: var(--color-neutral-6);
     font-size: 13px;
 }
 .loginDivider::before,
 .loginDivider::after {
     flex: 1;
-    border-top: 1px solid #e5e6eb;
+    border-top: 1px solid var(--color-neutral-3);
     content: "";
 }
 .googleLogin {
@@ -61,7 +61,7 @@
 .googleLinkPanel :global(.arco-typography) {
     align-self: stretch;
     margin: 0 0 20px;
-    color: #4e5969;
+    color: var(--color-neutral-8);
 }
 .googleGradientDefinition {
     position: absolute;
@@ -89,13 +89,13 @@
 .googleIconBound { cursor: default; }
 .googleIconBound :global(path) { fill: url("#profile-google-gradient"); }
 .googleIconUnbound {
-    color: #c9cdd4;
+    color: var(--color-neutral-4);
     cursor: pointer;
     transition: color 0.2s, background-color 0.2s;
 }
 .googleIconUnbound:hover {
-    color: #86909c;
-    background: #f2f3f5;
+    color: var(--color-neutral-6);
+    background: var(--color-neutral-2);
 }
 .googleStatusBound,
 .googleStatusUnbound {
@@ -104,5 +104,5 @@
     gap: 8px;
     max-width: 260px;
 }
-.googleStatusBound { color: #00b42a; }
-.googleStatusUnbound { color: #4e5969; }
+.googleStatusBound { color: rgb(var(--green-6)); }
+.googleStatusUnbound { color: var(--color-neutral-8); }

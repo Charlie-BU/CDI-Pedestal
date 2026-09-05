@@ -15,6 +15,12 @@ const EMBEDDED_PATHS = [
     "/feishu-open-platform",
 ];
 
+/** getWatermarkColor：从组件库灰色色板生成水印颜色。 */
+const getWatermarkColor = () => {
+    const gray = getComputedStyle(document.body).getPropertyValue("--gray-6").trim();
+    return gray ? `rgba(${gray}, 0.1)` : undefined;
+};
+
 const Layout = () => {
     const { user } = useUser();
     const location = useLocation();
@@ -34,7 +40,7 @@ const Layout = () => {
                 >
                     <Watermark
                         content={user?.username || "Guest"}
-                        fontStyle={{ color: "#9ca2a919" }}
+                        fontStyle={{ color: getWatermarkColor() }}
                         style={{ height: "100%" }}
                     >
                         <Outlet />

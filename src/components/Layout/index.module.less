@@ -1,7 +1,7 @@
 .layout {
     height: 100vh;
     overflow: hidden;
-    background: #fff;
+    background: var(--color-bg-3);
 }
 
 .header {
@@ -15,15 +15,16 @@
 }
 
 .sider {
-    background: #fff;
-    border-right: 1px solid #e5e6eb;
+    background-color: inherit;
+    border-right: 1px solid var(--color-neutral-3);
+    box-shadow: none;
 }
 
 .content {
     min-height: 0;
     overflow: auto;
     padding: 0 30px;
-    background: #fff;
+    background: var(--color-bg-3);
 }
 
 .embeddedContent {
@@ -33,6 +34,5 @@
 
 .footer {
     z-index: 1000;
-    background: #fff;
-    box-shadow: 0 -2px 4px rgb(0 0 0 / 5%);
+    box-shadow: 0 -2px 4px rgba(var(--gray-10), 0.05);
 }
