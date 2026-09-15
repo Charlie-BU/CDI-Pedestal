@@ -130,5 +130,18 @@
         "architect": "Architect",
         "proj_lead": "Project Lead",
         "guest": "Guest"
+    },
+    "localDebug": {
+        "button": "Local debug",
+        "title": "Sub-application local debug",
+        "description": "Settings apply only to this tab when local debugging is enabled. All fields are optional; leave blank to use online defaults. Saving reloads the page.",
+        "frontend": "Frontend URL",
+        "backend": "Backend URL",
+        "frontendPlaceholder": "http://localhost:9100",
+        "backendPlaceholder": "http://localhost:9101",
+        "fallback": "Leave blank to use the online setting: {{variable}}",
+        "invalidUrl": "Enter a full HTTP or HTTPS URL without credentials, query parameters, or fragments.",
+        "save": "Save and reload",
+        "saveFailed": "Could not save settings. Check that your browser allows session storage."
     }
 }

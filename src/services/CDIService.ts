@@ -50,7 +50,11 @@ export const CDIService = new CDIServiceService<CacheRequestOptions>({
         // 缓存 key 会把当前 token 纳入计算，这样不同账号之间的缓存不会相互污染。
         const token = localStorage.getItem(TOKEN_KEY) || "";
         // 如果调用方手动指定了 cacheKey，就优先使用；否则根据请求配置自动生成。
-        const key = cacheKey || createCacheKey(config, token);
+        const key = createCacheKey({
+            ...requestConfig,
+            baseURL: requestConfig.baseURL ?? http.defaults.baseURL,
+            ...(cacheKey ? { url: cacheKey } : {}),
+        }, token);
         // cached 用来保存本次请求对应的缓存数据，后面会根据它决定走哪条分支。
         let cached;
         try {

@@ -1,3 +1,5 @@
+import { getRemoteEntry } from "./localDebug";
+
 interface FederationManifest {
     metaData?: {
         remoteEntry?: {
@@ -35,11 +37,15 @@ const getRemoteEntryUrl = (manifestUrl: string, manifest: FederationManifest) =>
 export const preloadCAMRemote = () => {
     if (preloading) return preloading;
 
-    const manifestUrl = import.meta.env.VITE_CAM_REMOTE_ENTRY;
+    const manifestUrl = getRemoteEntry("cam", import.meta.env.VITE_CAM_REMOTE_ENTRY);
     if (!manifestUrl) return Promise.resolve();
 
     preloading = (async () => {
         try {
+            if (/\.m?js$/i.test(new URL(manifestUrl, window.location.href).pathname)) {
+                appendModulePreload(manifestUrl);
+                return;
+            }
             // manifest 是跨域静态资源，不需要 Bearer Token、/api/cam 代理或 401 处理；
             // 使用浏览器原生 fetch 可直接复用后续模块加载的 HTTP 缓存，也避免为此另建 Axios 实例。
             const response = await fetch(manifestUrl, { credentials: "omit" });

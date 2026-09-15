@@ -1,3 +1,4 @@
+import { getApiBase } from "@/localDebug";
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
@@ -129,7 +130,7 @@ const App = () => {
         () => ({
             user,
             accessToken,
-            apiBase: "/api/cam",
+            apiBase: getApiBase("cam"),
             locale: i18n.resolvedLanguage || "zh-CN",
             onUnauthorized: logout,
         }),

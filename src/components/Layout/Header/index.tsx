@@ -12,6 +12,8 @@ import {
     Space,
 } from "@cloud-materials/common";
 import { useTranslation } from "react-i18next";
+import LocalDebugButton from "@/components/LocalDebug";
+import { isLocalDebugEnabled } from "@/localDebug";
 import Profile from "@/components/User/Profile";
 import { useUser } from "@/hooks/useUser";
 import { LogoCDI } from "@/assets/icons";
@@ -64,6 +66,7 @@ const Header = () => {
                             </Space>
                         </button>
                     </Dropdown>
+                    {isLocalDebugEnabled() && <LocalDebugButton className={styles.action} />}
                     {user ? (
                         <Popover
                             position="br"

@@ -1,3 +1,4 @@
+import { localDebugHeader } from "./build/localDebugHeader";
 import { federation } from "@module-federation/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv } from "vite";
@@ -19,10 +20,14 @@ export default defineConfig(({ mode, command }) => {
 
     return {
         plugins: [
+            localDebugHeader(),
             react(),
             federation({
                 name: "cdi_pedestal",
                 dts: false,
+                // 基座先使用自身共享依赖，避免本地 remote 离线阻塞调试入口。
+                shareStrategy: "loaded-first",
+                runtimePlugins: [fileURLToPath(new URL("./src/localDebugRuntimePlugin.ts", import.meta.url))],
                 remotes: {
                     cam: {
                         type: "module",

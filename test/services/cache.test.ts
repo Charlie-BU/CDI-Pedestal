@@ -25,6 +25,12 @@ describe("cache", () => {
         expect(left).not.toBe(key("token-b", "/me"));
     });
 
+    it("isolates the same request and token across backend targets", () => {
+        const request = { method: "get", url: "/v1/user/me" };
+        expect(createCacheKey({ ...request, baseURL: "/api/cam" }, "token-a"))
+            .not.toBe(createCacheKey({ ...request, baseURL: "http://localhost:9101" }, "token-a"));
+    });
+
     it("reads data and clears only the selected token namespace", async () => {
         await cacheResponse(key("token-a", "/me"), { user: "a" });
         await cacheResponse(key("token-b", "/me"), { user: "b" });

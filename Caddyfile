@@ -18,7 +18,17 @@
     }
 
     handle {
-        try_files {path} /index.html
-        file_server
+        route {
+            try_files {path} /index.html
+            @document path /index.html /
+            header @document {
+                Cache-Control "private, no-store"
+                Vary "X-LOCAL-DEBUG"
+            }
+            templates {
+                mime text/html
+            }
+            file_server
+        }
     }
 }

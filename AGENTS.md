@@ -19,7 +19,7 @@ CDI-Pedestal is the CDI shell application. It owns product-level navigation, aut
 
 - Keep shell layout, login, token ownership, and top-level product routing in this repository. Load CAM through the `cam/App` federation remote rather than copying CAM screens into the shell.
 - `PlatformContextValue` in `src/platform.ts` is the host-to-remote contract. When it changes, update the remote consumer contract and verify both repositories together.
-- Browser requests to CAM use `/api/cam/v1/*`; Vite and Caddy rewrite that prefix to the CAM backend `/v1/*`. Do not bypass this boundary with environment-specific browser URLs.
+- Browser requests to CAM use `/api/cam/v1/*`; Vite and Caddy rewrite that prefix to the CAM backend `/v1/*`. 正常模式不得绕过该边界。本地调试模式由 `src/localDebug.ts` 统一解析覆盖地址，仅经子应用 `platform.apiBase` 传递；基座 `CDIService` 始终使用 `/api/cam`，不受调试配置影响；业务组件不得自行拼接调试 URL。
 - API access is centralized in `src/services/CDIService.ts`. Preserve request cancellation, error semantics, token isolation, and cache behavior when changing the adapter.
 - `src/cam-auto-generate/` is generated API client output. Do not hand-edit it; change the source contract/configuration and regenerate it with the repository-supported workflow.
 - Never expose server secrets in `VITE_*` variables, source code, browser storage, or logs. The access token is user-scoped data and must not leak across cache keys or sessions.
