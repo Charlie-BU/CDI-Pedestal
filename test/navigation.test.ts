@@ -1,24 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { isMenuVisible, parseHiddenMenus } from "@/navigation";
-
-describe("VITE_HIDE_MENUS", () => {
-    it("hides configured menu paths and accepts names without a leading slash", () => {
-        const hiddenMenus = parseHiddenMenus('["/cam", "railway"]');
-
-        expect(isMenuVisible("/cam", hiddenMenus)).toBe(false);
-        expect(isMenuVisible("/railway", hiddenMenus)).toBe(false);
-        expect(isMenuVisible("/coze-loop", hiddenMenus)).toBe(true);
+import { matchApplication, applicationName } from "@/subApplications";
+import { cam } from "./fixtures/applications";
+describe("database application routing", () => {
+    it("matches path segments and excludes disabled applications", () => {
+        expect(matchApplication([cam], "/cam/service/1")).toBe(cam);
+        expect(matchApplication([cam], "/camera")).toBeUndefined();
+        expect(matchApplication([{ ...cam, enabled: false }], "/cam")).toBeUndefined();
     });
-
-    it("keeps the home route visible even when it is configured as hidden", () => {
-        const hiddenMenus = parseHiddenMenus('["/", "home", "/cam"]');
-
-        expect(isMenuVisible("/", hiddenMenus)).toBe(true);
-        expect(isMenuVisible("/cam", hiddenMenus)).toBe(false);
-    });
-
-    it("ignores malformed JSON and unknown menu paths", () => {
-        expect(parseHiddenMenus("{")).toEqual(new Set());
-        expect(parseHiddenMenus('["/unknown", 1]')).toEqual(new Set());
+    it("selects database labels by language", () => {
+        const names = { name_zh: "应用", name_en: "Application" };
+        expect(applicationName(names, "zh-CN")).toBe("应用");
+        expect(applicationName(names, "en-US")).toBe("Application");
     });
 });

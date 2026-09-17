@@ -17,7 +17,7 @@
   "dependencies": {
     "@cloud-materials/common": "https://github.com/Charlie-BU/cloud-materials-common/releases/download/release/cloud-materials-common-1.20.1-cdi.0.tgz?asset=20260902-125705",
     "axios": "^1.13.2",
-    "cam-fe-code-generator": "^1.9.6",
+    "cam-fe-code-generator": "^1.9.8",
     "i18next": "^25.6.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "react": "~18.2.0",

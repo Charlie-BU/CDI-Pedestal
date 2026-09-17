@@ -1,206 +1,43 @@
-import { lazy, Suspense, useEffect, useMemo } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { BrowserRouter } from "react-router-dom";
-import { Spin } from "@cloud-materials/common";
-import Layout from "@/components/Layout";
-import { useUser } from "@/hooks/useUser";
+import { useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Button, Result, Spin } from "@cloud-materials/common";
 import { useTranslation } from "react-i18next";
-import type { PlatformContextValue } from "@/platform";
-import RemoteBoundary from "@/components/RemoteBoundary";
-import { preloadCAMRemote } from "@/preloadCAMRemote";
-import { isMenuVisible, MENU_PATHS, parseHiddenMenus } from "@/navigation";
+import Layout from "@/components/Layout";
+import SubApplicationView from "@/components/SubApplicationView";
+import ApplicationSettings from "@/components/ApplicationSettings";
+import { useUser } from "@/hooks/useUser";
+import { useApplications } from "@/hooks/useApplications";
+import { APPLICATION_SETTINGS_PATH } from "@/subApplications";
+import { preloadApplications } from "@/preloadApplications";
 
-const CAMApp = lazy(() => import("cam/App"));
-
-/** HIDDEN_MENUS：由构建环境决定的隐藏菜单及路由。 */
-const HIDDEN_MENUS = parseHiddenMenus(import.meta.env.VITE_HIDE_MENUS);
-/** FALLBACK_PATH：隐藏路由访问时跳转的首个可用菜单路径。 */
-const FALLBACK_PATH = MENU_PATHS.find((path) => isMenuVisible(path, HIDDEN_MENUS));
-
-type IdleCallbackWindow = {
-    requestIdleCallback?: (
-        callback: () => void,
-        options?: { timeout: number },
-    ) => number;
-    cancelIdleCallback?: (handle: number) => void;
-};
-
-const LoadingFallback = () => (
-    <div className="shell-loading">
-        <Spin dot loading />
-    </div>
-);
-
-const Home = () => {
+/** App：固定基座路由与数据库驱动的子应用路由。 */
+export default function App() {
     const { t } = useTranslation();
-    return (
-        <div style={{ padding: 32 }}>
-            <h1 style={{ marginTop: 0 }}>CDI</h1>
-            <p>{t("home.description")}</p>
-        </div>
-    );
-};
-
-/** 外部嵌入页面：在 CDI 内容区承载允许被嵌入的第三方平台。 */
-const EmbeddedPage = ({ title, src }: { title: string; src: string }) => (
-    <iframe
-        title={title}
-        src={src}
-        style={{ display: "block", width: "100%", height: "100%", border: 0 }}
-    />
-);
-
-
-/** Railway：Railway 平台嵌入页。 */
-const Railway = () => {
-    const { t } = useTranslation();
-    return <EmbeddedPage title={t("nav.railway")} src="https://railway.com/" />;
-};
-
-/** CozeLoop：扣子罗盘 平台嵌入页。 */
-const CozeLoop = () => {
-    const { t } = useTranslation();
-    return <EmbeddedPage title={t("nav.cozeLoop")} src="https://loop.coze.cn/console" />;
-};
-
-
-/** Prompt Minder：提示词管理平台嵌入页。 */
-const PromptMinder = () => {
-    const { t } = useTranslation();
-    return <EmbeddedPage title={t("nav.promptMinder")} src="https://www.prompt-minder.com/" />;
-};
-
-/** Icon Gallery：cloud-materials-common 图标库嵌入页。 */
-const IconGallery = () => {
-    const { t } = useTranslation();
-    return (
-        <EmbeddedPage
-            title={t("nav.iconGallery")}
-            src="https://charlie-bu.github.io/cloud-materials-common/"
-        />
-    );
-};
-
-/** Arco Design：Arco Design React 文档嵌入页。 */
-const ArcoDesign = () => {
-    const { t } = useTranslation();
-    return <EmbeddedPage title={t("nav.arcoDesign")} src="https://arco.design/react/docs/start" />;
-};
-
-/** 飞书开放平台：飞书开发者后台嵌入页。 */
-const FeishuOpenPlatform = () => {
-    const { t } = useTranslation();
-    return <EmbeddedPage title={t("nav.feishuOpenPlatform")} src="https://open.feishu.cn/app" />;
-};
-
-const App = () => {
-    const { i18n } = useTranslation();
-    const {
-        user,
-        accessToken,
-        fetchUser,
-        logout,
-    } = useUser();
-
+    const { user, accessToken, fetchUser } = useUser();
+    const { apps, loading, error, load, identity } = useApplications();
+    const currentApps = identity === accessToken ? apps : [];
+    useEffect(() => { if (accessToken && !user) void fetchUser(); }, [accessToken, user, fetchUser]);
     useEffect(() => {
-        if (accessToken && !user) void fetchUser();
-    }, [accessToken, fetchUser, user]);
-
+        void load(accessToken);
+        const refresh = () => void load(accessToken);
+        window.addEventListener("focus", refresh);
+        return () => window.removeEventListener("focus", refresh);
+    }, [accessToken, load]);
     useEffect(() => {
-        if (!accessToken) return;
-
-        // 用户完成登录后，提前在空闲时预加载 CAM 远程模块，减少首次进入页面的等待。
-        const preload = () => void preloadCAMRemote();
-        const idleWindow = window as unknown as IdleCallbackWindow;
-        if (idleWindow.requestIdleCallback) {
-            // 优先利用浏览器空闲时间执行，避免和当前首屏渲染抢占资源。
-            const idleCallback = idleWindow.requestIdleCallback(preload, {
-                timeout: 3000,
-            });
-            return () => idleWindow.cancelIdleCallback?.(idleCallback);
+        if (identity !== accessToken) return;
+        const run = () => void preloadApplications(apps);
+        if (window.requestIdleCallback) {
+            const id = window.requestIdleCallback(run, { timeout: 3000 });
+            return () => window.cancelIdleCallback(id);
         }
-
-        // 不支持 requestIdleCallback 时，退化为延迟触发，仍然尽量避开关键渲染阶段。
-        const timer = window.setTimeout(preload, 1000);
-        return () => window.clearTimeout(timer);
-    }, [accessToken]);
-
-    const platform = useMemo<PlatformContextValue>(
-        () => ({
-            user,
-            accessToken,
-            apiBase: "/api/cam",
-            locale: i18n.resolvedLanguage || "zh-CN",
-            onUnauthorized: logout,
-        }),
-        [
-            accessToken,
-            i18n.resolvedLanguage,
-            logout,
-            user,
-        ],
-    );
-
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route element={<Layout />}>
-                    {isMenuVisible("/", HIDDEN_MENUS) && <Route index element={<Home />} />}
-                    {isMenuVisible("/cam", HIDDEN_MENUS) && <Route
-                        path="cam/*"
-                        element={
-                            accessToken ? (
-                                <RemoteBoundary>
-                                    <Suspense fallback={<LoadingFallback />}>
-                                        <CAMApp platform={platform} />
-                                    </Suspense>
-                                </RemoteBoundary>
-                            ) : (
-                                <Navigate to="/" replace />
-                            )
-                        }
-                    />}
-                    {isMenuVisible("/railway", HIDDEN_MENUS) && <Route
-                        path="railway"
-                        element={
-                            accessToken ? <Railway /> : <Navigate to="/" replace />
-                        }
-                    />}
-                    {isMenuVisible("/coze-loop", HIDDEN_MENUS) && <Route
-                        path="coze-loop"
-                        element={
-                            accessToken ? <CozeLoop /> : <Navigate to="/" replace />
-                        }
-                    />}
-                    {isMenuVisible("/prompt-minder", HIDDEN_MENUS) && <Route
-                        path="prompt-minder"
-                        element={
-                            accessToken ? <PromptMinder /> : <Navigate to="/" replace />
-                        }
-                    />}
-                    {isMenuVisible("/icon-gallery", HIDDEN_MENUS) && <Route
-                        path="icon-gallery"
-                        element={
-                            accessToken ? <IconGallery /> : <Navigate to="/" replace />
-                        }
-                    />}
-                    {isMenuVisible("/arco-design", HIDDEN_MENUS) && <Route
-                        path="arco-design"
-                        element={
-                            accessToken ? <ArcoDesign /> : <Navigate to="/" replace />
-                        }
-                    />}
-                    {isMenuVisible("/feishu-open-platform", HIDDEN_MENUS) && <Route
-                        path="feishu-open-platform"
-                        element={
-                            accessToken ? <FeishuOpenPlatform /> : <Navigate to="/" replace />
-                        }
-                    />}
-                    {FALLBACK_PATH && <Route path="*" element={<Navigate to={FALLBACK_PATH} replace />} />}
-                </Route>
-            </Routes>
-        </BrowserRouter>
-    );
-};
-
-export default App;
+        const id = window.setTimeout(run, 1000);
+        return () => window.clearTimeout(id);
+    }, [apps, identity, accessToken]);
+    const retry = <Button onClick={() => void load(accessToken)}>{t("applications.retry")}</Button>;
+    return <BrowserRouter><Routes><Route element={<Layout />}>
+        <Route index element={<div style={{ padding: 32 }}><h1>CDI</h1><p>{t("home.description")}</p>{error && <Result title={t("applications.directoryFailed")} extra={retry} />}</div>} />
+        <Route path={APPLICATION_SETTINGS_PATH} element={<ApplicationSettings />} />
+        {currentApps.filter((app) => app.enabled).map((app) => <Route key={app.id} path={`${app.route_path.slice(1)}/*`} element={<SubApplicationView app={app} />} />)}
+        <Route path="*" element={loading || identity !== accessToken ? <Spin loading dot /> : <Result title={t(error ? "applications.directoryFailed" : "applications.notFound")} extra={error ? retry : undefined} />} />
+    </Route></Routes></BrowserRouter>;
+}

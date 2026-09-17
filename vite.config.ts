@@ -1,3 +1,4 @@
+import { localDebugHeader } from "./build/localDebugHeader";
 import { federation } from "@module-federation/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv } from "vite";
@@ -6,30 +7,22 @@ import { fileURLToPath, URL } from "node:url";
 export default defineConfig(({ mode, command }) => {
     const env = loadEnv(mode, process.cwd(), "");
     const port = Number(env.VITE_FE_PORT) || 9000;
-    const camUpstream = env.CAM_UPSTREAM_BASE_URL;
-    const camRemoteEntry = env.VITE_CAM_REMOTE_ENTRY;
-    if (!camRemoteEntry) {
-        throw new Error(
-            "VITE_CAM_REMOTE_ENTRY is required to load the CAM remote module.",
-        );
-    }
+    const cdiUpstream = env.CDI_UPSTREAM_BASE_URL;
     const nativeMapShimPath = fileURLToPath(
         new URL("./src/shims/babel-runtime-map.ts", import.meta.url),
     );
 
     return {
         plugins: [
+            localDebugHeader(),
             react(),
             federation({
                 name: "cdi_pedestal",
                 dts: false,
-                remotes: {
-                    cam: {
-                        type: "module",
-                        name: "cam",
-                        entry: camRemoteEntry,
-                    },
-                },
+                // 基座先使用自身共享依赖，避免本地 remote 离线阻塞调试入口。
+                shareStrategy: "loaded-first",
+                runtimePlugins: [fileURLToPath(new URL("./src/federationRuntime.ts", import.meta.url))],
+                remotes: {},
                 shared: {
                     react: { singleton: true },
                     // Vite dev 的共享 facade 不暴露 createPortal 等具名导出；
@@ -55,11 +48,11 @@ export default defineConfig(({ mode, command }) => {
             port,
             origin: `http://localhost:${port}`,
             proxy: {
-                // 基座和 CAM 子应用统一使用 /api/cam/v1/*。
-                "/api/cam": {
-                    target: camUpstream,
+                // 基座固定控制服务入口；子应用通过数据库下发的 URL 直连后端。
+                "/api/cdi": {
+                    target: cdiUpstream,
                     changeOrigin: true,
-                    rewrite: (path) => path.replace(/^\/api\/cam(?=\/|$)/, ""),
+                    rewrite: (path) => path.replace(/^\/api\/cdi(?=\/|$)/, ""),
                 },
             },
         },

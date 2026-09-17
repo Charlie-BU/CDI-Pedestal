@@ -29,6 +29,27 @@ import type {
   LinkGoogleBodyRequest,
   LinkGoogleHeaderRequest,
   LinkGoogle200Response,
+  GetAllSubApplicationsQueryRequest,
+  GetAllSubApplicationsHeaderRequest,
+  GetAllSubApplications200Response,
+  GetSubApplicationByIdQueryRequest,
+  GetSubApplicationByIdHeaderRequest,
+  GetSubApplicationById200Response,
+  SetSubApplicationEnabledBodyRequest,
+  SetSubApplicationEnabledHeaderRequest,
+  SetSubApplicationEnabled200Response,
+  ReorderSubApplicationsBodyRequest,
+  ReorderSubApplicationsHeaderRequest,
+  ReorderSubApplications200Response,
+  DeleteSubApplicationByIdBodyRequest,
+  DeleteSubApplicationByIdHeaderRequest,
+  DeleteSubApplicationById200Response,
+  CreateSubApplicationBodyRequest,
+  CreateSubApplicationHeaderRequest,
+  CreateSubApplication200Response,
+  UpdateSubApplicationBodyRequest,
+  UpdateSubApplicationHeaderRequest,
+  UpdateSubApplication200Response,
 } from './namespaces';
 
 export default class CDIServiceService<T> {
@@ -193,6 +214,145 @@ export default class CDIServiceService<T> {
     const data = { credential: _req['credential'] };
     const params = undefined;
     const headers = { Authorization: _req['Authorization'] };
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 分页查询未软删除的子应用配置，支持名称、标识、接入类型和启用状态筛选 */
+  GetAllSubApplicationsGET(
+    req: GetAllSubApplicationsQueryRequest & GetAllSubApplicationsHeaderRequest,
+    options?: T,
+  ): Promise<GetAllSubApplications200Response> {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/sub-application/list');
+    const method = 'GET';
+    const data = undefined;
+    const params = {
+      page: _req['page'],
+      page_size: _req['page_size'],
+      search: _req['search'],
+      app_type: _req['app_type'],
+      enabled: _req['enabled'],
+    };
+    const headers = { Authorization: _req['Authorization'] };
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 查询指定 ID 的未删除子应用完整配置 */
+  GetSubApplicationByIdGET(
+    req: GetSubApplicationByIdQueryRequest & GetSubApplicationByIdHeaderRequest,
+    options?: T,
+  ): Promise<GetSubApplicationById200Response> {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/sub-application/detail');
+    const method = 'GET';
+    const data = undefined;
+    const params = { id: _req['id'] };
+    const headers = { Authorization: _req['Authorization'] };
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 修改指定子应用的 enabled，内部调用完整配置更新逻辑；因此不仅校验启用字段，也会重新校验记录的其他配置与冲突。 */
+  SetSubApplicationEnabledPOST(
+    req: SetSubApplicationEnabledBodyRequest &
+      SetSubApplicationEnabledHeaderRequest,
+    options?: T,
+  ): Promise<SetSubApplicationEnabled200Response> {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/sub-application/set-enabled');
+    const method = 'POST';
+    const data = { id: _req['id'], enabled: _req['enabled'] };
+    const params = undefined;
+    const headers = {
+      Authorization: _req['Authorization'],
+      'Content-Type': _req['Content-Type'],
+    };
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 按照传入 ID 数组重排全部未删除子应用，将每条记录的 sort_order 设置为其数组下标，并更新修改人和修改时间。 */
+  ReorderSubApplicationsPOST(
+    req: ReorderSubApplicationsBodyRequest &
+      ReorderSubApplicationsHeaderRequest,
+    options?: T,
+  ): Promise<ReorderSubApplications200Response> {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/sub-application/reorder');
+    const method = 'POST';
+    const data = { ids: _req['ids'] };
+    const params = undefined;
+    const headers = {
+      Authorization: _req['Authorization'],
+      'Content-Type': _req['Content-Type'],
+    };
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 软删除指定子应用，设置删除时间和更新时间，强制停用，并记录最后修改用户。不会物理删除数据库记录。 */
+  DeleteSubApplicationByIdPOST(
+    req: DeleteSubApplicationByIdBodyRequest &
+      DeleteSubApplicationByIdHeaderRequest,
+    options?: T,
+  ): Promise<DeleteSubApplicationById200Response> {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/sub-application/delete');
+    const method = 'POST';
+    const data = { id: _req['id'] };
+    const params = undefined;
+    const headers = {
+      'Content-Type': _req['Content-Type'],
+      Authorization: _req['Authorization'],
+    };
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 创建子应用配置，校验字段、路由及 Federation 标识冲突，记录创建人和最后修改人，提交数据库事务后返回新记录 */
+  CreateSubApplicationPOST(
+    req: CreateSubApplicationBodyRequest & CreateSubApplicationHeaderRequest,
+    options?: T,
+  ): Promise<CreateSubApplication200Response> {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/sub-application/create');
+    const method = 'POST';
+    const data = {
+      frontend_url: _req['frontend_url'],
+      remote_name: _req['remote_name'],
+      exposed_module: _req['exposed_module'],
+      backend_url: _req['backend_url'],
+      sort_order: _req['sort_order'],
+      enabled: _req['enabled'],
+      show_in_menu: _req['show_in_menu'],
+      require_login: _req['require_login'],
+      app_key: _req['app_key'],
+      name_zh: _req['name_zh'],
+      name_en: _req['name_en'],
+      description_zh: _req['description_zh'],
+      description_en: _req['description_en'],
+      icon_url: _req['icon_url'],
+      app_type: _req['app_type'],
+      route_path: _req['route_path'],
+    };
+    const params = undefined;
+    const headers = {
+      Authorization: _req['Authorization'],
+      'Content-Type': _req['Content-Type'],
+    };
+    return this.request({ url, method, data, params, headers }, options);
+  }
+
+  /** 更新指定未删除子应用的部分配置，将 values 与原配置合并后进行完整校验，更新修改人及修改时间并提交事务 */
+  UpdateSubApplicationPOST(
+    req: UpdateSubApplicationBodyRequest & UpdateSubApplicationHeaderRequest,
+    options?: T,
+  ): Promise<UpdateSubApplication200Response> {
+    const _req = req || {};
+    let url = this.genBaseURL('/v1/sub-application/update');
+    const method = 'POST';
+    const data = { id: _req['id'], values: _req['values'] };
+    const params = undefined;
+    const headers = {
+      Authorization: _req['Authorization'],
+      'Content-Type': _req['Content-Type'],
+    };
     return this.request({ url, method, data, params, headers }, options);
   }
 }

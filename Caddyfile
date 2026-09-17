@@ -12,13 +12,23 @@
     @health path /health
     respond @health "OK" 200
 
-    # CAM API
-    handle_path /api/cam/* {
-        reverse_proxy {$CAM_UPSTREAM_BASE_URL}
+    # CDI Pedestal Server API
+    handle_path /api/cdi/* {
+        reverse_proxy {$CDI_UPSTREAM_BASE_URL}
     }
 
     handle {
-        try_files {path} /index.html
-        file_server
+        route {
+            try_files {path} /index.html
+            @document path /index.html /
+            header @document {
+                Cache-Control "private, no-store"
+                Vary "X-LOCAL-DEBUG"
+            }
+            templates {
+                mime text/html
+            }
+            file_server
+        }
     }
 }

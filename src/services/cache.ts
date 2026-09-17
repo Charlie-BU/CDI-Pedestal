@@ -98,13 +98,14 @@ const stableStringify = (value: unknown): string => {
  */
 // 基于请求信息和当前用户令牌生成缓存键。
 export const createCacheKey = (
-    config: Pick<AxiosRequestConfig, "method" | "url" | "params">,
+    config: Pick<AxiosRequestConfig, "baseURL" | "method" | "url" | "params">,
     accessToken: string,
 ): string =>
     [
         "v1",
         hash(accessToken || "anonymous"),
         (config.method || "get").toLowerCase(),
+        config.baseURL || "",
         config.url || "",
         stableStringify(config.params),
     ].join(":");
