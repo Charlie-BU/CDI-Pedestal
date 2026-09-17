@@ -28,7 +28,7 @@
 | icon_url | HTTP(S) 地址或基座根相对路径，可空 |
 | app_type | federation 或 iframe |
 | route_path | 唯一小写路径；不允许首页、配置页、API/资源保留路径及应用间父子路径重叠 |
-| frontend_url | HTTP(S) 前端地址，必填；Federation 填完整 manifest/remote entry URL |
+| frontend_url | HTTP(S) 前端地址，必填；Federation 可填服务根地址/目录（自动补 `/mf-manifest.json`），或完整 manifest/remote entry URL |
 | remote_name / exposed_module | Federation 容器名称与导出，例如 cam / ./App；iframe 清空 |
 | backend_url | 服务根地址，可空；iframe 清空 |
 | sort_order | 0～1000000 的整数，按该值及 id 排序 |
