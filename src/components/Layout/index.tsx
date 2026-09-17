@@ -6,14 +6,8 @@ import Footer from "./Footer";
 import styles from "./index.module.less";
 import { useUser } from "@/hooks/useUser";
 
-/** EMBEDDED_PATHS：需要占满 Shell 内容区的第三方嵌入页面路由前缀。 */
-const EMBEDDED_PATHS = [
-    "/prompt-minder",
-    "/icon-gallery",
-    "/arco-design",
-    "/coze-loop",
-    "/feishu-open-platform",
-];
+import { useApplications } from "@/hooks/useApplications";
+import { matchApplication } from "@/subApplications";
 
 /** getWatermarkColor：从组件库灰色色板生成水印颜色。 */
 const getWatermarkColor = () => {
@@ -24,7 +18,8 @@ const getWatermarkColor = () => {
 const Layout = () => {
     const { user } = useUser();
     const location = useLocation();
-    const isEmbeddedPage = EMBEDDED_PATHS.some((path) => location.pathname.startsWith(path));
+    const { apps } = useApplications();
+    const isEmbeddedPage = matchApplication(apps, location.pathname)?.app_type === "iframe";
 
     return (
         <ArcoLayout className={styles.layout}>

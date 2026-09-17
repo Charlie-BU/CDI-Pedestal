@@ -1,6 +1,6 @@
 # CDI-Pedestal 单元测试规范
 
-本文适用于 CDI-Pedestal：一个 React 18 + TypeScript + Vite 的 CDI Shell。它负责登录态、顶层导航、`/cam/*` 路由、CAM Module Federation remote 的加载，以及面向 CAM 的 `/api/cam` 代理与用户隔离缓存；CAM 业务页面仍属于 CAM-FE。本规范不在前端测试中访问真实 CAM 后端、已部署 remote、真实账号或浏览器登录态。
+本文适用于 CDI-Pedestal：一个 React 18 + TypeScript + Vite 的 CDI Shell。它负责登录态、顶层导航、目录驱动的子应用路由与 Module Federation remote 加载，以及基座 `/api/cdi` 代理与用户隔离缓存；CAM 业务页面仍属于 CAM-FE。本规范不在前端测试中访问真实 CAM 后端、已部署 remote、真实账号或浏览器登录态。
 
 本文不引入 CI。提交前由开发者在本地执行受影响测试与质量检查；将来接入 CI 时应复用本文的命令和边界，不能为 CI 放宽隔离要求。
 
@@ -108,14 +108,14 @@ CDI-Pedestal/
 
 - `useUser` 覆盖无 token 初始状态、拉取当前用户、登录/退出、未授权清理与请求失败；退出应清除当前账号的缓存而不能影响其他隔离测试数据。
 - `App` 覆盖 `/`、无 token 访问 `/cam/*` 的重定向、带 token 时传给 `cam/App` 的完整 `PlatformContextValue`、未知路由回退、Railway/Coze 的安全外链属性。
-- `PlatformContextValue` 变更时覆盖 user、accessToken、`apiBase: "/api/cam"`、locale 与 `onUnauthorized`。host 侧与 CAM-FE remote 的合同测试必须一起更新。
+- `PlatformContextValue` 变更时覆盖 user、accessToken、目录下发的 `apiBase`、locale 与 `onUnauthorized`；同时验证本地调试覆盖及关闭调试后回退目录地址。基座 `CDIService` 固定使用 `/api/cdi`，不受子应用地址影响。host 侧与 CAM-FE remote 的合同测试必须一起更新。
 - `RemoteBoundary` 覆盖 remote import/render 失败的可理解 fallback 与恢复路径；不吞掉可诊断错误。
 
 ### 5.4 预加载、i18n 与配置
 
 - 已登录时优先使用 `requestIdleCallback` 预加载 CAM remote，并在卸载时取消；不支持时退化 timer，timer 不得在卸载后触发。
 - locale 切换应向 remote 传递当前 resolved language；用户可见新增文案同步测试 `zh-CN.json` 与 `en-US.json` 的 key。
-- Vite/federation/代理改动至少验证配置意图：缺失 `VITE_CAM_REMOTE_ENTRY` 失败明确；`/api/cam` 重写不丢失 `/v1/*`；React/React Router 保持 singleton 与 dedupe。配置本身不需要真实启动后端。
+- Vite/federation/代理改动至少验证配置意图：不依赖子应用构建环境变量，目录接口失败可恢复；`/api/cdi/v1/*` 重写为 `/v1/*`，Vite/Caddy 均使用 `CDI_UPSTREAM_BASE_URL`；React/React Router 保持 singleton 与 dedupe。配置本身不需要真实启动后端。
 
 ### 5.5 集成合同
 

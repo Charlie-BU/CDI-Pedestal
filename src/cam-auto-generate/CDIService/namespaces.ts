@@ -58,10 +58,16 @@ export interface GetUserByUsernameOrNicknameOrEmail200Response {
 }
 
 export interface GetUserByUsernameOrNicknameOrEmail200ResponseUsersItem {
-  /** 创建时间（ISO8601） */
-  created_at: string;
+  /** 用户 ID */
+  id: number;
   /** 用户名 */
   username: string;
+  /** 是否配置本地密码 */
+  has_password: boolean;
+  /** 已绑定的第三方身份提供方 */
+  auth_providers: string[];
+  /** 创建时间（ISO8601） */
+  created_at: string;
   /** 昵称 */
   nickname: string | null;
   /** 邮箱 */
@@ -70,12 +76,6 @@ export interface GetUserByUsernameOrNicknameOrEmail200ResponseUsersItem {
   role: string;
   /** 等级 */
   level: number;
-  /** 用户 ID */
-  id: number;
-  /** 是否配置本地密码 */
-  has_password: boolean;
-  /** 已绑定的第三方身份提供方 */
-  auth_providers: string[];
 }
 
 export interface ModifyPasswordHeaderRequest {
@@ -237,4 +237,461 @@ export interface LinkGoogle200Response {
   status: number;
   /** 响应消息 */
   message: string;
+}
+
+export interface GetAllSubApplicationsQueryRequest {
+  /** 页码，从1开始，使用int()转换后必须≥1 */
+  page?: string;
+  /** 每页条数，范围1～100 */
+  page_size?: string;
+  /** 搜索关键字，同时匹配app_key、name_zh、name_en，OR条件，包含匹配 */
+  search?: string;
+  /** 接入类型筛选，非空时只能为federation或iframe */
+  app_type?: string;
+  /** 启用状态筛选，非空时只能为true或false */
+  enabled?: string;
+}
+
+export interface GetAllSubApplicationsHeaderRequest {
+  /** Bearer访问令牌，格式为Bearer {access_token}，未提供时按匿名访问处理 */
+  Authorization?: string;
+}
+
+export interface GetAllSubApplications200Response {
+  /** 响应状态码，固定为200 */
+  status: number;
+  /** 响应消息，固定为Get sub applications success */
+  message: string;
+  /** 当前页子应用配置列表，元素不可为null */
+  items: GetAllSubApplications200ResponseItemsItem[];
+  /** 满足筛选条件的未删除记录总数，非当前页条数 */
+  total: number;
+}
+
+export interface GetAllSubApplications200ResponseItemsItem {
+  /** 创建用户ID，可为空 */
+  created_by: number | null;
+  /** 最后更新时间，ISO格式 */
+  updated_at: string;
+  /** 最后修改用户ID，可为空 */
+  updated_by: number | null;
+  /** 软删除时间，本接口只返回未删除记录，正常为null */
+  deleted_at: string | null;
+  /** 由backend_url派生的浏览器访问地址，匿名且需登录时为空 */
+  api_base: string;
+  /** 原始数据库backend_url是否非空 */
+  has_backend: boolean;
+  /** 子应用配置主键ID */
+  id: number;
+  /** 唯一标识，最大长度64 */
+  app_key: string;
+  /** 中文名称，最大长度128 */
+  name_zh: string;
+  /** 英文名称，最大长度128 */
+  name_en: string;
+  /** 中文说明，可为空字符串 */
+  description_zh: string;
+  /** 英文说明，可为空字符串 */
+  description_en: string;
+  /** 图标地址，可为HTTP(S) URL、根相对路径或空字符串 */
+  icon_url: string;
+  /** 接入类型，federation或iframe */
+  app_type: string;
+  /** 基座路由路径，以/开头 */
+  route_path: string;
+  /** 前端入口URL，匿名访问且require_login=true时返回空字符串 */
+  frontend_url: string;
+  /** Federation远程容器名称，iframe应用为空 */
+  remote_name: string;
+  /** Federation导出模块路径，iframe应用为空 */
+  exposed_module: string;
+  /** 后端直连地址，无后端或iframe应用为空 */
+  backend_url: string;
+  /** 展示排序值，数值越小越靠前 */
+  sort_order: number;
+  /** 是否启用 */
+  enabled: boolean;
+  /** 是否在侧导显示 */
+  show_in_menu: boolean;
+  /** 通过基座访问该应用是否要求登录 */
+  require_login: boolean;
+  /** 创建时间，ISO格式 */
+  created_at: string;
+}
+
+export interface GetSubApplicationByIdQueryRequest {
+  /** 子应用 ID，转换为整数后查询主键 */
+  id?: string;
+}
+
+export interface GetSubApplicationByIdHeaderRequest {
+  /** Bearer {access_token}，必须使用有效令牌 */
+  Authorization: string;
+}
+
+export interface GetSubApplicationById200Response {
+  /** 固定为 200 */
+  status: number;
+  /** 固定为 Get sub application success */
+  message: string;
+  /** 子应用完整配置 */
+  item: GetSubApplicationById200ResponseItem;
+}
+
+export interface GetSubApplicationById200ResponseItem {
+  /** 数据库主键 */
+  id: number;
+  /** 唯一基座路由，最大长度 128 */
+  route_path: string;
+  /** 前端入口，最大长度 2048 */
+  frontend_url: string;
+  /** Federation 容器名，最大长度 64；iframe 应用为空 */
+  remote_name: string;
+  /** Federation 导出模块，最大长度 128；iframe 应用为空 */
+  exposed_module: string;
+  /** 后端地址，最大长度 2048；无后端或 iframe 应用为空 */
+  backend_url: string;
+  /** 排序值，范围为 0～1000000 */
+  sort_order: number;
+  /** 启用状态 */
+  enabled: boolean;
+  /** 侧导显示状态 */
+  show_in_menu: boolean;
+  /** 基座访问是否要求登录 */
+  require_login: boolean;
+  /** 创建时间，ISO 格式 */
+  created_at: string;
+  /** 更新时间，ISO 格式 */
+  updated_at: string;
+  /** 创建用户 ID */
+  created_by: number | null;
+  /** 最后修改用户 ID */
+  updated_by: number | null;
+  /** 软删除时间，未删除记录为 null */
+  deleted_at: string | null;
+  /** 唯一标识，最大长度 64 */
+  app_key: string;
+  /** 中文名称，最大长度 128 */
+  name_zh: string;
+  /** 英文名称，最大长度 128 */
+  name_en: string;
+  /** 中文说明，可为空字符串；写接口最大长度 4000 */
+  description_zh: string;
+  /** 英文说明，可为空字符串；写接口最大长度 4000 */
+  description_en: string;
+  /** 图标地址，最大长度 2048，可为空字符串 */
+  icon_url: string;
+  /** 应用类型，支持 federation、iframe */
+  app_type: string;
+}
+
+export interface SetSubApplicationEnabledHeaderRequest {
+  /** 格式为 Bearer {access_token}，必须对应 L0 用户。 */
+  Authorization: string;
+  /** 建议 application/json，路由未显式校验。 */
+  'Content-Type'?: string;
+}
+
+export interface SetSubApplicationEnabledBodyRequest {
+  /** 目标记录主键，实际执行 int() 转换；兼容整数字符串，浮点数向零截断，boolean 转换为 0 或 1。无正整数范围校验。 */
+  id: number;
+  /** 严格 JSON boolean；true 启用，false 停用。不接受 0、1、空字符串、"true"、"false"。 */
+  enabled: boolean;
+}
+
+export interface SetSubApplicationEnabled200Response {
+  /** 固定为 200。 */
+  status: number;
+  /** 固定为 "Update sub application success"。 */
+  message: string;
+  /** 更新后的完整子应用记录。 */
+  item: SetSubApplicationEnabled200ResponseItem;
+}
+
+export interface SetSubApplicationEnabled200ResponseItem {
+  /** 配置主键。 */
+  id: number;
+  /** 唯一标识，长度 1～64。 */
+  app_key: string;
+  /** 中文名称，长度 1～128。 */
+  name_zh: string;
+  /** 英文名称，长度 1～128。 */
+  name_en: string;
+  /** 中文说明，最大长度 4000，可为空。 */
+  description_zh: string;
+  /** 英文说明，最大长度 4000，可为空。 */
+  description_en: string;
+  /** 图标地址，最大长度 2048，可为空。 */
+  icon_url: string;
+  /** "federation" 或 "iframe"。 */
+  app_type: string;
+  /** 基座路由，长度 2～128。 */
+  route_path: string;
+  /** 前端 URL，最大长度 2048。 */
+  frontend_url: string;
+  /** Federation 容器名；iframe 为空。 */
+  remote_name: string;
+  /** Federation 导出模块；iframe 为空。 */
+  exposed_module: string;
+  /** 后端 URL，最大长度 2048；无后端或 iframe 时为空。 */
+  backend_url: string;
+  /** 排序值，完整更新校验要求 0～1000000。 */
+  sort_order: number;
+  /** 本次请求指定的启用状态。 */
+  enabled: boolean;
+  /** 菜单显示状态。 */
+  show_in_menu: boolean;
+  /** 基座登录要求。 */
+  require_login: boolean;
+  /** 原创建时间，ISO 格式。 */
+  created_at: string;
+  /** 本次 UTC 更新时间，ISO 格式。 */
+  updated_at: string;
+  /** 原创建用户 ID。 */
+  created_by: number | null;
+  /** 本次 L0 操作用户 ID。 */
+  updated_by: number;
+  /** 正常成功结果为 null。 */
+  deleted_at: string | null;
+}
+
+export interface ReorderSubApplicationsHeaderRequest {
+  /** 访问令牌，格式为 Bearer {access_token}，必须对应 L0 用户。 */
+  Authorization: string;
+  /** 请求内容类型，建议 application/json，路由未显式校验。 */
+  'Content-Type'?: string;
+}
+
+export interface ReorderSubApplicationsBodyRequest {
+  /** 全部未软删除记录的 ID 数组，元素必须为严格 JSON integer，不允许重复，顺序即最终排序顺序；无未删除记录时允许空数组。 */
+  ids: number[];
+}
+
+export interface ReorderSubApplications200Response {
+  /** 固定为 200。 */
+  status: number;
+  /** 固定为 Reorder sub applications success。 */
+  message: string;
+}
+
+export interface DeleteSubApplicationByIdHeaderRequest {
+  /** 建议 application/json，路由未显式校验 */
+  'Content-Type'?: string;
+  /** Bearer {access_token}，必须对应 L0 用户 */
+  Authorization: string;
+}
+
+export interface DeleteSubApplicationByIdBodyRequest {
+  /** 目标记录 ID，实际执行 int() 转换；接受整数字符串，浮点数向零截断，boolean 转换为 0 或 1。未设置正整数范围限制；null、空字符串、数组或对象转换失败。 */
+  id: number;
+}
+
+export interface DeleteSubApplicationById200Response {
+  /** 固定为 200 */
+  status: number;
+  /** 固定为 Delete sub application success */
+  message: string;
+}
+
+export interface CreateSubApplicationHeaderRequest {
+  /** 格式为 Bearer {access_token}，必须对应有效的 L0 用户 */
+  Authorization: string;
+  /** JSON 请求建议为 application/json；路由直接执行 request.json()，未显式校验该 Header */
+  'Content-Type'?: string;
+}
+
+export interface CreateSubApplicationBodyRequest {
+  /** 裁剪首尾空白后为非空 HTTP(S) URL，最大长度 2048；Federation 使用 manifest 或 remote entry 地址，iframe 使用网页地址 */
+  frontend_url: string;
+  /** app_type=federation 时必填且不可为 null，匹配 [a-zA-Z][a-zA-Z0-9_-]{0,63}，不能为 cdi_pedestal；app_type=iframe 时选填，输入 null 或其他类型均忽略并保存为空字符串 */
+  remote_name?: string | null;
+  /** app_type=federation 时必填且不可为 null，长度 3～128，匹配 \./[a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_-]+)*；app_type=iframe 时选填，输入 null 或其他类型均忽略并保存为空字符串 */
+  exposed_module?: string | null;
+  /** 默认空字符串；非空时必须为最大长度 2048 的 HTTP(S) URL；iframe 类型最终保存为空字符串，但仍先验证输入 */
+  backend_url?: string;
+  /** 默认 0，范围 0～1000000；严格要求 JSON integer，不接受 boolean、字符串或浮点数 */
+  sort_order?: number;
+  /** 默认 true；严格要求 JSON boolean，不接受 0、1、"true"、"false" */
+  enabled?: boolean;
+  /** 默认 true；严格要求 JSON boolean */
+  show_in_menu?: boolean;
+  /** 默认 true；严格要求 JSON boolean */
+  require_login?: boolean;
+  /** 去除首尾空白后长度 1～64，匹配 [a-z][a-z0-9_-]{0,63}；创建后不可修改，在全部记录中唯一（含软删除记录） */
+  app_key: string;
+  /** 去除首尾空白后长度 1～128，不可为空或全空白 */
+  name_zh: string;
+  /** 去除首尾空白后长度 1～128，不可为空或全空白 */
+  name_en: string;
+  /** 中文说明，最大长度 4000，不裁剪空白，允许空字符串 */
+  description_zh?: string;
+  /** 英文说明，最大长度 4000，不裁剪空白，允许空字符串 */
+  description_en?: string;
+  /** 裁剪首尾空白后最大长度 2048，允许空字符串、HTTP(S) URL 或以单个 / 开头的根相对路径 */
+  icon_url?: string;
+  /** 裁剪首尾空白后只能为 federation 或 iframe，区分大小写 */
+  app_type: string;
+  /** 裁剪首尾空白后长度 2～128，必须匹配 /[a-z0-9_-]+(?:/[a-z0-9_-]+)*，必须以 / 开头，不允许末尾 /、连续 /、大写字母、空格、点号或根路径 /；首段不能为保留名称 */
+  route_path: string;
+}
+
+export interface CreateSubApplication200Response {
+  /** 固定为 201；实际 HTTP 状态为 200 */
+  status: number;
+  /** 固定为 Create sub application success */
+  message: string;
+  /** 提交并刷新后的数据库记录 */
+  item: CreateSubApplication200ResponseItem;
+}
+
+export interface CreateSubApplication200ResponseItem {
+  /** Federation 导出模块；iframe 固定为空字符串 */
+  exposed_module: string;
+  /** 范围 0～1000000，默认 0 */
+  sort_order: number;
+  /** 启用状态，默认 true */
+  enabled: boolean;
+  /** 菜单显示状态，默认 true */
+  show_in_menu: boolean;
+  /** 基座访问登录要求，默认 true */
+  require_login: boolean;
+  /** 数据库默认时间，使用 datetime.isoformat() 序列化 */
+  created_at: string;
+  /** 数据库默认时间，使用 datetime.isoformat() 序列化 */
+  updated_at: string;
+  /** 本次创建的 L0 用户 ID */
+  created_by: number;
+  /** 本次创建的 L0 用户 ID */
+  updated_by: number;
+  /** 新记录固定为 null */
+  deleted_at: string | null;
+  /** 数据库生成的主键 */
+  id: number;
+  /** 规范化后的唯一标识，长度 1～64 */
+  app_key: string;
+  /** 规范化后的中文名称，长度 1～128 */
+  name_zh: string;
+  /** 规范化后的英文名称，长度 1～128 */
+  name_en: string;
+  /** 中文说明，最大长度 4000；未提供时为空字符串 */
+  description_zh: string;
+  /** 英文说明，最大长度 4000；未提供时为空字符串 */
+  description_en: string;
+  /** 规范化后的图标地址，最大长度 2048；未提供时为空字符串 */
+  icon_url: string;
+  /** federation 或 iframe */
+  app_type: string;
+  /** 规范化后的唯一基座路由，长度 2～128 */
+  route_path: string;
+  /** 规范化后的 HTTP(S) 前端地址，最大长度 2048 */
+  frontend_url: string;
+  /** Federation 容器名；iframe 固定为空字符串 */
+  remote_name: string;
+  /** 规范化后的后端地址；无后端或 iframe 时为空字符串 */
+  backend_url: string;
+}
+
+export interface UpdateSubApplicationHeaderRequest {
+  /** Bearer {access_token}，必须对应 L0 用户 */
+  Authorization: string;
+  /** 建议 application/json */
+  'Content-Type'?: string;
+}
+
+export interface UpdateSubApplicationBodyRequest {
+  /** 目标记录 ID，使用 int() 转换，兼容整数字符串 */
+  id: number;
+  /** 需要修改的配置字段，允许 {}，不允许未知字段 */
+  values: UpdateSubApplicationBodyRequestValues;
+}
+
+export interface UpdateSubApplicationBodyRequestValues {
+  /** 应用唯一标识，只允许与当前值完全相同，任何不同值触发 IMMUTABLE_KEY */
+  app_key?: string;
+  /** 中文名称，裁剪首尾空白后长度 1～128 */
+  name_zh?: string;
+  /** 英文名称，裁剪首尾空白后长度 1～128 */
+  name_en?: string;
+  /** 中文说明，最大长度 4000，不裁剪空白，空串表示清空 */
+  description_zh?: string;
+  /** 英文说明，最大长度 4000，不裁剪空白，空串表示清空 */
+  description_en?: string;
+  /** 启用状态，严格 JSON boolean */
+  enabled?: boolean;
+  /** 图标地址，最大长度 2048，合法 HTTP(S) URL 或根相对路径，空串或全空白表示清空 */
+  icon_url?: string;
+  /** 接入类型，裁剪后只能为 federation 或 iframe */
+  app_type?: string;
+  /** 路由，裁剪后长度 2～128，匹配 /[a-z0-9_-]+(?:/[a-z0-9_-]+)*，首段不能是保留名称 */
+  route_path?: string;
+  /** 前端 URL，非空 HTTP(S) URL，最大长度 2048，不可通过空串清空 */
+  frontend_url?: string;
+  /** Federation 容器名，合并后类型为 federation 时长度 1～64 且不允许 null；iframe 时任意输入被覆盖为空串 */
+  remote_name?: string | null;
+  /** Federation 导出模块，合并后类型为 federation 时长度 3～128 且不允许 null；iframe 时任意输入被覆盖为空串 */
+  exposed_module?: string | null;
+  /** 后端 URL，最大长度 2048，非空时必须为合法 HTTP(S) URL，空串或全空白表示清空；iframe 类型先校验再保存为空串 */
+  backend_url?: string;
+  /** 排序值，严格 JSON integer，范围 0～1000000 */
+  sort_order?: number;
+  /** 侧导显示状态，严格 JSON boolean */
+  show_in_menu?: boolean;
+  /** 基座登录要求，严格 JSON boolean */
+  require_login?: boolean;
+}
+
+export interface UpdateSubApplication200Response {
+  /** 固定为 200 */
+  status: number;
+  /** 固定为 Update sub application success */
+  message: string;
+  /** 提交并刷新后的完整记录 */
+  item: UpdateSubApplication200ResponseItem;
+}
+
+export interface UpdateSubApplication200ResponseItem {
+  /** 最终接入类型，federation 或 iframe */
+  app_type: string;
+  /** 最终路由，长度 2～128 */
+  route_path: string;
+  /** 最终前端 URL，最大长度 2048 */
+  frontend_url: string;
+  /** 最终容器名，iframe 时为空 */
+  remote_name: string;
+  /** 最终导出模块，iframe 时为空 */
+  exposed_module: string;
+  /** 最终后端 URL，最大长度 2048，无后端或 iframe 时为空 */
+  backend_url: string;
+  /** 最终排序值，范围 0～1000000 */
+  sort_order: number;
+  /** 最终启用状态 */
+  enabled: boolean;
+  /** 最终侧导显示状态 */
+  show_in_menu: boolean;
+  /** 最终基座登录要求 */
+  require_login: boolean;
+  /** 原创建时间，ISO 格式，不改变 */
+  created_at: string;
+  /** 本次服务端 UTC 更新时间，ISO 格式 */
+  updated_at: string;
+  /** 原创建用户 ID，不改变，可为 null */
+  created_by: number | null;
+  /** 本次操作的 L0 用户 ID */
+  updated_by: number;
+  /** 目标必须未删除，因此为 null */
+  deleted_at: string | null;
+  /** 原记录主键，不改变 */
+  id: number;
+  /** 原应用唯一标识，不能修改 */
+  app_key: string;
+  /** 最终中文名称，长度 1～128 */
+  name_zh: string;
+  /** 最终英文名称，长度 1～128 */
+  name_en: string;
+  /** 最终中文说明，最大长度 4000，可为空 */
+  description_zh: string;
+  /** 最终英文说明，最大长度 4000，可为空 */
+  description_en: string;
+  /** 最终图标地址，最大长度 2048，可为空 */
+  icon_url: string;
 }

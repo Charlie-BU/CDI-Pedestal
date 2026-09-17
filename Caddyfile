@@ -12,9 +12,9 @@
     @health path /health
     respond @health "OK" 200
 
-    # CAM API
-    handle_path /api/cam/* {
-        reverse_proxy {$CAM_UPSTREAM_BASE_URL}
+    # CDI Pedestal Server API
+    handle_path /api/cdi/* {
+        reverse_proxy {$CDI_UPSTREAM_BASE_URL}
     }
 
     handle {

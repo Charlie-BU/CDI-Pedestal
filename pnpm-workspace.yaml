@@ -1,3 +1,5 @@
 packages: []
 allowBuilds:
   esbuild: true
+minimumReleaseAgeExclude:
+  - cam-fe-code-generator@1.9.8

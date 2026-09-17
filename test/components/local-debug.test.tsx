@@ -5,7 +5,10 @@ import DebugForm from "@/components/LocalDebug/DebugForm";
 import LocalDebugButton from "@/components/LocalDebug";
 import i18n from "@/i18n";
 
-beforeEach(async () => { await i18n.changeLanguage("zh-CN"); });
+import { setDebugApplications } from "@/localDebug";
+import { cam } from "../fixtures/applications";
+
+beforeEach(async () => { setDebugApplications([cam]); await i18n.changeLanguage("zh-CN"); });
 afterEach(() => {
     cleanup();
     document.querySelector('meta[name="cdi-local-debug"]')?.remove();
@@ -25,8 +28,7 @@ describe("local debug UI", () => {
         const frontend = screen.getByPlaceholderText("http://localhost:9100");
         expect(frontend).toHaveValue("");
         expect(screen.getByPlaceholderText("http://localhost:9101")).toHaveValue("");
-        expect(screen.getByText(/VITE_CAM_REMOTE_ENTRY/)).toBeInTheDocument();
-        expect(screen.getByText(/CAM_UPSTREAM_BASE_URL/)).toBeInTheDocument();
+        expect(screen.getAllByText(/数据库/)).toHaveLength(2);
         fireEvent.change(frontend, { target: { value: "javascript:alert(1)" } });
         fireEvent.blur(frontend);
         expect(await screen.findByText(/请输入完整的 HTTP/)).toBeInTheDocument();

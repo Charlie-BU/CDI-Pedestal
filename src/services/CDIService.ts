@@ -11,7 +11,7 @@ import {
 export const TOKEN_KEY = "cdi_access_token";
 
 const http = axios.create({
-    baseURL: "/api/cam",
+    baseURL: "/api/cdi",
     timeout: 60000,
     headers: { "Content-Type": "application/json" },
 });
