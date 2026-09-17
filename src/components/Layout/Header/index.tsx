@@ -12,8 +12,8 @@ import {
     Space,
 } from "@cloud-materials/common";
 import { useTranslation } from "react-i18next";
-import LocalDebugButton from "@/components/LocalDebug";
-import { isLocalDebugEnabled } from "@/localDebug";
+import LocalDebugButton from "@/local-debug/LocalDebugButton";
+import { isLocalDebugEnabled } from "@/local-debug";
 import Profile from "@/components/User/Profile";
 import { useUser } from "@/hooks/useUser";
 import { LogoCDI } from "@/assets/icons";

@@ -1,7 +1,10 @@
 import type { ComponentType } from "react";
 import type { PlatformContextValue } from "./platform";
 import type { SubApplication } from "./subApplications";
-import { getApiBase, getRemoteEntry } from "./localDebug";
+import { prepareLocalDebugRefresh } from "./local-debug/refresh";
+import { getApiBase, getRemoteEntry } from "./local-debug";
+
+
 
 /** FederationRuntime：构建插件创建的 host 运行时接口。 */
 interface FederationRuntime {
@@ -25,6 +28,7 @@ export async function loadApplication(app: SubApplication) {
     if (needsApplicationReload(app)) throw new Error("APPLICATION_RELOAD_REQUIRED");
     const runtime = await ready;
     const signature = applicationSignature(app);
+    await prepareLocalDebugRefresh(app.app_key);
     runtime.registerRemotes([{ name: app.remote_name, alias: app.app_key, entry: getRemoteEntry(app.app_key, app.frontend_url), type: "module" }]);
     loaded.set(app.app_key, signature);
     const module = await runtime.loadRemote<{ default: ComponentType<{ platform: PlatformContextValue }> }>(`${app.app_key}/${app.exposed_module.slice(2)}`);

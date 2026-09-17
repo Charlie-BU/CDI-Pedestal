@@ -3,7 +3,7 @@ import { cam } from "./fixtures/applications";
 afterEach(() => vi.resetModules());
 describe("dynamic federation", () => {
     it.each(["https://remote.example", "https://remote.example/", "https://remote.example/cam/"])("resolves catalog base URL %s before registering the remote", async (frontend_url) => {
-        const { setDebugApplications } = await import("@/localDebug");
+        const { setDebugApplications } = await import("@/local-debug");
         const app = { ...cam, frontend_url };
         setDebugApplications([app]);
         const { default: plugin, loadApplication } = await import("@/federationRuntime");
@@ -13,7 +13,7 @@ describe("dynamic federation", () => {
         expect(runtime.registerRemotes).toHaveBeenCalledWith([{ name: "cam", alias: "cam", entry: `${frontend_url.replace(/\/+$/, "")}/mf-manifest.json`, type: "module" }]);
     });
     it("registers a catalog application on the existing host and requires reload after backend changes", async () => {
-        const { setDebugApplications } = await import("@/localDebug");
+        const { setDebugApplications } = await import("@/local-debug");
         setDebugApplications([cam]);
         const { default: plugin, loadApplication, needsApplicationReload } = await import("@/federationRuntime");
         const module = { default: () => null };

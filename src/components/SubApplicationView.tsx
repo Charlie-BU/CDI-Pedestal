@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import type { SubApplication } from "@/subApplications";
 import { applicationName } from "@/subApplications";
 import { useUser } from "@/hooks/useUser";
-import { getApiBase, getRemoteEntry } from "@/localDebug";
+import { getApiBase, getRemoteEntry } from "@/local-debug";
 import { applicationSignature, loadApplication, needsApplicationReload } from "@/federationRuntime";
 import RemoteBoundary from "./RemoteBoundary";
 

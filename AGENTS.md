@@ -19,7 +19,7 @@ CDI-Pedestal is the CDI shell application. It owns product-level navigation, aut
 
 - Keep shell layout, login, token ownership, and top-level product routing in this repository. Load compatible applications through the database-driven Federation runtime rather than copying their screens into the shell.
 - `PlatformContextValue` in `src/platform.ts` is the host-to-remote contract. When it changes, update the remote consumer contract and verify both repositories together.
-- Shell requests use `/api/cdi/v1/*`; Vite and Caddy rewrite this prefix to `/v1/*`. Business requests use `platform.apiBase` from the catalog, which contains the database `backend_url` and is accessed directly by the browser. 本地调试模式由 `src/localDebug.ts` 统一解析覆盖地址，仅经子应用 `platform.apiBase` 传递；基座 `CDIService` 始终使用 `/api/cdi`，不受调试配置影响；业务组件不得自行拼接调试 URL。
+- Shell requests use `/api/cdi/v1/*`; Vite and Caddy rewrite this prefix to `/v1/*`. Business requests use `platform.apiBase` from the catalog, which contains the database `backend_url` and is accessed directly by the browser. 本地调试模式由 `src/local-debug/index.ts` 统一解析覆盖地址，仅经子应用 `platform.apiBase` 传递；基座 `CDIService` 始终使用 `/api/cdi`，不受调试配置影响；业务组件不得自行拼接调试 URL。
 - API access is centralized in `src/services/CDIService.ts`. Preserve request cancellation, error semantics, token isolation, and cache behavior when changing the adapter.
 - `src/cam-auto-generate/` is generated API client output. Do not hand-edit it; change the source contract/configuration and regenerate it with the repository-supported workflow.
 - Never expose server secrets in `VITE_*` variables, source code, browser storage, or logs. The access token is user-scoped data and must not leak across cache keys or sessions.

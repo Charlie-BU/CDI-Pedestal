@@ -1,6 +1,6 @@
 import { Button, CModal, Message } from "@cloud-materials/common";
 import { useTranslation } from "react-i18next";
-import { isLocalDebugEnabled, readDebugSettings, saveDebugSettings } from "@/localDebug";
+import { isLocalDebugEnabled, readDebugSettings, saveDebugSettings } from "@/local-debug";
 import DebugForm from "./DebugForm";
 
 /** LocalDebugButton：打开与登录弹窗一致的本地调试配置表单。 */

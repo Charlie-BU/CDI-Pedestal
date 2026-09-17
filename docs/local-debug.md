@@ -22,8 +22,8 @@
 
 - `build/localDebugHeader.ts`：开发/预览读取 HTML 请求头；构建生成 Caddy 模板。
 - `Caddyfile`：仅 HTML 执行模板，将请求头映射为 meta `cdi-local-debug` 的固定 0/1。
-- `src/localDebug.ts`：目录驱动的覆盖解析和 sessionStorage。
-- `src/components/LocalDebug/`：复用登录 Modal 样式的动态表单。
+- `src/local-debug/index.ts`：目录驱动的覆盖解析和 sessionStorage。
+- `src/local-debug/LocalDebugButton.tsx` 与 `DebugForm.tsx`：复用登录 Modal 样式的动态表单。
 - `src/federationRuntime.ts`、`src/preloadApplications.ts`：使用同一解析结果注册和预加载。
 - `src/components/SubApplicationView.tsx`：将实际 apiBase 传给远程组件。
 
@@ -36,3 +36,11 @@ HTML 使用 `Cache-Control: private, no-store` 与 `Vary: X-LOCAL-DEBUG`；网�
 远程前端须允许基座 Origin 跨域加载，后端须允许相应 CORS、OPTIONS、Authorization 和 Content-Type。HTTPS 基座访问本地还受浏览器本地网络访问、混合内容及 CSP 策略约束。该请求头只开启开发入口，不替代认证。iframe 站点仍受 frame-ancestors/X-Frame-Options 约束。
 
 完整数据模型、接口、部署和验证见 [数据库驱动的子应用配置](sub-applications.md)。
+
+### 线上基座加载 Vite React 开发模块
+
+基座在加载显式配置的前端调试入口前，先从入口所在目录加载 `@react-refresh`，调用真实运行时的 `injectIntoGlobalHook`，并安装 React 插件需要的 preamble 标记，再加载 Federation 模块。初始化按入口去重，兼容运行时的命名导出与默认导出。这样无需依赖子应用 `index.html` 注入的初始化脚本。
+
+仅覆盖后端地址或未开启本地调试时不执行此逻辑。生产构建或非 Vite 调试地址没有该模块时，继续常规加载。开发服务器仍需允许基座跨域访问；此改动不绕过浏览器本地网络权限，也不保证所有子应用的热更新配置均可直接跨域工作。
+
+本地调试的浏览器端模块统一在 `src/local-debug/`：`index.ts` 管理配置，`refresh.ts` 初始化开发运行时，`LocalDebugButton.tsx`、`DebugForm.tsx` 和 `index.module.less` 提供交互界面。Node 端请求头插件保留在 `build/localDebugHeader.ts`，与浏览器代码隔离。

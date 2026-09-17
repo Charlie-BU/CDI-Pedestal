@@ -3,7 +3,8 @@ import { CDIService } from "@/services/CDIService";
 import { normalizeApplication } from "@/subApplications";
 import type { SubApplication } from "@/subApplications";
 import { cacheResponse, createCacheKey, getCachedResponse, isSameCachedData } from "@/services/cache";
-import { setDebugApplications } from "@/localDebug";
+import { setDebugApplications } from "@/local-debug";
+
 
 /** ApplicationStore：当前登录身份下的运行目录。 */
 interface ApplicationStore {

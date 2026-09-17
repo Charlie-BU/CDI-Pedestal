@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { DEBUG_STORAGE_KEY, getApiBase, getRemoteEntry, isLocalDebugEnabled, normalizeDebugUrl, readDebugSettings, saveDebugSettings } from "@/localDebug";
-import { setDebugApplications } from "@/localDebug";
+import { DEBUG_STORAGE_KEY, getApiBase, getRemoteEntry, isLocalDebugEnabled, normalizeDebugUrl, readDebugSettings, saveDebugSettings } from "@/local-debug";
+import { setDebugApplications } from "@/local-debug";
 import { cam } from "./fixtures/applications";
 
 beforeEach(() => {

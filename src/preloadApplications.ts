@@ -1,6 +1,7 @@
 import type { SubApplication } from "./subApplications";
-import { getRemoteEntry } from "./localDebug";
+import { getRemoteEntry } from "./local-debug";
 const preloaded = new Set<string>();
+
 /** preloadApplications：仅预取当前目录允许访问的 Federation 入口。 */
 export async function preloadApplications(apps: SubApplication[]) {
     await Promise.all(apps.filter((app) => app.enabled && app.app_type === "federation" && app.frontend_url).map(async (app) => {

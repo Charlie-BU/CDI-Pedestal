@@ -1,7 +1,7 @@
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Outlet } from "react-router-dom";
-import { saveDebugSettings, setDebugApplications } from "@/localDebug";
+import { saveDebugSettings, setDebugApplications } from "@/local-debug";
 
 vi.mock("@/components/Layout", () => ({ default: () => <div data-testid="shell-layout"><Outlet /></div> }));
 vi.mock("@/components/RemoteBoundary", () => ({ default: ({ children }: { children: React.ReactNode }) => children }));

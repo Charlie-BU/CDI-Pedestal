@@ -14,7 +14,7 @@ afterEach(() => {
 describe("preloadApplications", () => {
     it("preloads a configured JavaScript entry without trying to parse it as a manifest", async () => {
         document.head.insertAdjacentHTML("beforeend", '<meta name="cdi-local-debug" content="1">');
-        const { saveDebugSettings, setDebugApplications } = await import("@/localDebug");
+        const { saveDebugSettings, setDebugApplications } = await import("@/local-debug");
         setDebugApplications([cam]);
         saveDebugSettings({ cam: { frontend: "http://localhost:9100/remoteEntry.js" } });
         const fetchMock = vi.fn();
@@ -26,7 +26,7 @@ describe("preloadApplications", () => {
     });
 
     it("preloads the remote entry from a manifest without credentials", async () => {
-        const { setDebugApplications } = await import("@/localDebug");
+        const { setDebugApplications } = await import("@/local-debug");
         setDebugApplications([cam]);
         const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ metaData: { remoteEntry: { name: "remoteEntry.js", path: "assets/" } } }) });
         vi.stubGlobal("fetch", fetchMock);

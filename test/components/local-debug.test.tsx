@@ -1,11 +1,11 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { Form } from "@cloud-materials/common";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import DebugForm from "@/components/LocalDebug/DebugForm";
-import LocalDebugButton from "@/components/LocalDebug";
+import DebugForm from "@/local-debug/DebugForm";
+import LocalDebugButton from "@/local-debug/LocalDebugButton";
 import i18n from "@/i18n";
 
-import { setDebugApplications } from "@/localDebug";
+import { setDebugApplications } from "@/local-debug";
 import { cam } from "../fixtures/applications";
 
 beforeEach(async () => { setDebugApplications([cam]); await i18n.changeLanguage("zh-CN"); });

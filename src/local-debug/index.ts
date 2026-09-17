@@ -1,4 +1,4 @@
-import type { SubApplication } from "./subApplications";
+import type { SubApplication } from "../subApplications";
 
 /** DebugUrls：子应用的可选前后端覆盖地址。 */
 export interface DebugUrls { frontend: string; backend: string }

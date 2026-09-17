@@ -1,6 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getApiBase, saveDebugSettings, setDebugApplications } from "@/localDebug";
+import { getApiBase, saveDebugSettings, setDebugApplications } from "@/local-debug";
 
 import { cam } from "../fixtures/applications";
 

@@ -1,6 +1,6 @@
 import { Form, Input, Typography } from "@cloud-materials/common";
 import { useTranslation } from "react-i18next";
-import { getDebugApplications, normalizeDebugUrl } from "@/localDebug";
+import { getDebugApplications, normalizeDebugUrl } from "@/local-debug";
 import { applicationName } from "@/subApplications";
 import { useApplications } from "@/hooks/useApplications";
 import styles from "./index.module.less";
