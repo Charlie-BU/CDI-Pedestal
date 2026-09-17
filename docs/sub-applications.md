@@ -28,7 +28,7 @@
 | icon_url | HTTP(S) 地址或基座根相对路径，可空 |
 | app_type | federation 或 iframe |
 | route_path | 唯一小写路径；不允许首页、配置页、API/资源保留路径及应用间父子路径重叠 |
-| frontend_url | HTTP(S) 前端地址，必填；Federation 填完整 manifest/remote entry URL |
+| frontend_url | HTTP(S) 前端地址，必填；Federation 可填服务根地址/目录（自动补 `/mf-manifest.json`），或完整 manifest/remote entry URL |
 | remote_name / exposed_module | Federation 容器名称与导出，例如 cam / ./App；iframe 清空 |
 | backend_url | 服务根地址，可空；iframe 清空 |
 | sort_order | 0～1000000 的整数，按该值及 id 排序 |
@@ -137,3 +137,11 @@ SQL 文件提供给管理员手动执行，当前未在 PostgreSQL 实例执行�
 鉴权沿用共享请求拦截器，从当前登录状态注入 Bearer Token；写方法的 Authorization 空占位仅用于满足生成类型，真实 Token 由拦截器填写。列表支持匿名访问，默认不启用响应缓存，避免读取过时配置。生成类型中的 app_type 为 string，UI 适配时检查为 federation 或 iframe 后再使用。
 
 接入前已从最新生成代码采集上述七个真实请求，在临时 SQLite 下调用后端实际路由，并按生成响应类型递归核对字段、数组、基础类型和可空类型，全部通过。此验证不访问线上数据库；生成目录未作手工修改。
+
+### 目录加载与缓存
+
+首次进入且没有当前账号的缓存时，基座保持整页 loading，直到完整目录加载成功或请求失败，再渲染路由。目录按账号使用现有 IndexedDB 缓存策略保存全部分页结果；命中缓存后立即展示并后台请求最新目录。后续刷新保留当前页面，完整结果有变化时才更新菜单与路由，后台失败保留已有目录。切换账号会清空内存目录，旧请求不能覆盖新账号的数据；缓存读取或写入失败不阻塞网络结果。
+
+### 拖拽排序
+
+管理表格最左侧为拖拽手柄，拖动时预览整行，目标行高亮。放下后读取完整目录，移动源应用至目标位置，再通过 CDIService 的排序接口提交全部 ID；保留未显示的分页和筛选外应用。取消拖动或放回原行不提交。保存失败保留原列表并提示错误。手柄获得焦点后也可使用上下方向键调整当前页内的位置。

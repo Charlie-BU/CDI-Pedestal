@@ -47,13 +47,13 @@ export function saveDebugSettings(value: unknown): void {
     if (!isLocalDebugEnabled()) throw new Error("LOCAL_DEBUG_DISABLED");
     sessionStorage.setItem(DEBUG_STORAGE_KEY, JSON.stringify(normalizeDebugSettings(value)));
 }
-/** getRemoteEntry：解析调试入口，空值返回数据库下发的入口。 */
+/** getRemoteEntry：统一解析数据库与调试入口，为 Federation 服务地址补全 manifest。 */
 export function getRemoteEntry(id: string, fallback: string): string {
-    const url = readDebugSettings()[id]?.frontend;
-    if (!url) return fallback;
+    const url = readDebugSettings()[id]?.frontend || fallback;
+    if (!url) return url;
     const app = applications.find((item) => item.app_key === id);
     if (app?.app_type === "iframe") return url;
-    return /\.(json|m?js)$/i.test(new URL(url).pathname) ? url : `${url}/mf-manifest.json`;
+    return /\.(json|m?js)$/i.test(new URL(url).pathname) ? url : `${url.replace(/\/+$/, "")}/mf-manifest.json`;
 }
 /** getApiBase：仅解析子应用 API 地址，不影响基座 CDIService。 */
 export function getApiBase(id: string): string {

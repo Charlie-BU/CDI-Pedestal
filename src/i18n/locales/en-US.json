@@ -146,6 +146,7 @@
         "empty": "No applications available for debugging. Sign in or check application settings."
     },
     "applications": {
+        "loadingDirectory": "Loading applications",
         "title": "Sub-applications",
         "description": "Manage applications, endpoints and sidebar order. Reload the page to apply integration changes to an application that is already loaded.",
         "reloadRequired": "Application settings changed. Reload the page to continue.",
@@ -163,6 +164,7 @@
         "yes": "Visible",
         "no": "Hidden",
         "updated": "Updated at",
+        "dragOrder": "Drag to reorder (or use Up/Down arrow keys)",
         "operations": "Actions",
         "search": "Search name or key",
         "allTypes": "All types",
@@ -173,15 +175,13 @@
         "saved": "Settings saved",
         "delete": "Delete",
         "deleteConfirm": "Delete “{{name}}”? The application will be removed from the directory.",
-        "up": "Move up",
-        "down": "Move down",
         "required": "This field is required",
         "basic": "Basic information",
         "integration": "Integration",
         "visibility": "Visibility and access",
         "backendHint": "Enter the backend service root URL. This only affects the sub-application; shell authentication and profile requests stay unchanged.",
         "types": {
-            "federation": "Federation application",
+            "federation": "Microfrontend sub-application",
             "iframe": "iFrame embedded page"
         },
         "fields": {
@@ -197,7 +197,6 @@
             "remote_name": "Remote name",
             "exposed_module": "Exposed module",
             "backend_url": "Backend URL",
-            "sort_order": "Sort order",
             "enabled": "Enabled",
             "show_in_menu": "Show in sidebar",
             "require_login": "Require sign-in"

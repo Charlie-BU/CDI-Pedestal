@@ -18,7 +18,7 @@ it("validates the route prefix inline and hides sort order when creating", async
     expect(screen.queryByText("排序值")).not.toBeInTheDocument();
     expect(screen.getByText("基础信息")).toHaveStyle({ marginBottom: "16px" });
 });
-it("keeps sort order available when editing", () => {
+it("hides sort order when editing", () => {
     render(<Form layout="vertical"><ApplicationForm initial={cam} editing /></Form>);
-    expect(screen.getByText("排序值")).toBeInTheDocument();
+    expect(screen.queryByText("排序值")).not.toBeInTheDocument();
 });
