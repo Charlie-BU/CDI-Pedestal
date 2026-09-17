@@ -24,5 +24,5 @@ export default function SubApplicationView({ app }: { app: SubApplication }) {
     if (app.require_login && !accessToken) return <Navigate to="/" replace />;
     if (needsApplicationReload(app)) return <Result title={t("applications.reloadRequired")} extra={<Button onClick={() => window.location.reload()}>{t("remote.reload")}</Button>} />;
     if (app.app_type === "iframe") return <iframe title={applicationName(app, i18n.resolvedLanguage)} src={getRemoteEntry(app.app_key, app.frontend_url)} style={{ width: "100%", height: "100%", border: 0, display: "block" }} />;
-    return <RemoteBoundary key={app.app_key}><Suspense fallback={<Spin loading dot />}><Remote platform={platform} /></Suspense></RemoteBoundary>;
+    return <RemoteBoundary key={app.app_key}><Suspense fallback={<div role="status" aria-label={t("applications.loadingDirectory")} style={{ width: "100%", height: "100%", display: "grid", placeItems: "center" }}><Spin loading dot /></div>}><Remote platform={platform} /></Suspense></RemoteBoundary>;
 }
