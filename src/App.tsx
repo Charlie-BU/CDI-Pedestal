@@ -33,6 +33,9 @@ export default function App() {
         const id = window.setTimeout(run, 1000);
         return () => window.clearTimeout(id);
     }, [apps, identity, accessToken]);
+    if (loading || identity !== accessToken) {
+        return <div role="status" aria-label={t("applications.loadingDirectory")} style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}><Spin loading dot /></div>;
+    }
     const retry = <Button onClick={() => void load(accessToken)}>{t("applications.retry")}</Button>;
     return <BrowserRouter><Routes><Route element={<Layout />}>
         <Route index element={<div style={{ padding: 32 }}><h1>CDI</h1><p>{t("home.description")}</p>{error && <Result title={t("applications.directoryFailed")} extra={retry} />}</div>} />

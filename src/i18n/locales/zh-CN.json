@@ -146,6 +146,7 @@
         "empty": "当前没有可调试的子应用，请先登录或检查应用配置。"
     },
     "applications": {
+        "loadingDirectory": "正在加载子应用",
         "title": "子应用配置",
         "description": "管理全站子应用、访问地址和菜单顺序。已加载应用的接入配置变化后，需要刷新页面生效。",
         "reloadRequired": "子应用配置已更新，请刷新页面后继续。",
@@ -163,6 +164,7 @@
         "yes": "显示",
         "no": "隐藏",
         "updated": "更新时间",
+        "dragOrder": "拖拽排序（也可使用上下方向键）",
         "operations": "操作",
         "search": "搜索名称或标识",
         "allTypes": "全部类型",
@@ -173,15 +175,13 @@
         "saved": "配置已保存",
         "delete": "删除",
         "deleteConfirm": "确定删除“{{name}}”？删除后该应用将从目录中移除。",
-        "up": "上移",
-        "down": "下移",
         "required": "请填写此字段",
         "basic": "基础信息",
         "integration": "接入配置",
         "visibility": "展示与访问",
         "backendHint": "后端 URL 填写服务根地址。该配置仅影响子应用，基座登录与用户资料接口保持不变。",
         "types": {
-            "federation": "Federation 子应用",
+            "federation": "微前端子应用",
             "iframe": "iFrame 嵌入页面"
         },
         "fields": {
@@ -197,7 +197,6 @@
             "remote_name": "Remote 名称",
             "exposed_module": "暴露模块",
             "backend_url": "后端 URL",
-            "sort_order": "排序值",
             "enabled": "启用应用",
             "show_in_menu": "侧导显示",
             "require_login": "要求登录"
