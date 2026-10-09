@@ -19,6 +19,8 @@ export interface CacheRequestOptions extends AxiosRequestConfig {
     cacheKey?: string;
     /** 仅当后台刷新拿到不同数据时触发。 */
     onCacheUpdated?: (data: unknown) => void;
+    /** 缓存命中后，通知调用方后台刷新失败。 */
+    onCacheRefreshError?: (error: unknown) => void;
 }
 
 // 打开 IndexedDB 数据库，并在首次创建时初始化对象仓库。

@@ -116,6 +116,11 @@ export const useUser = create<UserStore>((set, get) => ({
                 { Authorization: "" },
                 {
                     needCache: true,
+                    onCacheRefreshError: (error) => {
+                        if (get().accessToken === token && axios.isAxiosError(error) && error.response?.status === 401) {
+                            get().logout();
+                        }
+                    },
                     onCacheUpdated: (updatedResponse) => {
                         const latest = updatedResponse as {
                             status?: number;
@@ -129,11 +134,11 @@ export const useUser = create<UserStore>((set, get) => ({
                     },
                 },
             );
+            if (get().accessToken !== token) return;
             ensureSuccess(response.status, response.message || t("user.fetchFailure"));
             set({ user: response.user, loading: false });
         } catch {
-            localStorage.removeItem(TOKEN_KEY);
-            set({ user: null, accessToken: "", loading: false });
+            if (get().accessToken === token) get().logout();
         }
     },
 
@@ -141,7 +146,7 @@ export const useUser = create<UserStore>((set, get) => ({
         const token = get().accessToken;
         localStorage.removeItem(TOKEN_KEY);
         void clearCachedResponsesForToken(token).catch(() => undefined);
-        set({ user: null, accessToken: "" });
+        set({ user: null, accessToken: "", loading: false });
     },
 
     openLoginModal: () => {

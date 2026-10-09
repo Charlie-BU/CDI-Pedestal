@@ -33,6 +33,7 @@ export const CDIService = new CDIServiceService<CacheRequestOptions>({
             needCache,
             cacheKey,
             onCacheUpdated,
+            onCacheRefreshError,
             ...axiosOptions
         } = options || {};
         // 合并生成最终请求配置。外部传入的 axiosOptions 可以补充超时、headers 等信息。
@@ -93,8 +94,9 @@ export const CDIService = new CDIServiceService<CacheRequestOptions>({
                 // 缓存更新完成后，通过回调通知上层“有新数据到了”。
                 // 调用方可以在这里 set 最新状态，从而触发页面刷新。
                 onCacheUpdated?.(data);
-            } catch {
-                // 当前界面已经展示了缓存数据，因此后台刷新失败时保持静默。
+            } catch (error) {
+                // 默认保持静默，允许调用方处理登录失效等必须响应的错误。
+                onCacheRefreshError?.(error);
             }
         })();
 

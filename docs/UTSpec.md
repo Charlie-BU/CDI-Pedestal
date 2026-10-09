@@ -102,6 +102,7 @@ CDI-Pedestal/
 - 无缓存或非 GET 请求只走网络，并保留调用方的 Axios 配置、超时与错误语义。
 - 有缓存的 GET：miss 时返回网络结果并异步写入；hit 时立即返回旧值、后台刷新仅在数据变化时写回并调用 `onCacheUpdated`。
 - IndexedDB 不可用、缓存写入失败、后台刷新失败都不得阻塞或替换主请求成功结果；后台失败不应将 token 或响应泄漏到日志。
+- 缓存命中后的后台刷新错误通过 `onCacheRefreshError` 通知调用方；`getMyInfo` 的 HTTP 401 必须清空当前会话、结束 loading 并清理对应账号缓存，其他后台错误仍保留缓存会话。旧 token 的迟到响应不得覆盖或清空新会话。
 - Bearer token 只在存在时加到 header，切换 token 后请求与缓存隔离。断言公开错误/cause，不冻结 Axios 原始错误文本。
 
 ### 5.3 Hook、认证与 Shell 路由
