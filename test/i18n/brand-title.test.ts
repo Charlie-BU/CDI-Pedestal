@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { brandTitle } from "../../build/brandTitle";
 import { applyContentOverride, parseContentOverride } from "@/i18n/contentOverride";
+import indexHtml from "../../index.html?raw";
 import zhCN from "@/i18n/locales/zh-CN.json";
 
 function renderTitle(raw?: string) {
@@ -11,6 +12,12 @@ function renderTitle(raw?: string) {
 }
 
 describe("initial brand title", () => {
+    it("uses the AirJelly brand asset as the browser tab icon", () => {
+        const document = new DOMParser().parseFromString(indexHtml, "text/html");
+        const icon = document.querySelector('link[rel="icon"]');
+        expect(icon?.getAttribute("href")).toBe("/src/assets/icons/airjelly.svg");
+        expect(icon?.getAttribute("type")).toBe("image/svg+xml");
+    });
     it("keeps the default for missing or invalid configuration", () => {
         expect(renderTitle()).toBe("<title>CDI</title>");
         expect(renderTitle("{")).toBe("<title>CDI</title>");
