@@ -254,3 +254,16 @@ body[data-color-theme="cream"] .c-m-btn-selector-common {
     --common-border-default: 1px solid var(--color-border-3);
     --common-border-active: 1px solid rgb(var(--primary-3));
 }
+
+/** 基座导航：菜单和折叠按钮共享交互底色。 */
+body {
+    --shell-navigation-hover: var(--color-neutral-2);
+    --shell-navigation-active: var(--color-neutral-3);
+}
+body[data-color-theme="cream"] {
+    --shell-navigation-hover: var(--color-bg-4);
+    --shell-navigation-active: var(--color-bg-5);
+}
+body .arco-menu-light .arco-menu-item:hover { background-color: var(--shell-navigation-hover); }
+body .arco-menu-light .arco-menu-item:active,
+body .arco-menu-light .arco-menu-item.arco-menu-selected { background-color: var(--shell-navigation-active); }

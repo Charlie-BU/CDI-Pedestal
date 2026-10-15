@@ -22,6 +22,7 @@
     flex: none;
     min-height: 0;
     box-sizing: border-box;
+    transition: width 220ms cubic-bezier(0.2, 0, 0, 1);
     background-color: inherit;
     border-right: 1px solid var(--color-neutral-3);
     box-shadow: none;
@@ -46,7 +47,8 @@
 .navigationToolbar {
     display: flex;
     justify-content: flex-end;
-    padding: 8px 11px 0;
+    padding: 10px 15px 12px;
+    flex-shrink: 0;
 }
 
 .collapseButton {
@@ -62,7 +64,8 @@
     background: transparent;
     cursor: pointer;
 
-    &:hover { background: var(--color-fill-2); color: var(--color-text-1); }
+    &:hover { background: var(--shell-navigation-hover); color: var(--color-text-1); }
+    &:active { background: var(--shell-navigation-active); }
     &:focus-visible { outline: 2px solid rgb(var(--primary-6)); outline-offset: 2px; }
 }
 
@@ -80,12 +83,18 @@
 
     &::after { content: ""; position: absolute; top: 0; bottom: 0; left: 3px; width: 2px; }
     &:hover::after, &:focus-visible::after { background: rgb(var(--primary-6)); }
+    &:active { background: var(--shell-navigation-active); }
     &:focus-visible { outline: none; }
 }
 
 .resizing {
+    transition: none;
     user-select: none;
     .resizeHandle::after { background: rgb(var(--primary-6)); }
 }
 
 .resizeOverlay { position: fixed; inset: 0; z-index: 9999; cursor: col-resize; }
+
+@media (prefers-reduced-motion: reduce) {
+    .sider { transition: none; }
+}

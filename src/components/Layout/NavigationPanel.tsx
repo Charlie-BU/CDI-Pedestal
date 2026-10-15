@@ -59,7 +59,10 @@ export default function NavigationPanel() {
         setPreferences((current) => ({ ...current, width: clampWidth(next) }));
     };
 
-    return <aside className={`${styles.sider} ${resizing ? styles.resizing : ""}`} style={{ width: collapsed ? 56 : width }}>
+    return <aside className={`${styles.sider} ${resizing ? styles.resizing : ""}`} style={{ width: collapsed ? 64 : width }}>
+        <nav id="shell-navigation" aria-label={t("nav.navigation")} className={styles.navigationMenu}>
+            <Sidebar collapsed={collapsed} />
+        </nav>
         <div className={styles.navigationToolbar}>
             <button type="button" className={styles.collapseButton}
                 aria-label={t(collapsed ? "nav.expand" : "nav.collapse")}
@@ -73,9 +76,6 @@ export default function NavigationPanel() {
                 </svg>
             </button>
         </div>
-        <nav id="shell-navigation" aria-label={t("nav.navigation")} className={styles.navigationMenu}>
-            <Sidebar collapsed={collapsed} />
-        </nav>
         {!collapsed && <div role="separator" tabIndex={0} aria-label={t("nav.resize")}
             aria-orientation="vertical" aria-valuemin={MIN_WIDTH} aria-valuemax={MAX_WIDTH} aria-valuenow={width}
             className={styles.resizeHandle} onPointerDown={startResize} onPointerMove={moveResize}

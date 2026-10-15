@@ -9,23 +9,50 @@
     background-color: transparent !important;
 }
 
-.icon {
-    width: 18px;
-    height: 18px;
+.expandedItem { display: flex; align-items: center; gap: 8px; }
+.iconSlot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    line-height: 0;
+    svg, img { display: block; width: 18px; height: 18px; margin: 0 !important; flex-shrink: 0; }
 }
-
-.productIcon {
-    width: 18px;
-    height: 18px;
-    margin-right: 8px;
-    margin-left: 1px;
-    object-fit: contain;
-}
-
+.icon, .productIcon { width: 18px; height: 18px; object-fit: contain; }
 .label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.icon, .productIcon { flex-shrink: 0; }
 .collapsedMenu {
-    .label { display: none; }
-    .icon, .productIcon { margin: 0 !important; }
-    :global(.arco-menu-item) { justify-content: center; padding: 0; }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
 }
+.collapsedItem, .popoverItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 8px;
+    padding: 0;
+    background: transparent;
+    color: var(--color-text-2);
+    cursor: pointer;
+    font: inherit;
+    &:hover { background: var(--shell-navigation-hover); }
+    &:active { background: var(--shell-navigation-active); }
+    &:focus-visible { outline: 2px solid rgb(var(--primary-6)); outline-offset: 2px; }
+}
+.collapsedItem { width: 44px; height: 44px; flex: 0 0 44px; }
+.popoverItem { justify-content: flex-start; gap: 8px; min-height: 32px; padding: 4px 8px; white-space: nowrap; }
+.selected { background: var(--shell-navigation-active); color: rgb(var(--primary-6)); }
+
+.navigationPopover {
+    :global(.arco-popover-content) { padding: 4px; }
+    :global(.arco-popover-inner-content) { padding: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .menu, .collapsedMenu { animation: navigationAppear 160ms ease-out; }
+}
+@keyframes navigationAppear { from { opacity: 0; transform: translateX(-3px); } to { opacity: 1; transform: translateX(0); } }

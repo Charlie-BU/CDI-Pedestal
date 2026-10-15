@@ -1,4 +1,4 @@
-import { Menu, Message } from "@cloud-materials/common";
+import { Menu, Message, Popover } from "@cloud-materials/common";
 import { IconAppsFill, IconHouseDashboard } from "@cloud-materials/common/ve-o-iconbox";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -24,12 +24,26 @@ export default function Sidebar({ collapsed = false }: { collapsed?: boolean }) 
         }
         navigate(key);
     };
-    return <Menu collapse={collapsed} selectedKeys={[selected]} onClickMenuItem={navigateTo} className={`${styles.menu} ${collapsed ? styles.collapsedMenu : ""}`}>
-        <Menu.Item style={{ display: "flex", alignItems: "center" }} key="/" title={t("nav.home")}><IconHouseDashboard className={styles.icon} /><span className={styles.label}>{t("nav.home")}</span></Menu.Item>
-        {visible.map((app) => <Menu.Item style={{ display: "flex", alignItems: "center" }} key={app.route_path} title={applicationName(app, i18n.resolvedLanguage)}>
-            <ApplicationIcon className={styles.productIcon} src={app.icon_url} />
-            <span className={styles.label}>{applicationName(app, i18n.resolvedLanguage)}</span>
+    const items = [
+        { key: "/", label: t("nav.home"), icon: <IconHouseDashboard className={styles.icon} /> },
+        ...visible.map((app) => ({ key: app.route_path, label: applicationName(app, i18n.resolvedLanguage), icon: <ApplicationIcon className={styles.productIcon} src={app.icon_url} /> })),
+        { key: APPLICATION_SETTINGS_PATH, label: t("applications.title"), icon: <IconAppsFill className={styles.icon} /> },
+    ];
+    if (collapsed) return <div role="menu" className={styles.collapsedMenu}>
+        {items.map((item) => <Popover key={item.key} position="right" className={styles.navigationPopover} trigger="hover" triggerProps={{ popupHoverStay: true, mouseLeaveDelay: 200 }} content={
+            <button type="button" className={`${styles.popoverItem} ${selected === item.key ? styles.selected : ""}`} onClick={() => navigateTo(item.key)}>
+                <span className={styles.iconSlot}>{item.icon}</span><span>{item.label}</span>
+            </button>
+        }>
+            <button type="button" role="menuitem" aria-label={item.label} aria-current={selected === item.key ? "page" : undefined}
+                className={`${styles.collapsedItem} ${selected === item.key ? styles.selected : ""}`} onClick={() => navigateTo(item.key)}>
+                <span className={styles.iconSlot}>{item.icon}</span>
+            </button>
+        </Popover>)}
+    </div>;
+    return <Menu selectedKeys={[selected]} onClickMenuItem={navigateTo} className={styles.menu}>
+        {items.map((item) => <Menu.Item key={item.key} className={styles.expandedItem}>
+            <span className={styles.iconSlot}>{item.icon}</span><span className={styles.label}>{item.label}</span>
         </Menu.Item>)}
-        <Menu.Item style={{ display: "flex", alignItems: "center" }} key={APPLICATION_SETTINGS_PATH} title={t("applications.title")}><IconAppsFill className={styles.icon} /><span className={styles.label}>{t("applications.title")}</span></Menu.Item>
     </Menu>;
 }

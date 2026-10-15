@@ -19,6 +19,17 @@ describe("application management entry", () => {
         expect(screen.getByText(/L0/)).toBeInTheDocument();
         expect(CDIService.GetAllSubApplicationsGET).not.toHaveBeenCalled();
     });
+    it("opens an interactive popover for collapsed navigation without a native tooltip", async () => {
+        await i18n.changeLanguage("zh-CN");
+        useApplications.setState({ identity: "token", apps: [cam] });
+        render(<MemoryRouter><Sidebar collapsed /></MemoryRouter>);
+        const item = screen.getByRole("menuitem", { name: "CAM" });
+        expect(item).not.toHaveAttribute("title");
+        expect(item.textContent).toBe("");
+        fireEvent.mouseEnter(item);
+        expect(await screen.findByRole("button", { name: "CAM" })).toBeVisible();
+        expect(screen.getByRole("button", { name: "CAM" })).toBeEnabled();
+    });
     it("always appends settings after visible database applications", async () => {
         await i18n.changeLanguage("zh-CN");
         useApplications.setState({ identity: "token", apps: [cam, { ...cam, id: 2, app_key: "hidden", name_zh: "隐藏应用", show_in_menu: false }] });
