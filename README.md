@@ -29,3 +29,15 @@ Federation 子应用导出接收 `PlatformContextValue` 的 React 组件，使�
 ```bash
 pnpm check
 ```
+
+## 品牌文案配置
+
+构建时通过 `VITE_CONTENT_OVERRIDE` 配置中英文标题和副标题，例如：
+
+```json
+{"zh-CN":{"brand":{"title":"示例平台","subtitle":"示例平台说明"}},"en-US":{"brand":{"title":"Example Platform","subtitle":"Example platform description"}}}
+```
+
+页头、首页和浏览器标题读取 `brand.title`，页头副标题读取 `brand.subtitle`。初始 HTML 使用默认语言 zh-CN 的标题，启动后按用户语言更新。Docker 构建使用同名 build arg；修改配置后需要重新构建发布。
+
+基座向 Federation 子应用传递可选的 `platform.brandName`，随当前语言变化。AirJelly Team 使用该名称展示成员与平台入口说明；旧基座未提供时默认显示 CDI。独立打开 Team 时默认显示 CDI。iframe 不接收此平台上下文。

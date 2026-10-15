@@ -5,6 +5,7 @@ import { useUser } from "@/hooks/useUser";
 import { useApplications } from "@/hooks/useApplications";
 import { CDIService } from "@/services/CDIService";
 import { normalizeApplication, applicationName, type ApplicationConfig, type ApplicationInput } from "@/subApplications";
+import ApplicationIcon from "@/components/ApplicationIcon";
 import ApplicationForm from "./ApplicationForm";
 import styles from "./index.module.less";
 
@@ -147,7 +148,7 @@ export default function ApplicationSettings() {
                 <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" aria-hidden="true">{[5, 10, 15].flatMap((cy) => [5, 11].map((cx) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1.5" />))}</svg>
             </button> },
             { title: t("applications.name"), width: 200, fixed: "left", render: (_, row) => <div className={styles.application}>
-                <span className={styles.icon}>{row.icon_url && <img src={row.icon_url} alt="" width={24} height={24} />}</span>
+                <span className={styles.icon}><ApplicationIcon src={row.icon_url} width={24} height={24} /></span>
                 <div className={styles.nameBlock}>
                     <div className={styles.ellipsis} title={applicationName(row, i18n.resolvedLanguage)}>{applicationName(row, i18n.resolvedLanguage)}</div>
                     <div className={`${styles.ellipsis} ${styles.identifier}`} title={row.app_key}>{row.app_key}</div>

@@ -1,6 +1,8 @@
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Outlet } from "react-router-dom";
+import zhCN from "@/i18n/locales/zh-CN.json";
+import i18n from "@/i18n";
 import { saveDebugSettings, setDebugApplications } from "@/local-debug";
 
 vi.mock("@/components/Layout", () => ({ default: () => <div data-testid="shell-layout"><Outlet /></div> }));
@@ -36,6 +38,9 @@ describe("App platform-to-remote contract", () => {
 
     afterEach(() => {
         cleanup();
+        i18n.removeResourceBundle("zh-CN", "translation");
+        i18n.addResourceBundle("zh-CN", "translation", zhCN);
+        void i18n.changeLanguage("zh-CN");
         document.querySelector('meta[name="cdi-local-debug"]')?.remove();
         setDebugApplications([cam]);
         sessionStorage.clear();
@@ -54,6 +59,17 @@ describe("App platform-to-remote contract", () => {
         await vi.waitFor(() => expect(finish).toBeDefined());
         await act(async () => { finish({ items: [cam], total: 1, status: 200, message: "ok" }); });
         expect(await screen.findByTestId("shell-layout")).toBeInTheDocument();
+    });
+
+    it("passes the configured brand and updates the document title", async () => {
+        i18n.addResource("zh-CN", "translation", "brand.title", "Example Platform");
+        await i18n.changeLanguage("zh-CN");
+        await renderAtCAM();
+        expect(screen.getByTestId("remote-brand")).toHaveTextContent("Example Platform");
+        expect(document.title).toBe("Example Platform");
+        await act(async () => { await i18n.changeLanguage("en-US"); });
+        expect(screen.getByTestId("remote-brand")).toHaveTextContent("CDI");
+        expect(document.title).toBe("CDI");
     });
 
     it("passes the locally overridden API base to the CAM remote", async () => {

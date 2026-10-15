@@ -12,10 +12,13 @@ import { preloadApplications } from "@/preloadApplications";
 
 /** App：固定基座路由与数据库驱动的子应用路由。 */
 export default function App() {
-    const { t } = useTranslation();
+    const { i18n, t } = useTranslation();
     const { user, accessToken, fetchUser } = useUser();
     const { apps, loading, error, load, identity } = useApplications();
     const currentApps = identity === accessToken ? apps : [];
+    useEffect(() => {
+        document.title = t("brand.title");
+    }, [i18n.resolvedLanguage, t]);
     useEffect(() => { if (accessToken && !user) void fetchUser(); }, [accessToken, user, fetchUser]);
     useEffect(() => {
         void load(accessToken);
@@ -38,7 +41,7 @@ export default function App() {
     }
     const retry = <Button onClick={() => void load(accessToken)}>{t("applications.retry")}</Button>;
     return <BrowserRouter><Routes><Route element={<Layout />}>
-        <Route index element={<div style={{ padding: 32 }}><h1>CDI</h1><p>{t("home.description")}</p>{error && <Result title={t("applications.directoryFailed")} extra={retry} />}</div>} />
+        <Route index element={<div style={{ padding: 32 }}><h1>{t("brand.title")}</h1><p>{t("home.description")}</p>{error && <Result title={t("applications.directoryFailed")} extra={retry} />}</div>} />
         <Route path={APPLICATION_SETTINGS_PATH} element={<ApplicationSettings />} />
         {currentApps.filter((app) => app.enabled).map((app) => <Route key={app.id} path={`${app.route_path.slice(1)}/*`} element={<SubApplicationView app={app} />} />)}
         <Route path="*" element={loading || identity !== accessToken ? <Spin loading dot /> : <Result title={t(error ? "applications.directoryFailed" : "applications.notFound")} extra={error ? retry : undefined} />} />

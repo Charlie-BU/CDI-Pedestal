@@ -37,6 +37,7 @@
         "enUS": "English"
     },
     "brand": {
+        "title": "CDI",
         "subtitle": "Composable Development Infrastructure"
     },
     "footer": {

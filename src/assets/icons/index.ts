@@ -1,5 +1,5 @@
-export { default as LogoCDI } from "./CDI.png";
 export { default as LogoCAM } from "./cam.png";
+export { default as LogoAirJelly } from "./airjelly.svg";
 export { default as LogoRailway } from "./railway.svg";
 export { default as LogoCozeLoop } from "./coze-loop.svg";
 export { default as LogoPromptMinder } from "./prompt-minder.png";

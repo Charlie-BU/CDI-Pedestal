@@ -5,5 +5,6 @@ export interface PlatformContextValue {
     accessToken: string;
     apiBase: string;
     locale: string;
+    brandName?: string;
     onUnauthorized: () => void;
 }

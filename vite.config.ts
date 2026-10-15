@@ -1,3 +1,4 @@
+import { brandTitle } from "./build/brandTitle";
 import { localDebugHeader } from "./build/localDebugHeader";
 import { federation } from "@module-federation/vite";
 import react from "@vitejs/plugin-react";
@@ -15,6 +16,7 @@ export default defineConfig(({ mode, command }) => {
     return {
         plugins: [
             localDebugHeader(),
+            brandTitle(env.VITE_CONTENT_OVERRIDE),
             react(),
             federation({
                 name: "cdi_pedestal",

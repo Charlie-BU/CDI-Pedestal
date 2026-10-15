@@ -9,6 +9,7 @@ import { CDIService } from "@/services/CDIService";
 import { useApplications } from "@/hooks/useApplications";
 import ApplicationSettings from "@/components/ApplicationSettings";
 import Sidebar from "@/components/Layout/Sidebar";
+import { LogoAirJelly } from "@/assets/icons";
 import i18n from "@/i18n";
 afterEach(() => { cleanup(); vi.restoreAllMocks(); session.user.level = 4; });
 describe("application management entry", () => {
@@ -25,6 +26,22 @@ describe("application management entry", () => {
         const labels = [...screen.getByRole("menu").querySelectorAll(".arco-menu-item")].map((el) => el.textContent);
         expect(labels).toEqual(["首页", "CAM", "子应用配置"]);
         expect(screen.queryByText("隐藏应用")).not.toBeInTheDocument();
+        expect(screen.getByText("CAM").querySelector("img")).toHaveAttribute("src", LogoAirJelly);
+    });
+});
+
+describe("application configuration icons", () => {
+    it("shows AirJelly for missing and broken row icons", async () => {
+        await i18n.changeLanguage("zh-CN");
+        session.user.level = 0;
+        const broken = { ...cam, id: 2, app_key: "broken", name_zh: "失效图标应用", icon_url: "https://fixture.invalid/broken.png" };
+        vi.mocked(CDIService.GetAllSubApplicationsGET).mockResolvedValue({ items: [cam, broken], total: 2, status: 200, message: "ok" });
+        render(<ApplicationSettings />);
+        const name = await screen.findByText("CAM", { selector: "div[title]" });
+        expect(name.closest("tr")!.querySelector("img")).toHaveAttribute("src", LogoAirJelly);
+        const brokenImage = screen.getByText("失效图标应用").closest("tr")!.querySelector("img")!;
+        fireEvent.error(brokenImage);
+        expect(brokenImage).toHaveAttribute("src", LogoAirJelly);
     });
 });
 

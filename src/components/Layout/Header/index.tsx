@@ -16,7 +16,7 @@ import LocalDebugButton from "@/local-debug/LocalDebugButton";
 import { isLocalDebugEnabled } from "@/local-debug";
 import Profile from "@/components/User/Profile";
 import { useUser } from "@/hooks/useUser";
-import { LogoCDI } from "@/assets/icons";
+import { LogoAirJelly } from "@/assets/icons";
 import styles from "./index.module.less";
 
 const Header = () => {
@@ -48,8 +48,8 @@ const Header = () => {
             className={styles.header}
             title={
                 <button className={styles.brand} onClick={() => navigate("/")}>
-                    <img className={styles.logo} src={LogoCDI} alt="" />
-                    <span>CDI</span>
+                    <img className={styles.logo} src={LogoAirJelly} alt="" />
+                    <span>{t("brand.title")}</span>
                 </button>
             }
             subTitle={t("brand.subtitle")}
