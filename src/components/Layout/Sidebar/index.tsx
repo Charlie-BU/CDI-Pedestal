@@ -9,7 +9,7 @@ import ApplicationIcon from "@/components/ApplicationIcon";
 import styles from "./index.module.less";
 
 /** Sidebar：数据库菜单后始终追加基座子应用配置入口。 */
-export default function Sidebar() {
+export default function Sidebar({ collapsed = false }: { collapsed?: boolean }) {
     const location = useLocation();
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
@@ -24,12 +24,12 @@ export default function Sidebar() {
         }
         navigate(key);
     };
-    return <Menu selectedKeys={[selected]} onClickMenuItem={navigateTo} className={styles.menu}>
-        <Menu.Item style={{ display: "flex", alignItems: "center" }} key="/"><IconHouseDashboard className={styles.icon} />{t("nav.home")}</Menu.Item>
-        {visible.map((app) => <Menu.Item style={{ display: "flex", alignItems: "center" }} key={app.route_path}>
+    return <Menu collapse={collapsed} selectedKeys={[selected]} onClickMenuItem={navigateTo} className={`${styles.menu} ${collapsed ? styles.collapsedMenu : ""}`}>
+        <Menu.Item style={{ display: "flex", alignItems: "center" }} key="/" title={t("nav.home")}><IconHouseDashboard className={styles.icon} /><span className={styles.label}>{t("nav.home")}</span></Menu.Item>
+        {visible.map((app) => <Menu.Item style={{ display: "flex", alignItems: "center" }} key={app.route_path} title={applicationName(app, i18n.resolvedLanguage)}>
             <ApplicationIcon className={styles.productIcon} src={app.icon_url} />
-            {applicationName(app, i18n.resolvedLanguage)}
+            <span className={styles.label}>{applicationName(app, i18n.resolvedLanguage)}</span>
         </Menu.Item>)}
-        <Menu.Item style={{ display: "flex", alignItems: "center" }} key={APPLICATION_SETTINGS_PATH}><IconAppsFill className={styles.icon} />{t("applications.title")}</Menu.Item>
+        <Menu.Item style={{ display: "flex", alignItems: "center" }} key={APPLICATION_SETTINGS_PATH} title={t("applications.title")}><IconAppsFill className={styles.icon} /><span className={styles.label}>{t("applications.title")}</span></Menu.Item>
     </Menu>;
 }

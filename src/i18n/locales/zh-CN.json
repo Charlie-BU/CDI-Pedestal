@@ -1,5 +1,9 @@
 {
     "nav": {
+        "collapse": "收起侧导",
+        "expand": "展开侧导",
+        "resize": "调整侧导宽度",
+        "navigation": "主导航",
         "home": "首页",
         "cam": "API 管理 CAM",
         "promptMinder": "Prompt Minder",

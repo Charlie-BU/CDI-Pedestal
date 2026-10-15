@@ -1,5 +1,9 @@
 {
     "nav": {
+        "collapse": "Collapse navigation",
+        "expand": "Expand navigation",
+        "resize": "Resize navigation",
+        "navigation": "Main navigation",
         "home": "Home",
         "cam": "CAM API Management",
         "promptMinder": "Prompt Minder",

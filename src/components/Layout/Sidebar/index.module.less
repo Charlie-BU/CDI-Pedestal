@@ -1,5 +1,6 @@
 .menu {
-    padding-top: 16px;
+    padding-top: 8px;
+    width: 100%;
     border-right: 0;
     background-color: transparent !important;
 }
@@ -19,4 +20,12 @@
     margin-right: 8px;
     margin-left: 1px;
     object-fit: contain;
+}
+
+.label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.icon, .productIcon { flex-shrink: 0; }
+.collapsedMenu {
+    .label { display: none; }
+    .icon, .productIcon { margin: 0 !important; }
+    :global(.arco-menu-item) { justify-content: center; padding: 0; }
 }

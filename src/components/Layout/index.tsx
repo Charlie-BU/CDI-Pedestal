@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { Layout as ArcoLayout, Watermark } from "@cloud-materials/common";
 import Header from "./Header";
-import Sidebar from "./Sidebar";
+import NavigationPanel from "./NavigationPanel";
 import Footer from "./Footer";
 import styles from "./index.module.less";
 import { useUser } from "@/hooks/useUser";
@@ -26,10 +26,8 @@ const Layout = () => {
             <ArcoLayout.Header className={styles.header}>
                 <Header />
             </ArcoLayout.Header>
-            <ArcoLayout className={styles.body}>
-                <ArcoLayout.Sider className={styles.sider} width={200}>
-                    <Sidebar />
-                </ArcoLayout.Sider>
+            <ArcoLayout className={styles.body} hasSider>
+                <NavigationPanel />
                 <ArcoLayout.Content
                     className={isEmbeddedPage ? `${styles.content} ${styles.embeddedContent}` : styles.content}
                 >

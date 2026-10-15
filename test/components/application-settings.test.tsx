@@ -26,7 +26,7 @@ describe("application management entry", () => {
         const labels = [...screen.getByRole("menu").querySelectorAll(".arco-menu-item")].map((el) => el.textContent);
         expect(labels).toEqual(["首页", "CAM", "子应用配置"]);
         expect(screen.queryByText("隐藏应用")).not.toBeInTheDocument();
-        expect(screen.getByText("CAM").querySelector("img")).toHaveAttribute("src", LogoAirJelly);
+        expect(screen.getByRole("menuitem", { name: "CAM" }).querySelector("img")).toHaveAttribute("src", LogoAirJelly);
     });
 });
 
