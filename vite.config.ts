@@ -1,3 +1,4 @@
+import { runtimeConfig } from "./build/runtimeConfig";
 import { brandTitle } from "./build/brandTitle";
 import { localDebugHeader } from "./build/localDebugHeader";
 import { federation } from "@module-federation/vite";
@@ -15,6 +16,7 @@ export default defineConfig(({ mode, command }) => {
 
     return {
         plugins: [
+            runtimeConfig(env.CDI_HOME_PAGE_URL),
             localDebugHeader(),
             brandTitle(env.VITE_CONTENT_OVERRIDE),
             react(),

@@ -8,4 +8,8 @@ if [ -n "${CDI_UPSTREAM_BASE_URL:-}" ]; then
     export CDI_UPSTREAM_BASE_URL="${CDI_UPSTREAM_BASE_URL%/}"
 fi
 
+# Serialize only public configuration; never expose the full environment.
+jq -n --arg url "${CDI_HOME_PAGE_URL:-}" '{homePageUrl: $url}' > /srv/runtime-config.json.tmp
+mv /srv/runtime-config.json.tmp /srv/runtime-config.json
+
 exec "$@"

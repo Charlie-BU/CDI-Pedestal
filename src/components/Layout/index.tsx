@@ -7,6 +7,7 @@ import styles from "./index.module.less";
 import { useUser } from "@/hooks/useUser";
 
 import { useApplications } from "@/hooks/useApplications";
+import { getHomePageUrl } from "@/runtimeConfig";
 import { matchApplication } from "@/subApplications";
 
 /** getWatermarkColor：从组件库灰色色板生成水印颜色。 */
@@ -19,7 +20,7 @@ const Layout = () => {
     const { user } = useUser();
     const location = useLocation();
     const { apps } = useApplications();
-    const isEmbeddedPage = matchApplication(apps, location.pathname)?.app_type === "iframe";
+    const isEmbeddedPage = (location.pathname === "/" && Boolean(getHomePageUrl())) || matchApplication(apps, location.pathname)?.app_type === "iframe";
 
     return (
         <ArcoLayout className={styles.layout}>
