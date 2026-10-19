@@ -1,15 +1,41 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import HomePage from "@/components/HomePage";
 import { useUser } from "@/hooks/useUser";
 import { getHomePageUrl } from "@/runtimeConfig";
-import "@/i18n";
+import i18n from "@/i18n";
 vi.mock("@/runtimeConfig", () => ({ getHomePageUrl: vi.fn(() => "") }));
 vi.mock("@/hooks/useUser", () => ({ useUser: vi.fn() }));
 const openLoginModal = vi.fn();
 vi.mocked(useUser).mockReturnValue({ accessToken: null, openLoginModal });
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
 describe("external home", () => {
+    it("sends locale on load and ready, then updates without reloading the iframe", async () => {
+        await i18n.changeLanguage("zh-CN");
+        vi.mocked(getHomePageUrl).mockReturnValue("https://home.example.test/");
+        const { container, unmount } = render(<HomePage><p>Default home</p></HomePage>);
+        const frame = container.querySelector("iframe")!;
+        const source = frame.contentWindow!;
+        const post = vi.spyOn(source, "postMessage");
+        fireEvent.load(frame);
+        expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "zh-CN" }, "https://home.example.test");
+        post.mockClear();
+        window.dispatchEvent(new MessageEvent("message", { origin: "https://other.example.test", source, data: { type: "cdi:homepage-ready" } }));
+        window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source: window, data: { type: "cdi:homepage-ready" } }));
+        expect(post).not.toHaveBeenCalled();
+        window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source, data: { type: "cdi:homepage-ready" } }));
+        expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "zh-CN" }, "https://home.example.test");
+        await act(async () => { await i18n.changeLanguage("en-US"); });
+        expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "en-US" }, "https://home.example.test");
+        expect(container.querySelector("iframe")).toBe(frame);
+        expect(frame).toHaveAttribute("src", "https://home.example.test/");
+        unmount();
+        post.mockClear();
+        window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source, data: { type: "cdi:homepage-ready" } }));
+        expect(post).not.toHaveBeenCalled();
+        post.mockRestore();
+        await i18n.changeLanguage("zh-CN");
+    });
     it("opens the host login modal only for the configured frame and origin", () => {
         vi.mocked(getHomePageUrl).mockReturnValue("https://home.example.test/");
         const { container, unmount } = render(<HomePage><p>Default home</p></HomePage>);

@@ -68,3 +68,7 @@ document.querySelector("#login-button").addEventListener("click", () => {
 ```
 
 基座只接收当前首页 iframe 窗口发送、且来源与 `CDI_HOME_PAGE_URL` 的 origin 一致的消息。已登录时忽略请求；离开首页或返回默认首页后停止监听。不通过 URL、消息或回调向官网传递 token。官网如果重定向到其他 origin，需将配置改为最终地址。此协议只打开弹窗，不包含登录成功后的跳转或登录状态通知。
+
+### 外部首页语言同步
+
+首页 iframe 加载、收到来源与窗口匹配的 `cdi:homepage-ready`，以及基座语言切换时，发送 `{ type: "cdi:context", locale: "zh-CN" | "en-US" }` 到配置的首页 origin。语言切换不重载 iframe；不发送用户资料或凭据。外部页应校验父窗口与基座 origin 后更新文案。
