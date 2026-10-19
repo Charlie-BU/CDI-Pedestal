@@ -76,3 +76,5 @@ document.querySelector("#login-button").addEventListener("click", () => {
 外部首页应在首屏渲染完成后发送 `window.parent.postMessage({ type: "cdi:homepage-ready" }, "https://实际基座域名")`，CDI 收到来源与窗口校验通过的消息后解除 loading；仅收到 iframe load 不视为首屏已就绪。AirJelly Cloud 已包含此就绪消息。没有接入该协议的静态首页需要添加上述消息。
 
 基座语言上下文还包含可选 `backgroundColor`，来源于当前 `--color-bg-3`，外部首页可校验颜色后设置自身同名 CSS 变量，使 iframe 背景与基座保持一致。
+
+首页上下文还包含布尔值 `authenticated`，随登录和退出更新，用于隐藏或恢复官网登录入口；不传递 token 或用户资料。

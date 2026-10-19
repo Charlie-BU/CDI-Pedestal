@@ -15,8 +15,8 @@ export default function HomePage({ children }: { children: ReactNode }) {
     const sendContext = useCallback(() => {
         if (!url) return;
         const backgroundColor = getComputedStyle(document.body).getPropertyValue("--color-bg-3").trim();
-        frame.current?.contentWindow?.postMessage({ type: "cdi:context", locale: i18n.resolvedLanguage || "zh-CN", ...(backgroundColor ? { backgroundColor } : {}) }, new URL(url).origin);
-    }, [url, i18n.resolvedLanguage]);
+        frame.current?.contentWindow?.postMessage({ type: "cdi:context", locale: i18n.resolvedLanguage || "zh-CN", authenticated: Boolean(accessToken), ...(backgroundColor ? { backgroundColor } : {}) }, new URL(url).origin);
+    }, [url, i18n.resolvedLanguage, accessToken]);
     useEffect(() => {
         if (!url) return;
         sendContext();

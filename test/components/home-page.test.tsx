@@ -19,15 +19,15 @@ describe("external home", () => {
         const source = frame.contentWindow!;
         const post = vi.spyOn(source, "postMessage");
         fireEvent.load(frame);
-        expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "zh-CN" }, "https://home.example.test");
+        expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "zh-CN", authenticated: false }, "https://home.example.test");
         post.mockClear();
         window.dispatchEvent(new MessageEvent("message", { origin: "https://other.example.test", source, data: { type: "cdi:homepage-ready" } }));
         window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source: window, data: { type: "cdi:homepage-ready" } }));
         expect(post).not.toHaveBeenCalled();
         act(() => { window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source, data: { type: "cdi:homepage-ready" } })); });
-        expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "zh-CN" }, "https://home.example.test");
+        expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "zh-CN", authenticated: false }, "https://home.example.test");
         await act(async () => { await i18n.changeLanguage("en-US"); });
-        expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "en-US" }, "https://home.example.test");
+        expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "en-US", authenticated: false }, "https://home.example.test");
         expect(container.querySelector("iframe")).toBe(frame);
         expect(frame).toHaveAttribute("src", "https://home.example.test/");
         unmount();
@@ -36,6 +36,20 @@ describe("external home", () => {
         expect(post).not.toHaveBeenCalled();
         post.mockRestore();
         await i18n.changeLanguage("zh-CN");
+    });
+    it("updates authenticated context on sign-in and sign-out without sending credentials", () => {
+        vi.mocked(getHomePageUrl).mockReturnValue("https://home.example.test/");
+        const { container, rerender } = render(<HomePage><p>Default home</p></HomePage>);
+        const frame = container.querySelector("iframe")!;
+        const post = vi.spyOn(frame.contentWindow!, "postMessage");
+        vi.mocked(useUser).mockReturnValueOnce({ accessToken: "test-access-token", openLoginModal });
+        rerender(<HomePage><p>Default home</p></HomePage>);
+        expect(post).toHaveBeenLastCalledWith(expect.objectContaining({ authenticated: true }), "https://home.example.test");
+        expect(JSON.stringify(post.mock.calls)).not.toContain("test-access-token");
+        rerender(<HomePage><p>Default home</p></HomePage>);
+        expect(post).toHaveBeenLastCalledWith(expect.objectContaining({ authenticated: false }), "https://home.example.test");
+        expect(container.querySelector("iframe")).toBe(frame);
+        post.mockRestore();
     });
     it("passes the shell background to the isolated iframe", () => {
         document.body.style.setProperty("--color-bg-3", "#f3efe6");
