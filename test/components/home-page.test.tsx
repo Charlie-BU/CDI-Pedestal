@@ -1,15 +1,16 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import HomePage from "@/components/HomePage";
 import { useUser } from "@/hooks/useUser";
-import { getHomePageUrl } from "@/runtimeConfig";
+import { getHomePageMode, getHomePageUrl } from "@/runtimeConfig";
 import i18n from "@/i18n";
-vi.mock("@/runtimeConfig", () => ({ getHomePageUrl: vi.fn(() => "") }));
+vi.mock("@/runtimeConfig", () => ({ getHomePageUrl: vi.fn(() => ""), getHomePageMode: vi.fn(() => "embedded") }));
 vi.mock("@/hooks/useUser", () => ({ useUser: vi.fn() }));
 const openLoginModal = vi.fn();
 vi.mocked(useUser).mockReturnValue({ accessToken: null, openLoginModal });
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
 describe("external home", () => {
+    beforeEach(() => { vi.mocked(getHomePageMode).mockReturnValue("embedded"); });
     it("sends locale on load and ready, then updates without reloading the iframe", async () => {
         await i18n.changeLanguage("zh-CN");
         vi.mocked(getHomePageUrl).mockReturnValue("https://home.example.test/");
@@ -23,7 +24,7 @@ describe("external home", () => {
         window.dispatchEvent(new MessageEvent("message", { origin: "https://other.example.test", source, data: { type: "cdi:homepage-ready" } }));
         window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source: window, data: { type: "cdi:homepage-ready" } }));
         expect(post).not.toHaveBeenCalled();
-        window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source, data: { type: "cdi:homepage-ready" } }));
+        act(() => { window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source, data: { type: "cdi:homepage-ready" } })); });
         expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "zh-CN" }, "https://home.example.test");
         await act(async () => { await i18n.changeLanguage("en-US"); });
         expect(post).toHaveBeenLastCalledWith({ type: "cdi:context", locale: "en-US" }, "https://home.example.test");
@@ -31,10 +32,22 @@ describe("external home", () => {
         expect(frame).toHaveAttribute("src", "https://home.example.test/");
         unmount();
         post.mockClear();
-        window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source, data: { type: "cdi:homepage-ready" } }));
+        act(() => { window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source, data: { type: "cdi:homepage-ready" } })); });
         expect(post).not.toHaveBeenCalled();
         post.mockRestore();
         await i18n.changeLanguage("zh-CN");
+    });
+    it("passes the shell background to the isolated iframe", () => {
+        document.body.style.setProperty("--color-bg-3", "#f3efe6");
+        try {
+            vi.mocked(getHomePageUrl).mockReturnValue("https://home.example.test/");
+            const { container } = render(<HomePage><p>Default home</p></HomePage>);
+            const frame = container.querySelector("iframe")!;
+            const post = vi.spyOn(frame.contentWindow!, "postMessage");
+            fireEvent.load(frame);
+            expect(post).toHaveBeenLastCalledWith(expect.objectContaining({ backgroundColor: "#f3efe6" }), "https://home.example.test");
+            post.mockRestore();
+        } finally { document.body.style.removeProperty("--color-bg-3"); }
     });
     it("opens the host login modal only for the configured frame and origin", () => {
         vi.mocked(getHomePageUrl).mockReturnValue("https://home.example.test/");
@@ -46,9 +59,6 @@ describe("external home", () => {
         send("https://home.example.test", window, { type: "cdi:open-login" });
         for (const data of [null, "cdi:open-login", { type: "unknown" }]) send("https://home.example.test", source, data);
         expect(openLoginModal).not.toHaveBeenCalled();
-        send("https://home.example.test", source, { type: "cdi:open-login" });
-        expect(openLoginModal).toHaveBeenCalledOnce();
-        fireEvent.click(screen.getByRole("button"));
         send("https://home.example.test", source, { type: "cdi:open-login" });
         expect(openLoginModal).toHaveBeenCalledOnce();
         unmount();
@@ -67,21 +77,39 @@ describe("external home", () => {
     });
     it("keeps the default page when not configured", () => {
         vi.mocked(getHomePageUrl).mockReturnValue("");
+        vi.mocked(getHomePageMode).mockReturnValue("default");
         const { container } = render(<HomePage><p>Default home</p></HomePage>);
         expect(screen.getByText("Default home")).toBeInTheDocument();
         expect(container.querySelector("iframe")).toBeNull();
     });
-    it("embeds without credentials and lets users recover the default page", () => {
+    it("keeps loading through frame load and reveals only a trusted ready message", () => {
         vi.mocked(getHomePageUrl).mockReturnValue("https://home.example.test/");
         const { container } = render(<HomePage><p>Default home</p></HomePage>);
         const frame = container.querySelector("iframe")!;
-        expect(frame).toHaveAttribute("src", "https://home.example.test/");
-        expect(frame).toHaveAttribute("title");
         expect(frame).toHaveAttribute("referrerpolicy", "no-referrer");
         expect(frame.getAttribute("sandbox")).not.toContain("allow-top-navigation");
+        expect(screen.queryByRole("button")).not.toBeInTheDocument();
         expect(screen.queryByText("Default home")).not.toBeInTheDocument();
-        fireEvent.click(screen.getByRole("button"));
-        expect(container.querySelector("iframe")).toBeNull();
-        expect(screen.getByText("Default home")).toBeInTheDocument();
+        expect(screen.getByRole("status")).toBeInTheDocument();
+        expect(frame).toHaveStyle({ visibility: "hidden" });
+        fireEvent.load(frame);
+        expect(screen.getByRole("status")).toBeInTheDocument();
+        fireEvent.error(frame);
+        expect(screen.queryByText("Default home")).not.toBeInTheDocument();
+        for (const [origin, source] of [["https://other.example.test", frame.contentWindow], ["https://home.example.test", window]] as const) {
+            act(() => { window.dispatchEvent(new MessageEvent("message", { origin, source, data: { type: "cdi:homepage-ready" } })); });
+        }
+        expect(screen.getByRole("status")).toBeInTheDocument();
+        act(() => { window.dispatchEvent(new MessageEvent("message", { origin: "https://home.example.test", source: frame.contentWindow, data: { type: "cdi:homepage-ready" } })); });
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+        expect(frame).toHaveStyle({ visibility: "visible" });
+        expect(screen.queryByText("Default home")).not.toBeInTheDocument();
+    });
+    it("does not show the default page if configuration cannot be confirmed", () => {
+        vi.mocked(getHomePageUrl).mockReturnValue("");
+        vi.mocked(getHomePageMode).mockReturnValue("unavailable");
+        render(<HomePage><p>Default home</p></HomePage>);
+        expect(screen.getByRole("status")).toBeInTheDocument();
+        expect(screen.queryByText("Default home")).not.toBeInTheDocument();
     });
 });

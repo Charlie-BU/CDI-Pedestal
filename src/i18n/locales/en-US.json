@@ -29,7 +29,7 @@
         "googleLinkFailure": "Failed to link Google account. Please try again."
     },
     "home": {
-        "useDefault": "Use default home",
+        "loading": "Loading home page",
         "frameTitle": "Platform home",
         "description": "Choose a platform from the navigation on the left."
     },

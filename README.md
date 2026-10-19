@@ -44,7 +44,7 @@ pnpm check
 
 ## 外部静态首页
 
-配置 `CDI_HOME_PAGE_URL=https://home.example.com/` 后，首页在保留基座顶栏、侧栏和页脚的内容区内展示外部 iframe。留空、配置无效或公开配置读取失败时保留默认首页。外部页不可用时，可点击“返回默认首页”；重新进入首页后再次尝试外部页。应用目录错误提示仍在默认页保留。
+配置 `CDI_HOME_PAGE_URL=https://home.example.com/` 后，首页在保留基座顶栏、侧栏和页脚的内容区内展示外部 iframe。只有确认地址未配置或为空时使用默认首页。配置读取失败、地址无效或 iframe 尚未加载时保持 loading，不切回默认首页。应用目录错误提示仍在默认页保留。
 
 - Docker 部署：在容器运行环境设置 `CDI_HOME_PAGE_URL`，重启部署即可切换 URL，无需重新构建镜像。启动脚本使用 JSON 序列化生成 `/srv/runtime-config.json`，只包含公开首页地址。该地址会被浏览器读取，不要放入凭据。
 - 本地开发及 `pnpm preview`：从 `.env` 读取同名变量，修改后重启服务。直接托管 `dist` 时，需自行生成 `runtime-config.json`；默认文件使用空地址。
@@ -53,7 +53,7 @@ pnpm check
 - 外部站点应以响应头配置 `Content-Security-Policy: frame-ancestors https://你的基座域名`，避免与 `X-Frame-Options: DENY/SAMEORIGIN` 冲突；基座若额外配置 CSP，须在 `frame-src` 中允许静态站点。
 - iframe 允许脚本、独立来源和新窗口，不开放表单、下载、顶层跳转等权限。新窗口链接建议使用 `target="_blank" rel="noopener noreferrer"`。不传递基座 token、用户资料或平台合同；iframe 自己的 Cookie 仍受浏览器策略管理。
 - 主题和语言不会自动继承。第一版用于独立展示内容，未接入站内路由消息协议；业务入口继续使用侧栏，外链可在新窗口打开。
-- 浏览器的 iframe `load/error` 无法可靠识别跨域 HTTP 错误及嵌入策略拒绝，因此保留手动恢复入口，不将 `load` 当作展示成功。上线时需用目标站点实际验证响应头、滚动、移动布局和链接行为。
+- 浏览器的 iframe `load/error` 无法可靠识别跨域 HTTP 错误及嵌入策略拒绝，因此 iframe `load` 仅下发语言上下文，loading 在校验通过的 `cdi:homepage-ready` 后结束；这不代表跨域 HTTP 状态或业务健康检查通过。上线时需用目标站点实际验证响应头、滚动、移动布局和链接行为。
 
 ### 官网按钮打开基座登录弹窗
 
@@ -67,8 +67,12 @@ document.querySelector("#login-button").addEventListener("click", () => {
 });
 ```
 
-基座只接收当前首页 iframe 窗口发送、且来源与 `CDI_HOME_PAGE_URL` 的 origin 一致的消息。已登录时忽略请求；离开首页或返回默认首页后停止监听。不通过 URL、消息或回调向官网传递 token。官网如果重定向到其他 origin，需将配置改为最终地址。此协议只打开弹窗，不包含登录成功后的跳转或登录状态通知。
+基座只接收当前首页 iframe 窗口发送、且来源与 `CDI_HOME_PAGE_URL` 的 origin 一致的消息。已登录时忽略请求；离开外部首页后停止监听。不通过 URL、消息或回调向官网传递 token。官网如果重定向到其他 origin，需将配置改为最终地址。此协议只打开弹窗，不包含登录成功后的跳转或登录状态通知。
 
 ### 外部首页语言同步
 
 首页 iframe 加载、收到来源与窗口匹配的 `cdi:homepage-ready`，以及基座语言切换时，发送 `{ type: "cdi:context", locale: "zh-CN" | "en-US" }` 到配置的首页 origin。语言切换不重载 iframe；不发送用户资料或凭据。外部页应校验父窗口与基座 origin 后更新文案。
+
+外部首页应在首屏渲染完成后发送 `window.parent.postMessage({ type: "cdi:homepage-ready" }, "https://实际基座域名")`，CDI 收到来源与窗口校验通过的消息后解除 loading；仅收到 iframe load 不视为首屏已就绪。AirJelly Cloud 已包含此就绪消息。没有接入该协议的静态首页需要添加上述消息。
+
+基座语言上下文还包含可选 `backgroundColor`，来源于当前 `--color-bg-3`，外部首页可校验颜色后设置自身同名 CSS 变量，使 iframe 背景与基座保持一致。
