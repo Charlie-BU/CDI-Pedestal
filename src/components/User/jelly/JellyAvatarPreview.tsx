@@ -8,6 +8,7 @@ import {
   scalePixelJellyGeometry,
   type PixelJellyfishSettings,
 } from './appearance'
+import { pixelContentBounds } from './content-bounds'
 import { PixelJellyAvatar } from './PixelJellyAvatar'
 
 /** JellyAvatarPreviewProps 是名片预览的输入。 */
@@ -15,12 +16,14 @@ interface JellyAvatarPreviewProps {
   settings: PixelJellyfishSettings
   /** 水母可见包络占宿主的比例；包络含触手摆动余量，大于 1 时身体仍落在宿主内。 */
   fill?: number
+  centerVisible?: boolean
 }
 
 /** JellyAvatarPreview 在宿主范围内完整展示保存的形象及表情。 */
-export function JellyAvatarPreview({ settings, fill = 0.9 }: JellyAvatarPreviewProps) {
+export function JellyAvatarPreview({ settings, fill = 0.9, centerVisible = false }: JellyAvatarPreviewProps) {
   const host = useRef<HTMLDivElement>(null)
   const [fit, setFit] = useState(1)
+  const [center, setCenter] = useState({ x: 0, y: 0 })
   const metrics = useMemo(
     () =>
       getFloatingAvatarWindowMetrics({
@@ -48,6 +51,32 @@ export function JellyAvatarPreview({ settings, fill = 0.9 }: JellyAvatarPreviewP
     observer.observe(element)
     return () => observer.disconnect()
   }, [metrics.visualWidth, metrics.visualHeight, fill])
+  // 头像按可见像素居中；只在挂载/尺寸/配置变化后的短暂稳定期校准，保留后续自然动画。
+  useLayoutEffect(() => {
+    if (!centerVisible) return;
+    const element = host.current;
+    if (!element) return;
+    let frame = 0, attempts = 0;
+    setCenter({ x: 0, y: 0 });
+    const align = () => {
+      const canvas = element.querySelector('canvas');
+      if (canvas?.width && canvas.height) {
+        const context = canvas.getContext('2d');
+        if (context) {
+          const bounds = pixelContentBounds(context.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+          if (bounds) {
+            const source = canvas.getBoundingClientRect(), target = element.getBoundingClientRect();
+            const dx = target.x + target.width / 2 - (source.x + (bounds.left + bounds.right) / 2 * source.width / canvas.width);
+            const dy = target.y + target.height / 2 - (source.y + (bounds.top + bounds.bottom) / 2 * source.height / canvas.height);
+            setCenter(old => Math.abs(dx) < 0.25 && Math.abs(dy) < 0.25 ? old : { x: old.x + dx, y: old.y + dy });
+          }
+        }
+      }
+      if (++attempts < 30) frame = requestAnimationFrame(align);
+    };
+    frame = requestAnimationFrame(align);
+    return () => cancelAnimationFrame(frame);
+  }, [centerVisible, settings, fit]);
   // 浮窗盒子底部留有停靠间隙，水母在盒子里偏上；把盒子整体下移半个差值，让水母落在宿主中心。
   const centerOffsetY = ((metrics.dockHeight - metrics.visualHeight) / 2) * fit
   return (
@@ -58,7 +87,7 @@ export function JellyAvatarPreview({ settings, fill = 0.9 }: JellyAvatarPreviewP
           flexShrink: 0,
           width: metrics.windowWidth,
           height: metrics.dockHeight,
-          transform: `translateY(${centerOffsetY}px) scale(${fit})`,
+          transform: `translate(${centerVisible ? center.x : 0}px, ${centerOffsetY + (centerVisible ? center.y : 0)}px) scale(${fit})`,
         }}
       >
         <PixelJellyAvatar

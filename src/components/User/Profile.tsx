@@ -50,7 +50,7 @@ const Profile = ({
                 </defs>
             </svg>
             <Space className={styles.summary}>
-                <UserAvatar size={40} jellyFill={1.35} user={userInfo} />
+                <UserAvatar size={40} jellyFill={1.5} user={userInfo} />
                 <div>
                     <div className={styles.userNameRow}>
                         <Typography.Text bold className={styles.userName}>

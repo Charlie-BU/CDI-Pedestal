@@ -7,6 +7,6 @@ export default function ConfiguredJellyAvatar({ config, size, fill, fallback }: 
     const appearance = useMemo(() => appearanceFromJellyConfig(config), [config]);
     if (!appearance) return fallback;
     return <span aria-hidden="true" style={{ display: "inline-flex", width: size, height: size, cursor: "pointer" }}>
-        <JellyAvatarPreview settings={appearance.pixel} fill={fill} />
+        <JellyAvatarPreview settings={appearance.pixel} fill={fill} centerVisible />
     </span>;
 }
