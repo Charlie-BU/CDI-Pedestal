@@ -1,5 +1,4 @@
 import {
-    Avatar,
     Divider,
     IconCheckCircleFill,
     IconGoogle,
@@ -14,11 +13,13 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { GetMyInfo200ResponseUser } from "@/cam-auto-generate/CDIService/namespaces";
 import styles from "./index.module.less";
+import UserAvatar from "./UserAvatar";
 
 interface Props {
     userInfo: GetMyInfo200ResponseUser & {
         has_password?: boolean;
         auth_providers?: string[];
+        jelly_config?: unknown;
     };
     logout: () => void;
     openModifyPasswordModal: () => void;
@@ -49,7 +50,7 @@ const Profile = ({
                 </defs>
             </svg>
             <Space className={styles.summary}>
-                <Avatar size={40}>{userInfo.nickname?.[0] || userInfo.username[0]}</Avatar>
+                <UserAvatar size={40} jellyFill={1.35} user={userInfo} />
                 <div>
                     <div className={styles.userNameRow}>
                         <Typography.Text bold className={styles.userName}>

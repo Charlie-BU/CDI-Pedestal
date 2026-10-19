@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import LocalDebugButton from "@/local-debug/LocalDebugButton";
 import { isLocalDebugEnabled } from "@/local-debug";
 import Profile from "@/components/User/Profile";
+import UserAvatar from "@/components/User/UserAvatar";
 import { useUser } from "@/hooks/useUser";
 import { LogoAirJelly } from "@/assets/icons";
 import styles from "./index.module.less";
@@ -83,9 +84,7 @@ const Header = () => {
                                 />
                             }
                         >
-                            <Avatar size={32} className={styles.avatar}>
-                                {user.nickname?.[0] || user.username[0]}
-                            </Avatar>
+                            <UserAvatar user={user} size={32} className={styles.avatar} />
                         </Popover>
                     ) : (
                         <Avatar size={32} className={styles.guest} onClick={openLoginModal}>

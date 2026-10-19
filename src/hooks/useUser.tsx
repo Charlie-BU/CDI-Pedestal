@@ -21,6 +21,7 @@ import SetPasswordForm from "@/components/User/SetPasswordForm";
 type AuthenticatedUser = GetMyInfo200ResponseUser & {
     has_password?: boolean;
     auth_providers?: string[];
+    jelly_config?: unknown;
 };
 
 interface UserStore {

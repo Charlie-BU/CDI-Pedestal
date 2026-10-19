@@ -1,0 +1,21 @@
+/* 微光仅作用于水母画布，不扩大点击区或移动桌面锚点。 */
+.pixel-jelly-generating {
+  animation: pixel-jelly-generating-breath var(--jelly-breath-period) ease-in-out infinite;
+}
+
+@keyframes pixel-jelly-generating-breath {
+  0%,
+  100% {
+    filter: brightness(1) drop-shadow(0 0 0 transparent);
+  }
+  50% {
+    filter: brightness(1.14) drop-shadow(0 0 2px rgba(138, 226, 255, 0.45));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-jelly-generating {
+    animation: none;
+    filter: brightness(1.08);
+  }
+}
