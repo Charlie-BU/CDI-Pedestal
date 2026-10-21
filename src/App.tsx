@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Button, Result, Spin } from "@cloud-materials/common";
 import { useTranslation } from "react-i18next";
+import PersistentHome from "@/components/PersistentHome";
 import HomePage from "@/components/HomePage";
 import Layout from "@/components/Layout";
 import SubApplicationView from "@/components/SubApplicationView";
@@ -42,9 +43,10 @@ export default function App() {
     }
     const retry = <Button onClick={() => void load(accessToken)}>{t("applications.retry")}</Button>;
     return <BrowserRouter><Routes><Route element={<Layout />}>
-        <Route index element={<HomePage><div style={{ padding: 32 }}><h1>{t("brand.title")}</h1><p>{t("home.description")}</p>{error && <Result title={t("applications.directoryFailed")} extra={retry} />}</div></HomePage>} />
+        <Route element={<PersistentHome><HomePage><div style={{ padding: 32 }}><h1>{t("brand.title")}</h1><p>{t("home.description")}</p>{error && <Result title={t("applications.directoryFailed")} extra={retry} />}</div></HomePage></PersistentHome>}>
+        <Route index element={null} />
         <Route path={APPLICATION_SETTINGS_PATH} element={<ApplicationSettings />} />
         {currentApps.filter((app) => app.enabled).map((app) => <Route key={app.id} path={`${app.route_path.slice(1)}/*`} element={<SubApplicationView app={app} />} />)}
         <Route path="*" element={loading || identity !== accessToken ? <Spin loading dot /> : <Result title={t(error ? "applications.directoryFailed" : "applications.notFound")} extra={error ? retry : undefined} />} />
-    </Route></Routes></BrowserRouter>;
+    </Route></Route></Routes></BrowserRouter>;
 }
